@@ -7,7 +7,7 @@ public class Format : MonoBehaviour {
     public static string makeReadable(int number) //int, so no decimals (YAY!)
     {
         int level = 0;
-        while (Mathf.Abs(number) >= Mathf.Pow(1000, level)) level++;
+        while (Mathf.Abs(number) >= Mathf.Pow(1000, level+1)) level++;
         string result = number.ToString();
         if (level > 0)
             result = result.Substring(0, result.Length - level * 3) + levelToSuffix(level);

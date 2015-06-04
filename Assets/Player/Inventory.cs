@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 //script that controls the player's on-body resource inventory
 
 public class Inventory : MonoBehaviour
@@ -8,6 +10,9 @@ public class Inventory : MonoBehaviour
     private List<Resource> resources;
     public int maxSize;
     private int currentSize = 0;
+    public int Fill { get { return currentSize; } }
+    public List<Resource> Resources { get { return resources; } }
+
     public GameObject inventoryFullMessage;
 
     void Awake()
@@ -56,10 +61,37 @@ public class Inventory : MonoBehaviour
     {
         return maxSize - currentSize;
     }
+}
 
-    public static Color enumToColor(colorType type)
+public enum colorType
+{
+    RED = 0,
+    GREEN = 1,
+    BLUE = 2,
+}
+
+public enum resourceType
+{
+    PURECOLOR = 0,
+}
+
+
+public static class resourceTypeExtension
+{
+    public static string ToReadableString(this resourceType type)
     {
-        switch(type)
+        switch (type)
+        {
+            case resourceType.PURECOLOR:
+                return "Pure Colors";
+            default:
+                return "Resource";
+        }
+    }
+
+    public static Color ToColor(this colorType type)
+    {
+        switch (type)
         {
             case colorType.RED:
                 return Color.red;
@@ -73,20 +105,8 @@ public class Inventory : MonoBehaviour
     }
 }
 
-public enum colorType
-{
-    RED,
-    GREEN,
-    BLUE,
-}
-
-public enum resourceType
-{
-    PURECOLOR,
-}
-
 [System.Serializable]
-public class Resource : System.IEquatable<Resource>
+public class Resource : System.IEquatable<Resource>, System.IComparable<Resource>
 {
     public resourceType type;
     public colorType color;
@@ -127,14 +147,8 @@ public class Resource : System.IEquatable<Resource>
         return new Resource(c1.type, c1.color, c1.count + count);
     }
 
-    public static string TypeToString(resourceType type)
+    public int CompareTo(Resource other)
     {
-        switch (type)
-        {
-            case resourceType.PURECOLOR:
-                return "Pure Colors";
-            default:
-                return "Resource";
-        }
+        return (int)type * System.Enum.GetValues(typeof(colorType)).Length + (int)color - (int)(other.type) * System.Enum.GetValues(typeof(colorType)).Length + (int)(other.color);
     }
 }

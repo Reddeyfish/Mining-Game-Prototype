@@ -192,14 +192,17 @@ public class HSVColor : MonoBehaviour
             H = 0f;
         }
     }
+}
+public static class ColorExtension
+{
 
-    public static Color setAlphaInt(Color color, int alpha) //int, so 0-255
+    public static Color setAlphaInt(this Color color, int alpha) //int, so 0-255
     {
         color.a = (float)alpha / 255f;
         return color;
     }
 
-    public static Color setAlphaFloat(Color color, float alpha) //float, so 0-1
+    public static Color setAlphaFloat(this Color color, float alpha) //float, so 0-1
     {
         color.a = alpha;
         return color;

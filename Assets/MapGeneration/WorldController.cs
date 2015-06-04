@@ -45,6 +45,9 @@ public class WorldController : MonoBehaviour {
 
     private void InitializeMap()
     {
+         // definitely something to optimize
+
+
         if (theMap != null)
         {
             Debug.Log("ERROR: THERE SHOULD ONLY BE ONE MAP");
@@ -55,22 +58,26 @@ public class WorldController : MonoBehaviour {
         //initialize data blocks
         for (int x = -mapSize + 1; x < mapSize; x++)
             for (int y = -mapSize + 1; y < mapSize; y++)
-                theMap[x][y] = getBlockTypeByPosition(x, y, 1);
+                theMap[x][y] = new FullBlock();
 
         // spawning area
         for (int x = -3; x <= 3; x++)
             for (int y = -3; y <= 3; y++)
                 theMap[x][y] = new EmptyBlock();
+
+        //now the real map
+
+        LoadMapFromArray(theMap.toArray());
     }
 
-    private void LoadMapFromArray(int[] intArray)
+    private void LoadMapFromArray(bool[] boolArray)
     {
-        if (intArray.Length != (((2 * mapSize) - 1) * ((2 * mapSize) - 1)))
+        if (boolArray.Length != (((2 * mapSize) - 1) * ((2 * mapSize) - 1)))
         {
             Debug.Log("Data array size mismatch");
             Debug.Log(mapSize);
             Debug.Log((((2 * mapSize) - 1) * ((2 * mapSize) - 1)));
-            Debug.Log(intArray.Length);
+            Debug.Log(boolArray.Length);
         }
         theMap = new Map(mapSize);
 
@@ -83,7 +90,7 @@ public class WorldController : MonoBehaviour {
         {
             for (int y = -mapSize + 1; y < mapSize; y++)
             {
-                theMap[x][y] = getBlockTypeByPosition(x, y, intArray[i]);
+                theMap[x][y] = getBlockTypeByPosition(x, y, boolArray[i]);
                 i++;
             }
         }
@@ -91,10 +98,10 @@ public class WorldController : MonoBehaviour {
         Random.seed = newRandomSeed;
     }
 
-    private EmptyBlock getBlockTypeByPosition(float x, float y, int data)
+    private EmptyBlock getBlockTypeByPosition(float x, float y, bool data)
     {
         float boulderValue = Random.value;
-        if (data == 0)
+        if (!data)
         {
             if (boulderValue > boulderFrequency)
             {
@@ -147,7 +154,7 @@ public class WorldController : MonoBehaviour {
 
         if (PlayerPrefs.HasKey(PlayerPrefKeys.map))
         {
-            int[] x = PlayerPrefsX.GetIntArray(PlayerPrefKeys.map);
+            bool[] x = PlayerPrefsX.GetBoolArray(PlayerPrefKeys.map);
             Debug.Log("Data Found!");
             LoadMapFromArray(x);
         }
@@ -173,8 +180,8 @@ public class WorldController : MonoBehaviour {
 
     void OnDestroy()
     {
-        int[] test = theMap.toIntArray();
-        bool success = PlayerPrefsX.SetIntArray(PlayerPrefKeys.map, test);
+        bool[] test = theMap.toArray();
+        bool success = PlayerPrefsX.SetBoolArray(PlayerPrefKeys.map, test);
         if (!success)
         {
             Debug.Log("Save Failed!");
@@ -310,9 +317,9 @@ public class MapBlock : EmptyBlock //just a dirt block, nothing special
         }
     }
 
-    public override int getBlockType()
+    public override bool getBlockType()
     {
-        return (int)(prefab.GetComponent<Block>().getDataValue());
+        return (bool)(prefab.GetComponent<Block>().getDataValue());
     }
 
     public override void Remove()
@@ -337,13 +344,21 @@ public class EmptyBlock
     public virtual void Create(int x, int y)
     {
     }
-    public virtual int getBlockType()
+    public virtual bool getBlockType()
     {
-        return 0;
+        return false;
     }
 
     public virtual void Remove()
     {
+    }
+}
+
+public class FullBlock : EmptyBlock
+{
+    public override bool getBlockType()
+    {
+        return true;
     }
 }
 
@@ -404,9 +419,9 @@ public class Map
                 this[x][y].Create(x, y);
     }
 
-    public int[] toIntArray()
+    public bool[] toArray()
     {
-        int[] result = new int[((2 * size) - 1) * ((2 * size) - 1)];
+        bool[] result = new bool[((2 * size) - 1) * ((2 * size) - 1)];
         int i = 0;
         for (int x = -size + 1; x < size; x++)
             for (int y = -size + 1; y < size; y++)

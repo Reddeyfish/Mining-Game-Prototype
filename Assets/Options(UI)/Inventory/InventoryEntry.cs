@@ -13,7 +13,7 @@ public class InventoryEntry : MonoBehaviour {
 
     //maybe tooltips later
 
-    private const int greyedAlpha = 75;
+    private const int greyedAlpha = 50;
     private const float normalAlpha = 1f;
 
     private int _red = 0;
@@ -52,9 +52,9 @@ public class InventoryEntry : MonoBehaviour {
     private Color greyColoring(int value, Color color)
     {
         if (value != 0)
-            color = HSVColor.setAlphaFloat(color, normalAlpha);
+            color = color.setAlphaFloat(normalAlpha);
         else
-            color = HSVColor.setAlphaInt(color, greyedAlpha);
+            color = color.setAlphaFloat(greyedAlpha);
         return color;
     }
 
@@ -65,7 +65,7 @@ public class InventoryEntry : MonoBehaviour {
         set
         {
             _type = value;
-            nameText.text = Resource.TypeToString(value);
+            nameText.text = value.ToReadableString();
         }
     }
 
@@ -84,11 +84,21 @@ public class InventoryEntry : MonoBehaviour {
         nameText = transform.Find("Text").GetComponent<Text>();
     }
 
-    public void Initialize(int red, int green, int blue, resourceType type) //not sure if this is necessary, but eh
+    public void set(Resource resource)
     {
-        this.Red = red;
-        this.Green = green;
-        this.Blue = blue;
-        this.Type = type;
+        //probably should assert that the types are equal. Ah well.
+
+        switch (resource.color)
+        {
+            case colorType.RED:
+                this.Red = resource.count;
+                break;
+            case colorType.GREEN:
+                this.Green = resource.count;
+                break;
+            case colorType.BLUE:
+                this.Blue = resource.count;
+                break;
+        }
     }
 }

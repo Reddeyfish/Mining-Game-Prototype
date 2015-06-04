@@ -9,9 +9,9 @@ public class CrystalLight : Block {
         GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, 0.06f);
     }
 
-    public override int getDataValue()
+    public override bool getDataValue()
     {
-        return 0;
+        return false;
     }
 
     public override blockDataType getBlockType()

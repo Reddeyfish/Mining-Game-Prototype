@@ -17,9 +17,9 @@ public class Block : MonoBehaviour, ISpawnable {
         WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK);
     }
 
-    public virtual int getDataValue()
+    public virtual bool getDataValue() //counted as an air(false) or dirt(true) block
     {
-        return 1;
+        return true;
     }
 
     public virtual blockDataType getBlockType()

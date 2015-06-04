@@ -103,7 +103,8 @@ public static class SimplePool {
 			obj.transform.position = pos;
 			obj.transform.rotation = rot;
 			obj.SetActive(true);
-            obj.GetComponent<ISpawnable>().Create();
+            foreach(ISpawnable spawnScript in obj.GetComponents<ISpawnable>())
+                spawnScript.Create();
 			return obj;
  
 		}

@@ -33,7 +33,7 @@ public class defaultRefining : BaseDigListener {
             if (count > 0)
             {
                 PickupPopup UI = (SimplePool.Spawn(popup, this.transform.position) as GameObject).GetComponent<PickupPopup>();
-                UI.color = Inventory.enumToColor(type);
+                UI.color = type.ToColor();
                 UI.count = count;
             }
         }
