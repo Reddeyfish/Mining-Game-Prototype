@@ -15,9 +15,9 @@ public class Inventory : MonoBehaviour
 
     public GameObject inventoryFullMessage;
 
-    void Awake()
+    void Start()
     {
-        resources = new List<Resource>();
+        LoadData();
     }
 
     public int Add(Resource resource)
@@ -60,6 +60,48 @@ public class Inventory : MonoBehaviour
     public int spaceRemaining()
     {
         return maxSize - currentSize;
+    }
+
+    void OnDestroy()
+    {
+        // save data
+
+        //could possibly optimize the format by grouping by type, but maybe later
+        int[] test = new int[resources.Count * 3];
+        for (int i = 0; i < resources.Count; i++)
+        {
+            test[3 * i ] = (int)(resources[i].type);
+            test[3 * i + 1] = (int)(resources[i].color);
+            test[3 * i + 2] = resources[i].count;
+
+        }
+        bool success = PlayerPrefsX.SetIntArray(PlayerPrefKeys.inventory, test);
+        if (!success)
+        {
+            Debug.Log("Inventory Save Failed!");
+        }
+        else
+        {
+            Debug.Log("Inventory Save Complete!");
+        }
+    }
+
+    void LoadData()
+    {
+        resources = new List<Resource>();
+
+        if (PlayerPrefs.HasKey(PlayerPrefKeys.inventory))
+        {
+            int[] data = PlayerPrefsX.GetIntArray(PlayerPrefKeys.inventory);
+            Debug.Log("Inventory Data Found!");
+            if (data.Length % 3 != 0)
+                Debug.Log("Inventory Size Mismatch");
+            for (int i = 0; i < data.Length / 3; i++)
+            {
+                resources.Add(new Resource((resourceType)data[3 * i], (colorType)data[3 * i + 1], data[3 * i + 2]));
+                currentSize += data[3 * i + 2];
+            }
+        }
     }
 }
 

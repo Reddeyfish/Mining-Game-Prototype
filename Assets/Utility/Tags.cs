@@ -32,6 +32,7 @@ public class AnimatorParams
 public class PlayerPrefKeys
 {
     public const string map = "Map";
+    public const string inventory = "Inventory";
     public const string OreX = "OreSeedX";
     public const string OreY = "OreSeedY";
     public const string ColorX = "ColorSeedX";

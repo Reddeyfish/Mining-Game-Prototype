@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class WorldController : MonoBehaviour {
     private static Map theMap;
-    private const int mapSize = 200;
+    private const int mapSize = 300;
     private Point loadedTopRight = new Point(0, 0);
     private Point loadedBottomLeft = new Point(0, 0);
     [HideInInspector] //public for the random library to use
@@ -155,7 +155,7 @@ public class WorldController : MonoBehaviour {
         if (PlayerPrefs.HasKey(PlayerPrefKeys.map))
         {
             bool[] x = PlayerPrefsX.GetBoolArray(PlayerPrefKeys.map);
-            Debug.Log("Data Found!");
+            Debug.Log("Map Data Found!");
             LoadMapFromArray(x);
         }
         else
@@ -184,11 +184,11 @@ public class WorldController : MonoBehaviour {
         bool success = PlayerPrefsX.SetBoolArray(PlayerPrefKeys.map, test);
         if (!success)
         {
-            Debug.Log("Save Failed!");
+            Debug.Log("Map Save Failed!");
         }
         else
         {
-            Debug.Log("Save Complete!");
+            Debug.Log("Map Save Complete!");
         }
     }
 
