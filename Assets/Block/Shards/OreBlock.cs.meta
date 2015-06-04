@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6c7acde9444bad648ad91970067a8ad6
+timeCreated: 1433115752
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - crystalShardPrefab: {instanceID: 0}
+  - deathEffect: {fileID: 172516, guid: 2720de76652085644badeef819830572, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

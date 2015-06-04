@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f38f761d985b9ab40951f5cda97cf807
+timeCreated: 1433105233
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - DirtBlock: {fileID: 132896, guid: 719fcd48bc32dfa4bae2e5c98eaa18c1, type: 2}
+  - OreBlock: {fileID: 198340, guid: e5aa021b4d67f9e449b0baa2f17560e0, type: 2}
+  - CrystalLight: {fileID: 118750, guid: 5285e49c976c1604181a6e7bd5a3131f, type: 2}
+  - Boulder: {fileID: 160004, guid: 5f8ac0ddaef44f5419f59582100f4bd8, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
