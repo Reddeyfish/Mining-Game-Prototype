@@ -6,7 +6,6 @@ public class ComboProgressView : MonoBehaviour {
     private Image fill;
     private Slider nolerpslider;
     private Image nolerpfill;
-    private Image background; //only one background
     private Transform player;
     private CanvasGroup group;
     private AudioSource source;
@@ -30,7 +29,6 @@ public class ComboProgressView : MonoBehaviour {
         fill = transform.Find("Fill Area/Fill").GetComponent<Image>();
         nolerpslider = transform.Find("no-lag slider").GetComponent<Slider>();
         nolerpfill = transform.Find("no-lag slider/Fill Area/Fill").GetComponent<Image>();
-        background = transform.Find("Background").GetComponent<Image>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
     }
 

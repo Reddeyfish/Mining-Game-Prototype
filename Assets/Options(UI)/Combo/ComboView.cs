@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class ComboView : MonoBehaviour {
     private Slider slider;
     private Image fill;
-    private Image background;
     private Transform player;
     private CanvasGroup group;
     private AudioSource source;
@@ -28,7 +27,6 @@ public class ComboView : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         fill = transform.Find("Fill Area/Fill").GetComponent<Image>();
-        background = transform.Find("Background").GetComponent<Image>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         handleAnimator = transform.Find("Handle Slide Area/Handle").GetComponent<Animator>();
 	}

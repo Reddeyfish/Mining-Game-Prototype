@@ -19,7 +19,6 @@ public class WorldController : MonoBehaviour {
     private const float oreFrequency = 0.65f;
     public int loadedRange = 16;
 
-    private GameObject player;
     [Header("the prefabs for each block type")]
     public GameObject DirtBlock;
     public GameObject OreBlock;
@@ -31,8 +30,6 @@ public class WorldController : MonoBehaviour {
 
 	void Start () {
         thi = this;
-        player = GameObject.FindGameObjectWithTag(Tags.player);
-        
 
         LoadData();
 
