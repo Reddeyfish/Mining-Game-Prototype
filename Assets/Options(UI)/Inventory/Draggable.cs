@@ -10,6 +10,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private int cellY = -1;
     public int cellWidth = 1;
     public int cellHeight = 1;
+    public int ID;
 	// Use this for initialization
 	void Start () {
         manager = GetComponentInParent<ItemsView>();
@@ -17,14 +18,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         centerToTopLeftCell = offset - new Vector3(-((RectTransform)transform).rect.width * transform.lossyScale.x / (2 * cellWidth), ((RectTransform)transform).rect.height * transform.lossyScale.y / (2 * cellHeight), 0);
 	}
 
-    void OnMouseDown()
-    {
-        Debug.Log("Down");
-    }
-
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
     {
-        Debug.Log("Enter");
         //Cursor.visible = false;
         transform.parent.SetAsLastSibling(); //the dragged thing renders over all the other cells
         if (cellX != -1 && cellY != -1)
@@ -44,9 +39,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
      if (x != null && y != null)
      {
          //switch parents!
-         manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault());
          if (cellX != -1 && cellY != -1)
-             manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open : true);
+         {
+             manager.removeCell(this, cellX, cellY);
+             manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open: true);
+         }
+
+         manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault());
+         
          cellX = x.GetValueOrDefault();
          cellY = y.GetValueOrDefault();
      }

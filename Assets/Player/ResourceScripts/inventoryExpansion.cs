@@ -7,4 +7,8 @@ public class inventoryExpansion : MonoBehaviour {
     {
         GetComponent<Inventory>().maxSize += amount;
     }
+    void OnDestroy()
+    {
+        GetComponent<Inventory>().maxSize -= amount;
+    }
 }
