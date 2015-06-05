@@ -25,7 +25,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
 
     void Awake()
     {
-        blocks = LayerMask.GetMask(Layers.blocks);
+        blocks = LayerMask.GetMask(new string[] {Layers.blocks, Layers.transBlocks});
         rigid = GetComponent<Rigidbody2D>();
         theStateMachine = GetComponent<Animator>();
     }

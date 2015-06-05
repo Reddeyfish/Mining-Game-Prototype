@@ -21,6 +21,7 @@ public class Axis
 public class Layers
 {
     public const string blocks = "Blocks";
+    public const string transBlocks = "TransparentBlocks";
     public const string player = "Player";
 }
 
@@ -37,6 +38,8 @@ public class PlayerPrefKeys
     public const string OreY = "OreSeedY";
     public const string ColorX = "ColorSeedX";
     public const string ColorY = "ColorSeedY";
+    public const string TransX = "TransSeedX";
+    public const string TransY = "TransSeedY";
     public const string obstacle = "Obstacle";
 }
 
@@ -44,4 +47,10 @@ public class Options
 {
     public const string SoundLevel = "SoundLevel";
     public const string MusicLevel = "MusicLevel";
+}
+
+public class ShaderParams
+{
+    public static int color = Shader.PropertyToID("_Color");
+    public static int emission = Shader.PropertyToID("_EmissionColor");
 }

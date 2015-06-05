@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OreBlock : Block
 {
-    private const int numCrystals = 4;
+    private const float albedoAlpha = 0.3f;
     public GameObject deathEffect;
     public override void Create()
     {
@@ -20,6 +20,9 @@ public class OreBlock : Block
             Light light = shard.GetComponent<Light>();
             if(light != null)
                 light.color = crystalColor;
+            Material mat = shard.GetComponent<Renderer>().material;
+            mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z, albedoAlpha);
+            mat.SetColor("_EmissionColor", HSVColor.HSVToRGB(colorValues.x, 1, 1));
             shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, 0.06f);
         }
     }

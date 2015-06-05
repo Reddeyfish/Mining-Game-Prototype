@@ -14,9 +14,14 @@ public class WorldController : MonoBehaviour {
     public static float ColorSeedY;
     private static float OreSeedX;
     private static float OreSeedY;
+    [HideInInspector]
+    public static float TransSeedX;
+    [HideInInspector]
+    public static float TransSeedY;
     private static float ObstacleSeed;
     private const float boulderFrequency = 0.8f;
     private const float oreFrequency = 0.65f;
+    public const float transFrequency = 0.9f;
     public int loadedRange = 16;
 
     [Header("the prefabs for each block type")]
@@ -24,6 +29,7 @@ public class WorldController : MonoBehaviour {
     public GameObject OreBlock;
     public GameObject CrystalLight;
     public GameObject Boulder;
+    public GameObject TransparentBlock;
     
     public static WorldController thi;
 	// Use this for initialization
@@ -123,6 +129,12 @@ public class WorldController : MonoBehaviour {
             {
                 return enumToBlock(blockDataType.OREBLOCK);
             }
+            else if (Mathf.PerlinNoise(TransSeedX + 3 * x / 181, TransSeedY + 3 * y / 181) > transFrequency)
+            {
+                Debug.Log(x);
+                Debug.Log(y);
+                return enumToBlock(blockDataType.TRANSPARENTMAP);
+            }
             else
             {
                 return enumToBlock(blockDataType.MAPBLOCK);
@@ -147,6 +159,8 @@ public class WorldController : MonoBehaviour {
         LoadSeed(out ColorSeedY, PlayerPrefKeys.ColorY);
         LoadSeed(out OreSeedX, PlayerPrefKeys.OreX);
         LoadSeed(out OreSeedY, PlayerPrefKeys.OreY);
+        LoadSeed(out TransSeedX, PlayerPrefKeys.TransX);
+        LoadSeed(out TransSeedY, PlayerPrefKeys.TransY);
         LoadSeed(out ObstacleSeed, PlayerPrefKeys.obstacle);
 
         if (PlayerPrefs.HasKey(PlayerPrefKeys.map))
@@ -252,6 +266,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.CrystalLight);
             case blockDataType.BOULDER:
                 return new MapBlock(thi.Boulder);
+            case blockDataType.TRANSPARENTMAP:
+                return new MapBlock(thi.TransparentBlock);
             default:
                 Debug.Log("Data error");
                 return null;
@@ -274,6 +290,7 @@ public enum blockDataType
     OREBLOCK = 2,
     LIGHTBLOCK = 3,
     BOULDER = 4,
+    TRANSPARENTMAP = 5,
 }
 
 public class Point

@@ -11,7 +11,6 @@ public class DirtBlock : Block {
         Material material = transform.Find("Visuals").GetComponent<Renderer>().material;
         Vector2 offset = Random.insideUnitSphere / 4;
         material.SetTextureOffset("_BumpMap", offset); //only really needs to be one once to randomize all of them
-        material.SetTextureOffset("_MainTex", offset);
 	}
 
     public override void Create()
