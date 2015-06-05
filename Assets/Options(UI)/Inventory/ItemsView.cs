@@ -112,7 +112,7 @@ public class ItemsView : MonoBehaviour {
         cells[x, y].transform.SetAsLastSibling();
         Debug.Log("Set!");
         Item newItem = new Item(x, y, drag.ID);
-        newItem.component = theUpgradeData.IDToComponent(player, drag.ID);
+        newItem.component = theUpgradeData.IDToUpgrade[drag.ID].AddComponentTo(player);
         items.Add(newItem);
         Debug.Log(items.Count);
     }

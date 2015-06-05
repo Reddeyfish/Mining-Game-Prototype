@@ -1,23 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+public delegate MonoBehaviour AddComponentDelegate(GameObject player);
 public class theUpgradeData : MonoBehaviour {
     public static Dictionary<int, Upgrade> IDToUpgrade = new Dictionary<int, Upgrade>()
     {
-        {1 , new Upgrade(2, 1)},
+        {1 , new Upgrade(2, 1, delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); })},
     };
-
-    public static MonoBehaviour IDToComponent(GameObject player, int ID)
-    {
-        switch (ID)
-        {
-            case 1:
-                return player.AddComponent<inventoryExpansion>();
-            default:
-                Debug.Log("Error; ID not registered");
-                return null;
-        }
-    }
 }
 
 public class Upgrade
@@ -25,10 +15,11 @@ public class Upgrade
     public string ComponentName;
     public int cellWidth;
     public int cellHeight;
-
-    public Upgrade(int cellWidth, int cellHeight)
+    public AddComponentDelegate AddComponentTo;
+    public Upgrade(int cellWidth, int cellHeight, AddComponentDelegate AddComponent)
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
+        this.AddComponentTo = AddComponent;
     }
 }

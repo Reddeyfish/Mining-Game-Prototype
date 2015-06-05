@@ -40,7 +40,7 @@ public class ComboMeter : BaseDigListener {
 
     }
 
-    void FixedUpdate()
+    void HandleComboMaterial()
     {
         if(inputtedAdds != 0)
         {
@@ -112,7 +112,8 @@ public class ComboMeter : BaseDigListener {
 
     public void Add(float amount)
     {
-        inputtedAdds += amount; //saves it until the next update so that state changes can be handled properly
+        inputtedAdds += amount; 
+        Callback.FireForFixedUpdate(HandleComboMaterial, this); //saves it until the next update so that state changes can be handled properly
     }
 }
 

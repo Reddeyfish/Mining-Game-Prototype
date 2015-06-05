@@ -5,8 +5,8 @@ using System.Collections;
 
 //probably will need expansions/reworks when I actually use this in something
 
-public class Callback : MonoBehaviour {
 
+public static class Callback {
     public delegate void CallbackMethod();
 
     //basically Invoke
@@ -17,8 +17,19 @@ public class Callback : MonoBehaviour {
     }
 
     //wrapper so that we don't need to call StartCoroutine()
-    public static void FireAndForget(MonoBehaviour callingScript, CallbackMethod code, float time)
+    public static void FireAndForget(this CallbackMethod code, float time, MonoBehaviour callingScript)
     {
         callingScript.StartCoroutine(FireAndForgetRoutine(code, time));
+    }
+
+    public static IEnumerator FireForFixedUpdateRoutine(CallbackMethod code)
+    {
+        yield return new WaitForFixedUpdate();
+        code();
+    }
+
+    public static void FireForFixedUpdate(this CallbackMethod code, MonoBehaviour callingScript)
+    {
+        callingScript.StartCoroutine(FireForFixedUpdateRoutine(code));
     }
 }
