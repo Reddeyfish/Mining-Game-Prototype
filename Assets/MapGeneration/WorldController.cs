@@ -131,8 +131,6 @@ public class WorldController : MonoBehaviour {
             }
             else if (Mathf.PerlinNoise(TransSeedX + 3 * x / 181, TransSeedY + 3 * y / 181) > transFrequency)
             {
-                Debug.Log(x);
-                Debug.Log(y);
                 return enumToBlock(blockDataType.TRANSPARENTMAP);
             }
             else

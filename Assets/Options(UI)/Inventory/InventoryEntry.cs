@@ -52,9 +52,14 @@ public class InventoryEntry : MonoBehaviour {
     private Color greyColoring(int value, Color color)
     {
         if (value != 0)
+        {
             color = color.setAlphaFloat(normalAlpha);
+        }
         else
-            color = color.setAlphaFloat(greyedAlpha);
+        {
+            color = color.setAlphaInt(greyedAlpha);
+        }
+        
         return color;
     }
 
