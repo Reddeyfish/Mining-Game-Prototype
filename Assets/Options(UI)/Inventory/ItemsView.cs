@@ -13,7 +13,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public GameObject draggable;
     [Range(0, 0.5f)]
     public float tolerance = 0.25f; //zero tolerance == zero sense. Make sure it's greater than zero to enable snap.
-
+    public int destroyRange = 3;
 	// Use this for initialization
 	public void Awaken () {
         player = GameObject.FindGameObjectWithTag(Tags.player);
@@ -58,19 +58,27 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public void positionToCellIndex(Vector3 position, int cellWidth, int cellHeight, out int? xIndex, out int? yIndex)
     {
         Vector3 local = position - cells[0,0].transform.position;
+        int x = Mathf.RoundToInt(local.x / cellSize.width);
+        int y = Mathf.RoundToInt(-local.y / cellSize.height);
         if (inModRange(local.x, cellSize.width, tolerance) && inModRange(-local.y, cellSize.height, tolerance))
         {
-            int x = Mathf.RoundToInt(local.x / cellSize.width);
-            int y = Mathf.RoundToInt(-local.y / cellSize.height);
-            if(x >= 0 && y >= 0) //if we're in range of real cells
+            if (x >= 0 && y >= 0) //if we're in range of real cells
                 if (x + cellWidth - 1 < cells.GetLength(0) && y + cellHeight - 1 < cells.GetLength(1)) //and our max corner is also in the range of real cells
-                    if(isRangeEmpty(x, y, cellWidth, cellHeight))
+                    if (isRangeEmpty(x, y, cellWidth, cellHeight))
                     {
                         xIndex = x;
                         yIndex = y;
                         return;
                     }
         }
+        //else
+        if ((x < -destroyRange || x >= rows + destroyRange) || (y < -destroyRange || y >= cols + destroyRange)) //if we're really far away from the cells
+        {
+            xIndex = -1;
+            yIndex = -1;
+            return;
+        }
+        //else
         xIndex = null; //else no match
         yIndex = null;
     }
@@ -79,7 +87,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     {
         int? x, y;
         positionToCellIndex(position, cellWidth, cellHeight, out x, out y);
-        if (x != null && y != null)
+        if (x != null && y != null && x >= 0 && y >= 0)
         {
             return cells[x.GetValueOrDefault(), y.GetValueOrDefault()];
         }
@@ -129,6 +137,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     {
         drag.transform.SetParent(cells[x, y].transform);
         Debug.Log("Set!");
+        cells[x, y].transform.SetAsLastSibling(); //have the draggable rendered over all other cells
         Item newItem = new Item(x, y, drag.ID);
         newItem.component = theUpgradeData.IDToUpgrade[drag.ID].AddComponentTo(player);
         items.Add(newItem);

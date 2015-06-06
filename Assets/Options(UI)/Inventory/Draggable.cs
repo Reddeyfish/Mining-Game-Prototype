@@ -79,7 +79,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
              parent.parent.GetComponent<StoreEntry>().restock(ID);
          }
 
-         manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault());
+         if (x == -1 && y == -1)
+         {
+             //remove ourselves
+             SimplePool.Despawn(this.gameObject);
+         }
+         else
+         {
+             manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault());
+         }
 
          cellX = x.GetValueOrDefault();
          cellY = y.GetValueOrDefault();
