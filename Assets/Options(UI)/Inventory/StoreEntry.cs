@@ -14,14 +14,8 @@ public class StoreEntry : MonoBehaviour {
         set
         {
             _id = value;
-            Debug.Log(itemName);
             itemName.text = theUpgradeData.IDToUpgrade[value].ComponentName;
-            RectTransform draggable = (RectTransform)SimplePool.Spawn(draggablePrefab).transform;
-            draggable.SetParent(draggableHolder);
-            draggable.localScale = Vector3.one;
-            draggable.GetComponent<Draggable>().Instantiate(value, manager);
-
-            layout.preferredHeight = draggable.rect.height + wrapperHeight;
+            restock(value);
         }
     }
 	// Use this for initialization
@@ -36,5 +30,15 @@ public class StoreEntry : MonoBehaviour {
     {
         this.manager = manager;
         this.ID = ID;
+    }
+
+    public void restock(int ID)
+    {
+        RectTransform draggable = (RectTransform)SimplePool.Spawn(draggablePrefab).transform;
+        draggable.SetParent(draggableHolder);
+        draggable.localScale = Vector3.one;
+        draggable.GetComponent<Draggable>().Instantiate(ID, manager);
+
+        layout.preferredHeight = draggable.rect.height + wrapperHeight;
     }
 }

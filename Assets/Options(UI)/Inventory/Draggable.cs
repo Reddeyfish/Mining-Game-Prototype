@@ -45,7 +45,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         //Cursor.visible = false;
         parent = transform.parent;
         transform.SetParent(GameObject.FindGameObjectWithTag(Tags.canvas).transform);
-        //transform.parent.SetAsLastSibling(); //the dragged thing renders over all the other cells
+        //transform.parent.SetAsLastSibling(); //the dragged thing renders over all the other cells; no longer needed due to parenting to the canvas
         if (cellX != -1 && cellY != -1)
             manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open : true); //so we can be placed right where we started
     }
@@ -65,8 +65,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
          //switch parents!
          if (cellX != -1 && cellY != -1)
          {
+             //remove ourself from the old parent cell
              manager.removeCell(this, cellX, cellY);
              manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open: true);
+         }
+         else
+         {
+             //if we don't have a cell parent, then we have a store parent
+             parent.parent.GetComponent<StoreEntry>().restock(ID);
          }
 
          manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault());
