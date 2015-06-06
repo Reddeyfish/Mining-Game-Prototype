@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISpawnable {
+public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler { //, ISpawnable {
     ItemsView manager;
     Image icon;
     Vector3 offset;
@@ -18,15 +18,17 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	void Awake () {
         icon = GetComponent<Image>();
 	}
-
+    /*
     public void Create()
     {
         cellX = -1;
         cellY = -1;
     }
-
-    public void Instantiate(int ID, ItemsView manager)
+    */
+    public void Instantiate(int ID, ItemsView manager, int cellX = -1, int cellY = -1)
     {
+        transform.localScale = Vector3.one;
+
         this.ID = ID;
         this.manager = manager;
         this.cellWidth = theUpgradeData.IDToUpgrade[ID].cellWidth;
@@ -38,6 +40,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         ((RectTransform)transform).anchoredPosition = Vector3.zero;
         offset = new Vector3(-((RectTransform)transform).rect.width * transform.lossyScale.x / 2, ((RectTransform)transform).rect.height * transform.lossyScale.y / 2, 0);
         centerToTopLeftCell = offset - new Vector3(-((RectTransform)transform).rect.width * transform.lossyScale.x / (2 * cellWidth), ((RectTransform)transform).rect.height * transform.lossyScale.y / (2 * cellHeight), 0);
+        this.cellX = cellX;
+        this.cellY = cellY;
     }
 
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
@@ -47,7 +51,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         transform.SetParent(GameObject.FindGameObjectWithTag(Tags.canvas).transform);
         //transform.parent.SetAsLastSibling(); //the dragged thing renders over all the other cells; no longer needed due to parenting to the canvas
         if (cellX != -1 && cellY != -1)
-            manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open : true); //so we can be placed right where we started
+            manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: true); //so we can be placed right where we started
     }
 
     public void OnDrag (PointerEventData eventData)
@@ -67,7 +71,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
          {
              //remove ourself from the old parent cell
              manager.removeCell(this, cellX, cellY);
-             manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open: true);
+             manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: true);
          }
          else
          {
@@ -87,7 +91,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
      }
      ((RectTransform)transform).anchoredPosition = Vector3.zero;
      if (cellX != -1 && cellY != -1)
-        manager.setCellRangeFill(cellX, cellY, cellHeight, cellWidth, open : false);
+         manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: false);
      Cursor.visible = true;
  }
 

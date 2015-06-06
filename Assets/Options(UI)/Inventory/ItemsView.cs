@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ItemsView : MonoBehaviour {
+public class ItemsView : MonoBehaviour, IDisabledAwake {
     List<Item> items;
     GameObject[,] cells;
     private GameObject player;
@@ -10,13 +10,12 @@ public class ItemsView : MonoBehaviour {
     private const int rows = 4;
     private const int cols = 4;
     public GameObject cell;
+    public GameObject draggable;
     [Range(0, 0.5f)]
     public float tolerance = 0.25f; //zero tolerance == zero sense. Make sure it's greater than zero to enable snap.
 
 	// Use this for initialization
-	void Start () {
-        items = new List<Item>();
-
+	public void Awaken () {
         player = GameObject.FindGameObjectWithTag(Tags.player);
 
         //spawn cells
@@ -34,6 +33,26 @@ public class ItemsView : MonoBehaviour {
         //now that the local positioning is done, switch back to global scaling
         cellSize.width *= transform.lossyScale.x;
         cellSize.height *= transform.lossyScale.y;
+
+        //now load our data
+        items = new List<Item>();
+
+        if (PlayerPrefs.HasKey(PlayerPrefKeys.items))
+        {
+            int[] data = PlayerPrefsX.GetIntArray(PlayerPrefKeys.items);
+            Debug.Log("Item Data Found!");
+            if (data.Length % 3 != 0)
+                Debug.Log("Item Size Mismatch");
+            for (int i = 0; i < data.Length / 3; i++)
+            {
+                Draggable drag = SimplePool.Spawn(draggable).GetComponent<Draggable>();
+                drag.ID = data[3 * i];
+                setCell(drag, data[3 * i + 1], data[3 * i + 2]);
+                drag.Instantiate(data[3 * i], this, data[3 * i + 1], data[3 * i + 2]);
+                setCellRangeFill(data[3 * i + 1], data[3 * i + 2], drag.cellWidth, drag.cellHeight, open: false);
+                ((RectTransform)drag.transform).anchoredPosition = Vector3.zero;
+            }
+        }
 	}
 
     public void positionToCellIndex(Vector3 position, int cellWidth, int cellHeight, out int? xIndex, out int? yIndex)
@@ -81,7 +100,7 @@ public class ItemsView : MonoBehaviour {
         return true;
     }
 
-    public void setCellRangeFill(int basex, int basey, int cellHeight, int cellWidth, bool open)
+    public void setCellRangeFill(int basex, int basey, int cellWidth, int cellHeight, bool open)
     {
         for (int x = basex; x < basex + cellWidth; x++)
             for (int y = basey; y < basey + cellHeight; y++)
@@ -109,7 +128,6 @@ public class ItemsView : MonoBehaviour {
     public void setCell(Draggable drag, int x, int y)
     {
         drag.transform.SetParent(cells[x, y].transform);
-        cells[x, y].transform.SetAsLastSibling();
         Debug.Log("Set!");
         Item newItem = new Item(x, y, drag.ID);
         newItem.component = theUpgradeData.IDToUpgrade[drag.ID].AddComponentTo(player);
@@ -120,6 +138,23 @@ public class ItemsView : MonoBehaviour {
     private static bool inModRange(float value, float mod, float tolerance)
     {
         return mod - (value % mod) < (mod * tolerance) || (value % mod) < (mod * tolerance);
+    }
+
+    void OnDisable()
+    {
+        //Save our data
+        int[] data = new int[items.Count * 3];
+        for (int i = 0; i < items.Count; i++)
+        {
+            data[3 * i] = items[i].ID;
+            data[3 * i + 1] = items[i].x;
+            data[3 * i + 2] = items[i].y;
+        }
+        bool success = PlayerPrefsX.SetIntArray(PlayerPrefKeys.items, data);
+        if (success)
+            Debug.Log("Items Save Complete!");
+        else
+            Debug.Log("Items Save Failed!");
     }
 }
 

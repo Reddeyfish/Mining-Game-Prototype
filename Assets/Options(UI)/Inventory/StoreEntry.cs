@@ -36,7 +36,6 @@ public class StoreEntry : MonoBehaviour {
     {
         RectTransform draggable = (RectTransform)SimplePool.Spawn(draggablePrefab).transform;
         draggable.SetParent(draggableHolder);
-        draggable.localScale = Vector3.one;
         draggable.GetComponent<Draggable>().Instantiate(ID, manager);
 
         layout.preferredHeight = draggable.rect.height + wrapperHeight;
