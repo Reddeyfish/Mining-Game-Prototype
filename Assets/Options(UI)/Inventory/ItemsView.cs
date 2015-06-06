@@ -7,8 +7,8 @@ public class ItemsView : MonoBehaviour {
     GameObject[,] cells;
     private GameObject player;
     private Rect cellSize;
-    private const int rows = 3;
-    private const int cols = 3;
+    private const int rows = 4;
+    private const int cols = 4;
     public GameObject cell;
     [Range(0, 0.5f)]
     public float tolerance = 0.25f; //zero tolerance == zero sense. Make sure it's greater than zero to enable snap.
@@ -29,7 +29,7 @@ public class ItemsView : MonoBehaviour {
                 cellTrans.transform.SetParent(this.transform);
                 cellTrans.transform.localScale = Vector3.one;
                 cells[x, y] = cellTrans;
-                cellTrans.transform.localPosition = new Vector2((x - (float)rows / 2) * cellSize.width, (((float)cols / 2) - y) * cellSize.height);
+                cellTrans.transform.localPosition = new Vector2((x - ((float)rows - 1) / 2) * cellSize.width, ((((float)cols - 1) / 2) - y) * cellSize.height);
             }
         //now that the local positioning is done, switch back to global scaling
         cellSize.width *= transform.lossyScale.x;

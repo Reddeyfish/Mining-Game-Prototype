@@ -27,9 +27,20 @@ public static class Callback {
         yield return new WaitForFixedUpdate();
         code();
     }
-
+    //wrapper so that we don't need to call StartCoroutine()
     public static void FireForFixedUpdate(this CallbackMethod code, MonoBehaviour callingScript)
     {
         callingScript.StartCoroutine(FireForFixedUpdateRoutine(code));
+    }
+
+    public static IEnumerator FireForNextFrameRoutine(CallbackMethod code)
+    {
+        yield return 0;
+        code();
+    }
+
+    public static void FireForNextFrame(this CallbackMethod code, MonoBehaviour callingScript)
+    {
+        callingScript.StartCoroutine(FireForNextFrameRoutine(code));
     }
 }

@@ -179,6 +179,10 @@ public static class SimplePool {
 	/// </summary>
     static public GameObject Spawn (GameObject prefab, Vector3 pos, Quaternion rot) {
         Init(prefab);
+#if UNITY_EDITOR
+        if (prefab == null)
+            Debug.Log("You forgot to link up the prefab");
+#endif
         return pools[prefab].Spawn(pos, rot);
     }
 

@@ -10,6 +10,8 @@ public class Tags : MonoBehaviour {
     public const string comboUI = "ComboUI";
     public const string comboProgressUI = "ComboProgressUI";
     public const string popup = "Popup";
+    public const string itemSlots = "ItemSlotsUI";
+    public const string canvas = "Canvas";
 }
 
 public class Axis
