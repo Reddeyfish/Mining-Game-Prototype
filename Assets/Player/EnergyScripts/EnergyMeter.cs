@@ -60,6 +60,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         remainingDrainTime += amount;
         if (remainingDrainTime > _startDrainTime)
             remainingDrainTime = _startDrainTime;
+        updateMeter();
     }
 }
 

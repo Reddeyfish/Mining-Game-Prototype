@@ -32,6 +32,7 @@ public class WorldController : MonoBehaviour {
     public GameObject Boulder;
     public GameObject ExplosiveBlock;
     public GameObject TransparentBlock;
+    public GameObject homeBase;
     
     public static WorldController thi;
 	// Use this for initialization
@@ -69,7 +70,6 @@ public class WorldController : MonoBehaviour {
         for (int x = -3; x <= 3; x++)
             for (int y = -3; y <= 3; y++)
                 theMap[x][y] = new EmptyBlock();
-
         //now the real map
 
         LoadMapFromArray(theMap.toArray());
@@ -108,6 +108,10 @@ public class WorldController : MonoBehaviour {
         float obstacleValue = Random.value;
         if (!data)
         {
+            if (x == 0 && y == 0)
+            {
+                return enumToBlock(blockDataType.BASE);
+            }
             if (obstacleValue > boulderFrequency)
             {
                 return enumToBlock(blockDataType.EMPTYBLOCK);
@@ -274,6 +278,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.ExplosiveBlock);
             case blockDataType.TRANSPARENTMAP:
                 return new MapBlock(thi.TransparentBlock);
+            case blockDataType.BASE:
+                return new MapBlock(thi.homeBase);
             default:
                 Debug.Log("Data error");
                 return null;
@@ -298,6 +304,7 @@ public enum blockDataType
     BOULDER = 4,
     EXPLOSIVE = 5,
     TRANSPARENTMAP = 6,
+    BASE = 7,
 }
 
 public class Point
