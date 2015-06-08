@@ -15,7 +15,7 @@ public class ComboMeter : BaseDigListener {
     private float comboAmount = 0;
     private float inputtedAdds = 0;
 
-    private const float startDrainTime = 15.0f;
+    private const float startDrainTime = 5.0f;
 
     public float[] levels = {12, 24, 36};
     public float fillMultiplier = 1f; //just in case we need it

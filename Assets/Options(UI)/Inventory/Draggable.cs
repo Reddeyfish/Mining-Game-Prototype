@@ -33,9 +33,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         this.manager = manager;
         this.cellWidth = theUpgradeData.IDToUpgrade[ID].cellWidth;
         this.cellHeight = theUpgradeData.IDToUpgrade[ID].cellHeight;
-        Rect trans = ((RectTransform)transform).rect;
-        trans.width = cellWidth * theUpgradeData.cellPixelWidth;
-        trans.height = cellHeight * theUpgradeData.cellPixelHeight;
+        RectTransform trans = ((RectTransform)transform);
+        trans.sizeDelta = new Vector2(cellWidth * theUpgradeData.cellPixelWidth, cellHeight * theUpgradeData.cellPixelHeight);
         icon.sprite = theUpgradeData.IDToSprite(ID);
         ((RectTransform)transform).anchoredPosition = Vector3.zero;
         offset = new Vector3(-((RectTransform)transform).rect.width * transform.lossyScale.x / 2, ((RectTransform)transform).rect.height * transform.lossyScale.y / 2, 0);

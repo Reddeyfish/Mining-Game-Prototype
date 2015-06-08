@@ -19,6 +19,7 @@ public class WorldController : MonoBehaviour {
     [HideInInspector]
     public static float TransSeedY;
     private static float ObstacleSeed;
+    private const float explosiveFrequency = 0.9f; //have these frequencies descending, because they're used in an if/elseif
     private const float boulderFrequency = 0.8f;
     private const float oreFrequency = 0.65f;
     public const float transFrequency = 0.9f;
@@ -29,6 +30,7 @@ public class WorldController : MonoBehaviour {
     public GameObject OreBlock;
     public GameObject CrystalLight;
     public GameObject Boulder;
+    public GameObject ExplosiveBlock;
     public GameObject TransparentBlock;
     
     public static WorldController thi;
@@ -103,10 +105,10 @@ public class WorldController : MonoBehaviour {
 
     private EmptyBlock getBlockTypeByPosition(float x, float y, bool data)
     {
-        float boulderValue = Random.value;
+        float obstacleValue = Random.value;
         if (!data)
         {
-            if (boulderValue > boulderFrequency)
+            if (obstacleValue > boulderFrequency)
             {
                 return enumToBlock(blockDataType.EMPTYBLOCK);
             }
@@ -121,7 +123,11 @@ public class WorldController : MonoBehaviour {
         }
         else
         {
-            if (boulderValue > boulderFrequency)
+            if (obstacleValue > explosiveFrequency)
+            {
+                return enumToBlock(blockDataType.EXPLOSIVE);
+            }
+            else if (obstacleValue > boulderFrequency)
             {
                 return enumToBlock(blockDataType.BOULDER);
             }
@@ -264,6 +270,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.CrystalLight);
             case blockDataType.BOULDER:
                 return new MapBlock(thi.Boulder);
+            case blockDataType.EXPLOSIVE:
+                return new MapBlock(thi.ExplosiveBlock);
             case blockDataType.TRANSPARENTMAP:
                 return new MapBlock(thi.TransparentBlock);
             default:
@@ -288,7 +296,8 @@ public enum blockDataType
     OREBLOCK = 2,
     LIGHTBLOCK = 3,
     BOULDER = 4,
-    TRANSPARENTMAP = 5,
+    EXPLOSIVE = 5,
+    TRANSPARENTMAP = 6,
 }
 
 public class Point

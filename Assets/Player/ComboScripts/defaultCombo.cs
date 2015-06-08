@@ -10,6 +10,8 @@ public class defaultCombo : BaseDigListener
         {blockDataType.EMPTYBLOCK, 0},
         {blockDataType.LIGHTBLOCK, 0},
         {blockDataType.MAPBLOCK, 1},
+        {blockDataType.TRANSPARENTMAP, 1},
+        {blockDataType.EXPLOSIVE, 1},
         {blockDataType.OREBLOCK, 6},
     };
 

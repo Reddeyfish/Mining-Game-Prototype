@@ -9,7 +9,8 @@ public class theUpgradeData : MonoBehaviour {
     public static theUpgradeData thi;
     public static Dictionary<int, Upgrade> IDToUpgrade = new Dictionary<int, Upgrade>()
     {
-        {1 , new Upgrade("Inventory Upgrade", 2, 1, delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); })},
+        {1 , new Upgrade("Inventory Space", 2, 1, delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); })},
+        {2 , new Upgrade("Drill Toughness", 1, 2, delegate(GameObject player) { return player.AddComponent<UDrillToughness>(); })},
     };
 
     public Sprite[] sprites;

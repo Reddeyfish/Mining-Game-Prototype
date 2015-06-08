@@ -5,33 +5,39 @@ using System.Collections.Generic;
 
 public class DiggingListenerSystem : MonoBehaviour {
 
-    private List<BaseDigListener> listeners;
+    private List<IDigListener> listeners;
 
 	// Use this for initialization
 	void Awake () {
-        listeners = new List<BaseDigListener>();
+        listeners = new List<IDigListener>();
 	}
 
-    public void Subscribe(BaseDigListener listener)
+    public void Subscribe(IDigListener listener)
     {
         listeners.Add(listener);
     }
 
-    public void UnSubscribe(BaseDigListener listener)
+    public void UnSubscribe(IDigListener listener)
     {
         listeners.Remove(listener);
     }
 
     public void DigNotify(Block block)
     {
-        foreach (BaseDigListener listener in listeners)
+        foreach (IDigListener listener in listeners)
         {
             listener.OnNotify(block);
         }
     }
 }
 
-public abstract class BaseDigListener : MonoBehaviour
+public interface IDigListener
+{
+    void OnNotify(Block block);
+    void OnDestroy();
+}
+
+public abstract class BaseDigListener : MonoBehaviour, IDigListener
 {
     private DiggingListenerSystem listener;
 
@@ -41,7 +47,7 @@ public abstract class BaseDigListener : MonoBehaviour
         listener.Subscribe(this);
     }
     public abstract void OnNotify(Block block);
-    void OnDestroy()
+    public void OnDestroy()
     {
         listener.UnSubscribe(this);
     }

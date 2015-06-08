@@ -20,9 +20,11 @@ public class OreBlock : Block
             Light light = shard.GetComponent<Light>();
             if(light != null)
                 light.color = crystalColor;
+            
             Material mat = shard.GetComponent<Renderer>().material;
-            mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z, albedoAlpha);
-            mat.SetColor("_EmissionColor", HSVColor.HSVToRGB(colorValues.x, 1, 1));
+            float hue = (colorValues.x + 0.9f + 0.2f * Random.value) % 1;
+            mat.color = HSVColor.HSVToRGB(hue, colorValues.y, colorValues.z, albedoAlpha);
+            mat.SetColor("_EmissionColor", HSVColor.HSVToRGB(hue, 1, 1));
             shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, 0.06f);
         }
     }
