@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 public class defaultCombo : BaseDigListener
 {
-    private ComboMeter combo;
+    private EnergyMeter combo;
     private static Dictionary<blockDataType, float> blockValues = new Dictionary<blockDataType, float>()
     {
         {blockDataType.BOULDER, 0},
@@ -18,7 +18,7 @@ public class defaultCombo : BaseDigListener
     // Use this for initialization
     protected override void Start()
     {
-        combo = GetComponent<ComboMeter>();
+        combo = GetComponent<EnergyMeter>();
         base.Start();
     }
 

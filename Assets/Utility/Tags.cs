@@ -7,7 +7,7 @@ using System.Collections;
 public class Tags : MonoBehaviour {
     public const string player = "Player";
 	public const string block = "Block";
-    public const string comboUI = "ComboUI";
+    public const string energyUI = "ComboUI";
     public const string comboProgressUI = "ComboProgressUI";
     public const string popup = "Popup";
     public const string itemSlots = "ItemSlotsUI";

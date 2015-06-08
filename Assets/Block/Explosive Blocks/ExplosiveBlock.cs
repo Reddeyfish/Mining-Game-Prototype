@@ -2,14 +2,14 @@
 using System.Collections;
 
 public class ExplosiveBlock : Block, IDigListener {
-    Material mat;
+    protected Material mat;
     private DiggingListenerSystem listener;
     
-    private float hue;
+    protected float hue;
     private bool stable = true;
     private const float maxEmission = 1.2f;
-    private const float radius = 1.9f;
-    private const float detonationTime = 2f;
+    protected virtual float getRadius() { return 1.9f; }
+    protected virtual float detonationTime() { return 2f;}
     private const float detonationVariance = 8f;
     private const float detonationShake = 0.1f;
     public GameObject deathEffect;
@@ -25,6 +25,11 @@ public class ExplosiveBlock : Block, IDigListener {
     {
         listener.Subscribe(this);
         stable = true;
+        setVisuals();
+    }
+
+    public virtual void setVisuals()
+    {
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
         mat = transform.Find("Visuals").GetComponent<Renderer>().material;
         mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
@@ -67,7 +72,7 @@ public class ExplosiveBlock : Block, IDigListener {
             mat.SetColor(ShaderParams.emission, color * detonationVariance * Random.value);
             visuals.localPosition = Random.insideUnitSphere * detonationShake;
             yield return new WaitForFixedUpdate();
-            time += Time.fixedDeltaTime / detonationTime;
+            time += Time.fixedDeltaTime / detonationTime();
         }
         listener.UnSubscribe(this);
         SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
@@ -77,7 +82,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public void OnNotify(Block block)
     {
-        if (block != this && stable && (block.transform.position - this.transform.position).magnitude < radius)
+        if (block != this && stable && (block.transform.position - this.transform.position).magnitude < getRadius())
         {
             StopAllCoroutines();
             StartCoroutine(Detonate());
