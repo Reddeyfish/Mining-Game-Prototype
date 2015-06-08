@@ -6,8 +6,9 @@ public class OreBlock : ExplosiveBlock
     private const float albedoAlpha = 0.3f;
     protected override float getRadius() { return 2.5f; }
     protected override float detonationTime() { return 5f; }
-    private const float detonationVariance = 8f;
-    private const float detonationShake = 0.1f;
+    private const float defaultSpin = 0.06f;
+    private const float defaultEmission = 1f;
+    private const float detonationSpinMultiplier = 10;
 
     public override void setVisuals()
     {
@@ -16,6 +17,7 @@ public class OreBlock : ExplosiveBlock
         hue = colorValues.x;
         mat = visuals.GetComponent<Renderer>().material;
         mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
+        mat.SetColor(ShaderParams.emission, mat.color * defaultEmission);
         
         //add 'crystals'
         Color crystalColor = HSVColor.HSVToRGB(colorValues.x, 1, 1);
@@ -28,11 +30,18 @@ public class OreBlock : ExplosiveBlock
                 light.color = crystalColor;
             
             Material crystalMat = shard.GetComponent<Renderer>().material;
-            float crystalHue = (colorValues.x + 0.9f + 0.2f * Random.value) % 1;
-            crystalMat.color = HSVColor.HSVToRGB(crystalHue, colorValues.y, colorValues.z, albedoAlpha);
-            crystalMat.SetColor("_EmissionColor", HSVColor.HSVToRGB(crystalHue, 1, 1));
-            shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, 0.06f);
+            hue = (colorValues.x + 0.9f + 0.2f * Random.value) % 1;
+            crystalMat.color = HSVColor.HSVToRGB(hue, colorValues.y, colorValues.z, albedoAlpha);
+            crystalMat.SetColor("_EmissionColor", HSVColor.HSVToRGB(hue, 1, 1));
+            shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, defaultSpin);
         }
+    }
+
+    protected override void AlterVisuals()
+    {
+        Transform visuals = transform.Find("Visuals");
+        foreach (Transform shard in visuals)
+            shard.GetComponent<Animator>().speed *= detonationSpinMultiplier;
     }
 
     public override void Destroy()

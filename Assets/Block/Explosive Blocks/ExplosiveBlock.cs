@@ -61,8 +61,9 @@ public class ExplosiveBlock : Block, IDigListener {
         }
     }
 
-    IEnumerator Detonate()
+    protected virtual IEnumerator Detonate()
     {
+        AlterVisuals();
         stable = false;
         float time = 0;
         Color color = HSVColor.HSVToRGB(hue, 1f, 1);
@@ -77,6 +78,11 @@ public class ExplosiveBlock : Block, IDigListener {
         listener.UnSubscribe(this);
         SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
         Despawn();
+
+    }
+
+    protected virtual void AlterVisuals()
+    {
 
     }
 
