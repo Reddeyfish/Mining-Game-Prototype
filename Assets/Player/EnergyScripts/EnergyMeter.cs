@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(ComboListenerSystem))]
-public class EnergyMeter: MonoBehaviour {
+public class EnergyMeter: MonoBehaviour, IObliterable {
     private ComboListenerSystem listeners;
     private EnergyView view;
     private ComboProgressView progress;
@@ -10,6 +10,7 @@ public class EnergyMeter: MonoBehaviour {
     private Transform player;
     private float remainingDrainTime;
     private float _startDrainTime = 60.0f;
+    private float explosionDamage = 10f;
     public float StartDrainTime
     {
         get { return _startDrainTime; }
@@ -39,6 +40,13 @@ public class EnergyMeter: MonoBehaviour {
             remainingDrainTime -= Time.fixedDeltaTime;
             position = player.position;
         }
+    }
+
+    public void Obliterate()
+    {
+        remainingDrainTime -= explosionDamage;
+        float timerLevel = remainingDrainTime / _startDrainTime;
+        view.takeEnergyHit(timerLevel);
     }
 
     void updateMeter()
