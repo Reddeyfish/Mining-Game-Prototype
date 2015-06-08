@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class defaultRefining : BaseDigListener {
     private Inventory inventory;
-    private const float yield = 20.0f;
+    private List<ResourceConversion> conversionTable = new List<ResourceConversion>() 
+    {   new ResourceConversion(blockDataType.OREBLOCK, resourceType.PURECOLOR, 20),
+        new ResourceConversion(blockDataType.EXPLOSIVE, resourceType.UNSTABLE, 20)};
     public GameObject popup;
     // Use this for initialization
     protected override void Start()
@@ -14,7 +17,15 @@ public class defaultRefining : BaseDigListener {
 
     public override void OnNotify(Block block)
     {
-        if (block.getBlockType() == blockDataType.OREBLOCK)
+        foreach (ResourceConversion conversion in conversionTable)
+        {
+            extractResources(block, conversion);
+        }
+    }
+
+    void extractResources(Block block, ResourceConversion conversion) //blockDataType blockType, resourceType resourceType, int yield)
+    {
+        if (block.getBlockType() == conversion.blockType)
         {
             Color color = block.getColor();
             colorType type = colorType.RED;
@@ -29,7 +40,7 @@ public class defaultRefining : BaseDigListener {
                 max = color.b;
                 type = colorType.BLUE;
             }
-            int count = inventory.Add(new Resource(resourceType.PURECOLOR, type, Mathf.RoundToInt(yield * max)));
+            int count = inventory.Add(new Resource(conversion.resourceType, type, Mathf.RoundToInt(conversion.yield * max)));
             if (count > 0)
             {
                 PickupPopup UI = (SimplePool.Spawn(popup, this.transform.position) as GameObject).GetComponent<PickupPopup>();
@@ -37,5 +48,18 @@ public class defaultRefining : BaseDigListener {
                 UI.count = count;
             }
         }
+    }
+}
+
+public class ResourceConversion
+{
+    public blockDataType blockType;
+    public resourceType resourceType;
+    public int yield;
+    public ResourceConversion(blockDataType blockType, resourceType resourceType, int yield)
+    {
+        this.blockType = blockType;
+        this.resourceType = resourceType;
+        this.yield = yield;
     }
 }

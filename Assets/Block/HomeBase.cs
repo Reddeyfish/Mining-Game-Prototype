@@ -9,7 +9,7 @@ public class HomeBase : Block {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
 	}
 
-    public void Create()
+    public override void Create()
     {
         UI.alpha = 0;
     }
@@ -52,7 +52,7 @@ public class HomeBase : Block {
 
     public override bool isMinable() { return false; }
 
-    public virtual bool getDataValue() //counted as an air(false) or dirt(true) block
+    public override bool getDataValue() //counted as an air(false) or dirt(true) block
     {
         return false;
     }

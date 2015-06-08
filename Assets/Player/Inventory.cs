@@ -115,6 +115,7 @@ public enum colorType
 public enum resourceType
 {
     PURECOLOR = 0,
+    UNSTABLE = 1,
 }
 
 
@@ -126,6 +127,8 @@ public static class resourceTypeExtension
         {
             case resourceType.PURECOLOR:
                 return "Pure Colors";
+            case resourceType.UNSTABLE:
+                return "Unstable";
             default:
                 return "Resource";
         }
