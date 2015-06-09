@@ -7,4 +7,13 @@ public class Boulder : DirtBlock {
     {
         return blockDataType.BOULDER;
     }
+    protected override void UpdateMap()
+    {
+        WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.BOULDERINTERIOR);
+    }
+
+    public override void Destroy()
+    {
+        Debug.Log("Error; boulders are NOT minable");
+    }
 }

@@ -30,6 +30,7 @@ public class WorldController : MonoBehaviour {
     public GameObject OreBlock;
     public GameObject CrystalLight;
     public GameObject Boulder;
+    public GameObject BoulderInterior;
     public GameObject ExplosiveBlock;
     public GameObject TransparentBlock;
     public GameObject homeBase;
@@ -274,6 +275,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.CrystalLight);
             case blockDataType.BOULDER:
                 return new MapBlock(thi.Boulder);
+            case blockDataType.BOULDERINTERIOR:
+                return new MapBlock(thi.BoulderInterior);
             case blockDataType.EXPLOSIVE:
                 return new MapBlock(thi.ExplosiveBlock);
             case blockDataType.TRANSPARENTMAP:
@@ -302,9 +305,10 @@ public enum blockDataType
     OREBLOCK = 2,
     LIGHTBLOCK = 3,
     BOULDER = 4,
-    EXPLOSIVE = 5,
-    TRANSPARENTMAP = 6,
-    BASE = 7,
+    BOULDERINTERIOR = 5,
+    EXPLOSIVE = 6,
+    TRANSPARENTMAP = 7,
+    BASE = 8,
 }
 
 public class Point

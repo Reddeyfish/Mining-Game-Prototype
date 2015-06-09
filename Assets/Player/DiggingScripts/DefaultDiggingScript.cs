@@ -68,7 +68,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         drillSound.transform.LookAt(2 * drillSound.transform.position - target.transform.position);
         drillSound.transform.localPosition = (target.transform.position - drillSound.transform.position)/2;
         //particle effect coloring
-        drillParticles.startColor = target.transform.Find("Visuals").GetComponent<Renderer>().material.color;
+        drillParticles.startColor = target.GetComponent<Block>().getColor();
         drillParticles.Play();
 
         float digTime = target.digTime() * (1 + this.transform.position.magnitude/digPower); //drill gets slower the farther away we are from the center
@@ -76,8 +76,8 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         theStateMachine.SetBool(AnimatorParams.dig, true);
         Collider2D otherCollider = target.transform.GetComponent<Collider2D>();
         otherCollider.enabled = false;
-
-        while ((this.transform.position - target.transform.position).magnitude > 0.03f)
+        Vector3 targetPos = target.transform.position;
+        while ((this.transform.position - targetPos).magnitude > 0.03f)
         {
             rigid.velocity = (target.transform.position - this.transform.position).normalized / digTime;
             Camera.main.transform.localPosition = Random.insideUnitCircle * screenShakeIntensity;
