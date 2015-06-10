@@ -3,23 +3,34 @@ using System.Collections;
 using UnityEngine.UI;
 public class HomeBase : Block {
     CanvasGroup UI;
+    GameObject player;
+    GameObject inspectButton;
+    UIKeyboardShortcut keyShortcut;
+    ModeSwitch UIMode;
     public KeyCode key = KeyCode.Space;
 	// Use this for initialization
 	void Awake () {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
+        player = GameObject.FindGameObjectWithTag(Tags.player);
+        inspectButton = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectButton").gameObject;
+        UIMode = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel").GetComponent<ModeSwitch>();
 	}
-
+    /*
     public override void Create()
     {
-        UI.alpha = 0;
+        //shouldn't need anything, hopefully
     }
-
+    */
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == Tags.player)
         {
             UI.alpha = 1;
-            StartCoroutine(InputRoutine());
+            EnergyMeter meter = player.GetComponent<EnergyMeter>();
+            meter.Add(meter.StartDrainTime); //energy to max
+            keyShortcut = inspectButton.AddComponent<UIKeyboardShortcut>();
+            keyShortcut.key = key;
+            UIMode.setStoreMode(true);
         }
     }
 
@@ -28,21 +39,12 @@ public class HomeBase : Block {
         if (other.tag == Tags.player)
         {
             UI.alpha = 0;
-            StopAllCoroutines();
+            EnergyMeter meter = player.GetComponent<EnergyMeter>();
+            meter.Add(meter.StartDrainTime); //energy to max
+            Destroy(keyShortcut);
+            keyShortcut = null;
+            UIMode.setStoreMode(false);
         }
-    }
-
-    IEnumerator InputRoutine()
-    {
-        while (!Input.GetKeyDown(key))
-        {
-            yield return 0;
-        }
-
-        //they pressed space!
-        GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
-        EnergyMeter meter = player.GetComponent<EnergyMeter>();
-        meter.Add(meter.StartDrainTime); //energy to max
     }
 
     public override blockDataType getBlockType()

@@ -36,6 +36,7 @@ public class PlayerPrefKeys
 {
     public const string map = "Map";
     public const string inventory = "Inventory";
+    public const string baseInventory = "baseInventory";
     public const string items = "Items";
     public const string OreX = "OreSeedX";
     public const string OreY = "OreSeedY";

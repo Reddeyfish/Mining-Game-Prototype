@@ -91,7 +91,8 @@ public class ExplosiveBlock : Block, IDigListener {
         if (block != this && stable && (block.transform.position - this.transform.position).magnitude < getRadius())
         {
             StopAllCoroutines();
-            StartCoroutine(Detonate());
+            if(gameObject.activeInHierarchy)
+                StartCoroutine(Detonate());
         }
     }
 

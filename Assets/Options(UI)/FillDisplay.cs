@@ -8,10 +8,17 @@ public class FillDisplay : MonoBehaviour {
         
     }
 
-    public void set(int fill, int max)
+    public void set(int fill, int max = -1)
     {
         if(text == null)
             text = transform.Find("FillText").GetComponent<Text>(); //issues with set being called before Awake
-        text.text = fill.ToString() + "/" + max.ToString();
+        if (max > 0)
+        {
+            text.text = fill.ToString() + "/" + max.ToString();
+        }
+        else //max has default value; there is no max
+        {
+            text.text = fill.ToString();
+        }
     }
 }

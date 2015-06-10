@@ -33,7 +33,7 @@ public class OreBlock : ExplosiveBlock
             hue = (colorValues.x + 0.9f + 0.2f * Random.value) % 1;
             crystalMat.color = HSVColor.HSVToRGB(hue, colorValues.y, colorValues.z, albedoAlpha);
             crystalMat.SetColor("_EmissionColor", HSVColor.HSVToRGB(hue, 1, 1));
-            shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(0, defaultSpin);
+            shard.GetComponent<Animator>().speed = RandomLib.RandFloatRange(defaultSpin/2, defaultSpin/2);
         }
     }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class InventoryUIController : MonoBehaviour {
     List<InventoryEntry> entries;
     FillDisplay fill;
+    public bool baseMode { get; set; }
     public GameObject InventoryEntryPrefab;
 
     void Awake()
@@ -16,7 +17,20 @@ public class InventoryUIController : MonoBehaviour {
 	// Use this for initialization
     void OnEnable()
     {
-        Inventory inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        BaseInventory inventory;
+        if(baseMode)
+        {
+            Debug.Log("base");
+            inventory = GetComponent<BaseInventory>();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>().Merge(inventory);
+            fill.set(inventory.Fill);
+        }
+        else
+        {
+            Debug.Log("notbase");
+            inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+            fill.set(inventory.Fill, ((Inventory)inventory).maxSize);
+        }
         List<Resource> resources = inventory.Resources;
         if (resources.Count == 0)
         {
@@ -55,7 +69,7 @@ public class InventoryUIController : MonoBehaviour {
             entries.RemoveRange(entryIndex, entries.Count - entryIndex);
         }
 
-        fill.set(inventory.Fill, inventory.maxSize);
+        
     }
 
     private InventoryEntry SpawnNewEntry()

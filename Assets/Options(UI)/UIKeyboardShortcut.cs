@@ -16,7 +16,7 @@ public class UIKeyboardShortcut : MonoBehaviour
 
     }
 
-    protected virtual void SendEvent() //can override this for different functionality
+    public virtual void SendEvent() //can override this for different functionality
     {
         ExecuteEvents.Execute(this.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.submitHandler);
     }
