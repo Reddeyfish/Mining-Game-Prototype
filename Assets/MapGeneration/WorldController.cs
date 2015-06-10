@@ -19,6 +19,11 @@ public class WorldController : MonoBehaviour {
     [HideInInspector]
     public static float TransSeedY;
     private static float ObstacleSeed;
+
+    private const float tunnelFrequency = 0.97f;
+    private const int tunnelLengthMin = 3;
+    private const int tunnelLengthMax = 8;
+
     private const float explosiveFrequency = 0.9f; //have these frequencies descending, because they're used in an if/elseif
     private const float boulderFrequency = 0.8f;
     private const float oreFrequency = 0.65f;
@@ -65,7 +70,28 @@ public class WorldController : MonoBehaviour {
         //initialize data blocks
         for (int x = -mapSize + 1; x < mapSize; x++)
             for (int y = -mapSize + 1; y < mapSize; y++)
-                theMap[x][y] = new FullBlock();
+            {
+                if (Random.value > tunnelFrequency) //tunnel in x direction
+                {
+                    int start = x - Random.Range(tunnelLengthMin, tunnelLengthMax);
+                    if(start < -mapSize + 1)
+                        start = -mapSize + 1;
+                    for (int i = start; i <= x; i++)
+                        theMap[i][y] = new EmptyBlock();
+                }
+                else if (Random.value > tunnelFrequency) //tunnel in y direction
+                {
+                    int start = y - Random.Range(tunnelLengthMin, tunnelLengthMax);
+                    if (start < -mapSize + 1)
+                        start = -mapSize + 1;
+                    for (int i = start; i <= y; i++)
+                        theMap[x][i] = new EmptyBlock();
+                }
+                else
+                {
+                    theMap[x][y] = new FullBlock();
+                }
+            }
 
         // spawning area
         for (int x = -3; x <= 3; x++)
