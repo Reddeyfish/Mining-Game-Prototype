@@ -6,9 +6,13 @@ public class EnergyView : MonoBehaviour {
     private Image fill;
     private Transform player;
     private IEnumerator hit;
+    private IEnumerator warn;
     private AudioSource source;
     private float levelTarget;
-    private float lerpSpeed = 0.2f;
+    private Color targetColor;
+    private const float lerpSpeed = 0.2f;
+    private const float warnLevel = 0.2f;
+    private const float warnFlashTime = 0.5f;
     public AudioClip ready;
     public AudioClip drain;
     void Awake()
@@ -26,19 +30,23 @@ public class EnergyView : MonoBehaviour {
 
     public void setFillLevel(float level)
     {
+        levelTarget = Mathf.Clamp01(level);
         if (hit == null)
         {
-            slider.value = Mathf.Clamp01(level);
+            slider.value = levelTarget;
             updateColor();
-        }
-        else
-            levelTarget = level;
+        } 
     }
 
     public void updateColor()
     {
         Vector3 color = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.y));
-        fill.color = HSVColor.HSVToRGB(color.x, 1, 0.75f + 0.125f * color.z);
+        targetColor = HSVColor.HSVToRGB(color.x, 1, 0.75f + 0.125f * color.z);
+        if (warn == null)
+        {
+            fill.color = targetColor;
+            CheckWarn();
+        }
     }
 
     public void boost()
@@ -49,7 +57,7 @@ public class EnergyView : MonoBehaviour {
 
     public void takeEnergyHit(float level)
     {
-        levelTarget = level;
+        levelTarget = Mathf.Clamp01(level);
         if (hit == null)
         {
             hit = takeEnergyHitRoutine();
@@ -63,6 +71,11 @@ public class EnergyView : MonoBehaviour {
 
     public IEnumerator takeEnergyHitRoutine()
     {
+        if (warn != null)
+        {
+            StopCoroutine(warn);
+            warn = null;
+        }
         float startLevel = slider.value;
         while (Mathf.Abs(slider.value - levelTarget) > 0.02f)
         {
@@ -72,5 +85,40 @@ public class EnergyView : MonoBehaviour {
             yield return new WaitForFixedUpdate();
         }
         hit = null;
+        CheckWarn();
+    }
+
+    public IEnumerator warnRoutine()
+    {
+        
+        while (levelTarget < warnLevel)
+        {
+            float time = 0;
+            Debug.Log("Blink!");
+            fill.color = Color.white;
+            while (time < warnFlashTime)
+            {
+                yield return new WaitForFixedUpdate();
+                time += Time.fixedDeltaTime;
+            }
+            time = 0;
+
+            while (time < warnFlashTime)
+            {
+                fill.color = targetColor;
+                yield return new WaitForFixedUpdate();
+                time += Time.fixedDeltaTime;
+            }
+        }
+        warn = null;
+    }
+
+    public void CheckWarn()
+    {
+        if (levelTarget < warnLevel && warn == null)
+        {
+            warn = warnRoutine();
+            StartCoroutine(warn);
+        }
     }
 }

@@ -48,12 +48,14 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         float timerLevel = remainingDrainTime / _startDrainTime;
         view.takeEnergyHit(timerLevel);
         GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(0.5f);
+        CheckDeath();
     }
 
     void updateMeter()
     {
         float timerLevel = remainingDrainTime / _startDrainTime;
         view.setFillLevel(timerLevel);
+        CheckDeath();
     }
 
     public void Add(float amount)
@@ -62,6 +64,22 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         if (remainingDrainTime > _startDrainTime)
             remainingDrainTime = _startDrainTime;
         updateMeter();
+    }
+
+    void CheckDeath()
+    {
+        //warning for low energy should be in the view
+        if (remainingDrainTime <= 0)
+        {
+            //die
+
+            //todo: add visual effects
+
+            this.transform.position = Vector3.zero;
+            Camera.main.transform.parent.parent.position = Vector3.zero;
+            WorldController.thi.RecreateCreatedBlocks();
+            this.GetComponent<Inventory>().Wipe();
+        }
     }
 }
 
