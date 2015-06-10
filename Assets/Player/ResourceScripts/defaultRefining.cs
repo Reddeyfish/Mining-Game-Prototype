@@ -6,7 +6,8 @@ public class defaultRefining : BaseDigListener {
     private Inventory inventory;
     private List<ResourceConversion> conversionTable = new List<ResourceConversion>() 
     {   new ResourceConversion(blockDataType.OREBLOCK, resourceType.PURECOLOR, 20),
-        new ResourceConversion(blockDataType.EXPLOSIVE, resourceType.UNSTABLE, 20)};
+        new ResourceConversion(blockDataType.EXPLOSIVE, resourceType.UNSTABLE, 20),
+        new ResourceConversion(blockDataType.BOULDERINTERIOR, resourceType.HARDENED, 20),};
     public GameObject popup;
     // Use this for initialization
     protected override void Start()

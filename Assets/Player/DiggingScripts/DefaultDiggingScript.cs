@@ -79,7 +79,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         Vector3 targetPos = target.transform.position;
         while ((this.transform.position - targetPos).magnitude > 0.03f)
         {
-            rigid.velocity = (target.transform.position - this.transform.position).normalized / digTime;
+            rigid.velocity = (targetPos - this.transform.position).normalized / digTime; //note : the direction isn't always constant
             Camera.main.transform.localPosition = Random.insideUnitCircle * screenShakeIntensity;
             yield return new WaitForFixedUpdate();
         }
