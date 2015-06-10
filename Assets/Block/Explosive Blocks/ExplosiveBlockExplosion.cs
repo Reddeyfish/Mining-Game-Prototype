@@ -27,7 +27,8 @@ public class ExplosiveBlockExplosion : MonoBehaviour, ISpawnable
         //effects
         source.pitch = basePitch + Random.value * pitchVariance;
         source.Play();
-
+        ScreenShake.RandomShake(this, 0.1f, 0.4f);
+        Pause.Slow(this, 0.5f);
         //actual explosion
         Collider2D[] hits = Physics2D.OverlapAreaAll((Vector2)(this.transform.position) + (range * Vector2.one), (Vector2)(this.transform.position) - (range * Vector2.one));
         foreach (Collider2D hit in hits)

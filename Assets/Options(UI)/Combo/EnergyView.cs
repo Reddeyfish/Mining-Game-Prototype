@@ -55,8 +55,10 @@ public class EnergyView : MonoBehaviour {
             hit = takeEnergyHitRoutine();
             StartCoroutine(hit);
         }
+        /*
         source.clip = drain;
         source.Play();
+         * */
     }
 
     public IEnumerator takeEnergyHitRoutine()

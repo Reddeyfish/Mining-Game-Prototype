@@ -68,10 +68,6 @@ public class Pause : MonoBehaviour {
     //freeze time for a small amount in order to emphasize an impact or effect
     public static IEnumerator FreezeRoutine(float durationRealSeconds, float timeScale = 0f)
     {
-        if (frozen)
-            yield break;
-        frozen = true;
-
         if(!paused)
             currentTimeScale = Time.timeScale;
         Time.timeScale = timeScale;
@@ -86,6 +82,32 @@ public class Pause : MonoBehaviour {
 
 	public static void Freeze(MonoBehaviour callingScript, float durationRealSeconds, float timeScale = 0f) //wrapper for FreezeRoutine so that we don't need to call StartCoroutine()
 	{
-		callingScript.StartCoroutine(FreezeRoutine(durationRealSeconds, timeScale));
+        if (!frozen)
+            callingScript.StartCoroutine(FreezeRoutine(durationRealSeconds, timeScale));
+        frozen = true;
 	}
+
+    public static IEnumerator SlowRoutine(float durationRealSeconds, float startTimeScale = 0.5f)
+    {
+        if (!paused)
+            currentTimeScale = Time.timeScale;
+        Time.timeScale = startTimeScale;
+        float pauseEndTime = Time.realtimeSinceStartup + durationRealSeconds;
+        float pauseStartTime = Time.realtimeSinceStartup;
+        float endTimeScale = currentTimeScale ?? 1.0f;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            Time.timeScale = Mathf.Lerp(startTimeScale, endTimeScale, Mathf.Pow((Time.realtimeSinceStartup - pauseStartTime) / durationRealSeconds, 3));
+            yield return 0;
+        }
+        frozen = false;
+        Time.timeScale = endTimeScale;
+    }
+
+    public static void Slow(MonoBehaviour callingScript, float durationRealSeconds, float startTimeScale = 0.5f) //wrapper for SlowRoutine so that we don't need to call StartCoroutine()
+    {
+        if (!frozen)
+            callingScript.StartCoroutine(SlowRoutine(durationRealSeconds, startTimeScale));
+        frozen = true;
+    }
 }

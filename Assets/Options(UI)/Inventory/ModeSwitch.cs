@@ -14,6 +14,5 @@ public class ModeSwitch : MonoBehaviour, IDisabledAwake {
     {
         tab.gameObject.SetActive(store);
         inventoryController.baseMode = store;
-        Debug.Log(inventoryController.baseMode);
     }
 }

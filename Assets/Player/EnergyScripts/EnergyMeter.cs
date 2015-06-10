@@ -47,6 +47,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         remainingDrainTime -= explosionDamage;
         float timerLevel = remainingDrainTime / _startDrainTime;
         view.takeEnergyHit(timerLevel);
+        GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(0.5f);
     }
 
     void updateMeter()

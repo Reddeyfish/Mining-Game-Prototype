@@ -12,6 +12,7 @@ public class Tags : MonoBehaviour {
     public const string popup = "Popup";
     public const string itemSlots = "ItemSlotsUI";
     public const string canvas = "Canvas";
+    public const string screenFlash = "ScreenFlash";
 }
 
 public class Axis

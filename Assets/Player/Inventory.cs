@@ -27,12 +27,12 @@ public class Inventory : BaseInventory
             SimplePool.Spawn(inventoryFullMessage, this.transform.position);
         }
         base.Add(resource.Resize(count));
-        currentSize += count;
         return count; //calling script now does the UI stuff
     }
 
     public int spaceRemaining()
     {
+        Debug.Log(maxSize - currentSize);
         return maxSize - currentSize;
     }
 
