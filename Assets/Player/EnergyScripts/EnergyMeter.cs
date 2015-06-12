@@ -8,6 +8,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     private ComboProgressView progress;
     private Vector3 position;
     private Transform player;
+    private ScreenFlash flash;
     private float remainingDrainTime;
     private float _startDrainTime = 60.0f;
     private float explosionDamage = 10f;
@@ -28,6 +29,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         view = GameObject.FindGameObjectWithTag(Tags.energyUI).GetComponent<EnergyView>();
         progress = GameObject.FindGameObjectWithTag(Tags.comboProgressUI).GetComponent<ComboProgressView>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
+        flash = GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>();
         position = player.position;
         remainingDrainTime = _startDrainTime;
     }
@@ -47,7 +49,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         remainingDrainTime -= explosionDamage;
         float timerLevel = remainingDrainTime / _startDrainTime;
         view.takeEnergyHit(timerLevel);
-        GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(0.5f);
+        flash.Flash(0.5f);
         CheckDeath();
     }
 
@@ -71,15 +73,23 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         //warning for low energy should be in the view
         if (remainingDrainTime <= 0)
         {
-            //die
-
-            //todo: add visual effects
-
-            this.transform.position = Vector3.zero;
-            Camera.main.transform.parent.parent.position = Vector3.zero;
-            WorldController.thi.RecreateCreatedBlocks();
-            this.GetComponent<Inventory>().Wipe();
+            StartCoroutine(Die());
         }
+    }
+
+    IEnumerator Die()
+    {
+        remainingDrainTime = _startDrainTime;
+        this.GetComponent<Inventory>().Wipe();
+        this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+        flash.Fade(1.5f);
+
+        yield return new WaitForSeconds(1.5f);
+
+        this.transform.position = Vector3.zero;
+        Camera.main.transform.parent.parent.position = Vector3.zero;
+        WorldController.thi.RecreateCreatedBlocks();
+        this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 }
 

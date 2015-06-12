@@ -366,7 +366,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                 currentSize += data[3 * i + 2];
             }
         }
-        Debug.Log(resources.Count);
     }
 }
 
