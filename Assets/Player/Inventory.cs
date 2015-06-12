@@ -32,7 +32,6 @@ public class Inventory : BaseInventory
 
     public int spaceRemaining()
     {
-        Debug.Log(maxSize - currentSize);
         return maxSize - currentSize;
     }
 

@@ -21,6 +21,7 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
 
     public virtual int Add(Resource resource)
     {
+        Debug.Log(resources.Count);
         int loc = findResource(resource);
         if (loc != -1)
         {
@@ -113,7 +114,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
         
         foreach (Cost cost in costs)
         {
-            Debug.Log("Paying Costs");
             switch (cost.cost)
             {
                 case costType.RED:
@@ -131,7 +131,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                     Subtract(new Resource(cost.type, colorType.BLUE, cost.count));
                     break;
                 case costType.ANY:
-                    Debug.Log("Any");
                     /*remove the resources in such a way that the resulting values are as close as equal as possible.
                     
                      * in other words:
@@ -367,6 +366,7 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                 currentSize += data[3 * i + 2];
             }
         }
+        Debug.Log(resources.Count);
     }
 }
 
@@ -497,6 +497,10 @@ public class Resource : System.IEquatable<Resource>, System.IComparable<Resource
 
     public int CompareTo(Resource other)
     {
-        return (int)type * System.Enum.GetValues(typeof(colorType)).Length + (int)color - (int)(other.type) * System.Enum.GetValues(typeof(colorType)).Length + (int)(other.color);
+        if ((int)type - (int)(other.type) != 0)
+        {
+            return (int)type - (int)(other.type);
+        }
+        return  (int)color - (int)(other.color);
     }
 }

@@ -147,12 +147,10 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public void setCell(Draggable drag, int x, int y, bool notARearrangement)
     {
         drag.transform.SetParent(cells[x, y].transform);
-        Debug.Log("Set!");
         cells[x, y].transform.SetAsLastSibling(); //have the draggable rendered over all other cells
         Item newItem = new Item(x, y, drag.ID);
         newItem.component = theUpgradeData.IDToUpgrade[drag.ID].AddComponentTo(player);
         items.Add(newItem);
-        Debug.Log(items.Count);
         if (notARearrangement)
         {
             source.Play();

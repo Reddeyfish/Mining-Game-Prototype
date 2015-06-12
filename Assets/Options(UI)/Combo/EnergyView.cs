@@ -94,7 +94,6 @@ public class EnergyView : MonoBehaviour {
         while (levelTarget < warnLevel)
         {
             float time = 0;
-            Debug.Log("Blink!");
             fill.color = Color.white;
             while (time < warnFlashTime)
             {

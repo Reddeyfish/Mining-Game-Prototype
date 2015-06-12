@@ -221,7 +221,6 @@ public class WorldController : MonoBehaviour {
             seed = Random.Range(-9999, 9999) / 11;
             PlayerPrefs.SetFloat(key, seed);
         }
-        Debug.Log(seed);
     }
 
     void OnDestroy()

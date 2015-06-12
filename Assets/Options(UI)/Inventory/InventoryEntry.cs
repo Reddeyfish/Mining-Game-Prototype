@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class InventoryEntry : MonoBehaviour {
+public class InventoryEntry : MonoBehaviour, ISpawnable {
     private Image red;
     private Image green;
     private Image blue;
@@ -87,6 +87,13 @@ public class InventoryEntry : MonoBehaviour {
         blue = transform.Find("Blue").GetComponent<Image>();
         blueText = transform.Find("Blue/Count").GetComponent<Text>();
         nameText = transform.Find("Text").GetComponent<Text>();
+    }
+
+    public void Create()
+    {
+        this.Red = 0;
+        this.Green = 0;
+        this.Blue = 0;
     }
 
     public void set(Resource resource)

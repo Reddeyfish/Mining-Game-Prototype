@@ -43,7 +43,6 @@ public class InventoryUIController : MonoBehaviour {
             resources.Sort();
 
             InventoryEntry entry = entries.Count > 0 ? entry = entries[0] : SpawnNewEntry();
-
             entry.Type = resources[0].type;
             int entryIndex = 1; //for going through entries
 

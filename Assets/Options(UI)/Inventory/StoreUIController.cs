@@ -30,6 +30,11 @@ public class StoreUIController : MonoBehaviour {
         }
     }
 
+    void OnEnable()
+    {
+        recheckCosts();
+    }
+
     public void recheckCosts()
     {
         foreach(StoreEntry entry in entries)
