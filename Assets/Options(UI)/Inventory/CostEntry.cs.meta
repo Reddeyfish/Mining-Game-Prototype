@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: e5c6d50c9d61e474fbb93a7faa2f766e
+timeCreated: 1434001004
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - multihue: {fileID: 21300000, guid: 28a00768299805545b87ba547a3596e1, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

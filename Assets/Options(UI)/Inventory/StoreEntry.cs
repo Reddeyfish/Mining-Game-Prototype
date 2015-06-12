@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 public class StoreEntry : MonoBehaviour {
+    List<CostEntry> costEntries;
     Text itemName;
     RectTransform draggableHolder;
     LayoutElement layout;
@@ -9,6 +11,7 @@ public class StoreEntry : MonoBehaviour {
     private int _id;
     private const float wrapperHeight = 27;
     public GameObject draggablePrefab;
+    public GameObject costEntryPrefab;
     public int ID { 
         get { return _id; }
         set
@@ -16,6 +19,7 @@ public class StoreEntry : MonoBehaviour {
             _id = value;
             itemName.text = theUpgradeData.IDToUpgrade[value].ComponentName;
             restock(value);
+            setCosts(theUpgradeData.IDToUpgrade[value].costs);
         }
     }
 	// Use this for initialization
@@ -39,5 +43,38 @@ public class StoreEntry : MonoBehaviour {
         draggable.GetComponent<Draggable>().Instantiate(ID, manager);
         draggableHolder.sizeDelta = draggable.sizeDelta;
         layout.preferredHeight = draggable.rect.height + wrapperHeight;
+    }
+
+    void setCosts(List<Cost> costs)
+    {
+        if (costEntries != null)
+            foreach (CostEntry costEntry in costEntries)
+                SimplePool.Despawn(costEntry.gameObject);
+        costEntries = new List<CostEntry>();
+        Transform costParent = transform.Find("Costs");
+
+        foreach (Cost cost in costs)
+        {
+            Transform newEntry = SimplePool.Spawn(costEntryPrefab).transform;
+            newEntry.SetParent(costParent);
+            newEntry.localScale = Vector3.one;
+            CostEntry newCostEntry = newEntry.GetComponent<CostEntry>();
+            newCostEntry.Initialize(cost);
+            costEntries.Add(newCostEntry);
+        }
+
+    }
+}
+
+public class Cost
+{
+    public resourceType type;
+    public int count;
+    public costType cost;
+    public Cost(resourceType type, int count, costType cost)
+    {
+        this.type = type;
+        this.count = count;
+        this.cost = cost;
     }
 }

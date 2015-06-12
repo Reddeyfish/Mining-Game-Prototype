@@ -40,6 +40,7 @@ public class Inventory : BaseInventory
     {
         foreach (Resource resource in Resources)
             other.Add(resource);
+        Wipe();
     }
 
     public void Wipe()

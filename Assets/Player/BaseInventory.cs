@@ -45,6 +45,254 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
         return -1;
     }
 
+    private bool containsResource(Resource resource)
+    {
+        int index = findResource(resource);
+        if (index < 0)
+        {
+            return false;
+        }
+        if (resources[index].count < resource.count)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private int getResourceCount(Resource resource)
+    {
+        int index = findResource(resource);
+        return index < 0 ? 0 : resources[index].count;
+    }
+
+    private void deductResource(Resource resource)
+    {
+        int index = findResource(resource);
+        resources[index] = resources[index].Deduct(resource);
+    }
+
+    public bool canPayCosts(List<Cost> costs)
+    {
+        //assume only one mode; we won't have white + any costs on the same resource
+        foreach (Cost cost in costs)
+        {
+            switch (cost.cost)
+            {
+                case costType.RED:
+                    if(!containsResource(new Resource(cost.type, colorType.RED, cost.count))) return false;    
+                    break;
+
+                case costType.GREEN:
+                    if(!containsResource(new Resource(cost.type, colorType.GREEN, cost.count))) return false;    
+                    break;
+
+                case costType.BLUE:
+                    if(!containsResource(new Resource(cost.type, colorType.BLUE, cost.count))) return false;    
+                    break;
+
+                case costType.WHITE:
+                    //all 3 resources
+                    if (!containsResource(new Resource(cost.type, colorType.RED, cost.count))) return false;
+                    if (!containsResource(new Resource(cost.type, colorType.GREEN, cost.count))) return false;
+                    if (!containsResource(new Resource(cost.type, colorType.BLUE, cost.count))) return false;
+                    break;
+  
+                case costType.ANY:
+                    if (getResourceCount(new Resource(cost.type, colorType.RED)) 
+                        + getResourceCount(new Resource(cost.type, colorType.GREEN)) 
+                        + getResourceCount(new Resource(cost.type, colorType.BLUE)) 
+                        < cost.count) 
+                        return false;
+                    break;
+            }
+        }
+        return true;
+    }
+
+    public void PayCosts(List<Cost> costs)
+    {
+        
+        foreach (Cost cost in costs)
+        {
+            Debug.Log("Paying Costs");
+            switch (cost.cost)
+            {
+                case costType.RED:
+                    deductResource(new Resource(cost.type, colorType.RED, cost.count));
+                    break;
+                case costType.GREEN:
+                    deductResource(new Resource(cost.type, colorType.GREEN, cost.count));
+                    break;
+                case costType.BLUE:
+                    deductResource(new Resource(cost.type, colorType.BLUE, cost.count));
+                    break;
+                case costType.WHITE:
+                    deductResource(new Resource(cost.type, colorType.RED, cost.count));
+                    deductResource(new Resource(cost.type, colorType.GREEN, cost.count));
+                    deductResource(new Resource(cost.type, colorType.BLUE, cost.count));
+                    break;
+                case costType.ANY:
+                    Debug.Log("Any");
+                    /*remove the resources in such a way that the resulting values are as close as equal as possible.
+                    
+                     * in other words:
+                     * while(cost.count > 0)
+                     * //deduct one from the tallest resource
+                     * //cost.count--;
+                     * 
+                     * different algorithm, but the same result
+                    */
+                    int[] relevantResources = {findResource(new Resource(cost.type, colorType.RED)),
+                                                   findResource(new Resource(cost.type, colorType.GREEN)),
+                                                   findResource(new Resource(cost.type, colorType.BLUE)),};
+                    int full = 0;
+                    for (int i = 0; i < 3; i++)
+                        if (relevantResources[i] != -1)
+                            full++;
+                    Debug.Log(full);
+                    switch (full)
+                    {
+                            //there shouldn't be a case 0; if there is, then there is either a zero cost, or someone didn't check that this was payable
+                        case 1:
+                            int index = relevantResources[0];
+                            if (index == -1)
+                            {
+                                index = relevantResources[1];
+                                if (index == -1)
+                                    index = relevantResources[2];
+                            }
+                            Debug.Log(cost.count);
+                            resources[index] = resources[index].Deduct(cost.count);
+                            break;
+                        
+                        case 2:
+                            int[] newRelevantResources = new int[2];
+                            int offset = 0;
+                            for (int i = 0; i < 3; i++)
+                            {
+                                if (relevantResources[i] != -1)
+                                {
+                                    newRelevantResources[i + offset] = relevantResources[i];
+                                }
+                                else
+                                {
+                                    offset -= 1;
+                                }
+                            }
+                            if (resources[newRelevantResources[0]] > resources[newRelevantResources[1]])
+                                newRelevantResources = new int[] { newRelevantResources[1], newRelevantResources[0] };
+                            //now sorted, ascending
+                            Debug.Log("Ascending");
+                            Debug.Log(resources[newRelevantResources[0]].count);
+                            Debug.Log(resources[newRelevantResources[1]].count);
+                            int max = resources[newRelevantResources[1]].count - resources[newRelevantResources[0]].count;
+                            Debug.Log(max);
+                            if (max >= cost.count)
+                            {
+                                Debug.Log(cost.count);
+                                resources[newRelevantResources[1]] = resources[newRelevantResources[1]].Deduct(cost.count);
+                                break;
+                            }
+
+                            int min = resources[relevantResources[0]].count;
+
+                            min = min - (max + 2 * min - cost.count) / 2;
+                            Debug.Log(max + min + (cost.count % 2));
+                            Debug.Log(min);
+                            resources[newRelevantResources[1]] = resources[newRelevantResources[1]].Deduct(max + min + (cost.count % 2));
+                            resources[newRelevantResources[0]] = resources[newRelevantResources[0]].Deduct(min);
+                            break;
+
+                        case 3:
+                            //sort
+                            if (resources[relevantResources[0]] <= resources[relevantResources[1]])
+                            {
+                                if (resources[relevantResources[1]] > resources[relevantResources[2]])
+                                {
+                                    if (resources[relevantResources[0]] < resources[relevantResources[2]])
+                                    {
+                                        //swap
+                                        int temp = relevantResources[0];
+                                        relevantResources[0] = relevantResources[2];
+                                        relevantResources[2] = relevantResources[1];
+                                        relevantResources[1] = temp;
+                                    }
+                                    else
+                                    {
+                                        int temp = relevantResources[1];
+                                        relevantResources[1] = relevantResources[2];
+                                        relevantResources[2] = temp;
+                                    }
+                                }
+                                else
+                                {
+                                    // do nothing; correctly sorted
+                                }
+                            }
+                            else
+                            {
+                                if (resources[relevantResources[0]] > resources[relevantResources[2]])
+                                {
+                                    if (resources[relevantResources[1]] < resources[relevantResources[2]])
+                                    {
+                                        int temp = relevantResources[0];
+                                        relevantResources[0] = relevantResources[1];
+                                        relevantResources[1] = relevantResources[2];
+                                        relevantResources[2] = temp;
+                                    }
+                                    else
+                                    {
+                                        int temp = relevantResources[0];
+                                        relevantResources[0] = relevantResources[2];
+                                        relevantResources[2] = temp;
+                                    }
+                                }
+                                else
+                                {
+                                    int temp = relevantResources[0];
+                                    relevantResources[0] = relevantResources[1];
+                                    relevantResources[1] = temp;
+                                }
+                            }
+                            //now sorted in ascending order
+                            int two = resources[relevantResources[2]].count - resources[relevantResources[1]].count;
+                            if (two >= cost.count)
+                            {
+                                Debug.Log(cost.count);
+                                resources[relevantResources[2]] = resources[relevantResources[2]].Deduct(cost.count);
+                                break;
+                            }
+
+                            int one = resources[relevantResources[1]].count - resources[relevantResources[0]].count;
+
+                            if (two + 2 * one >= cost.count)
+                            {
+                                one = one - (two + 2 * one - cost.count) / 2; //deduction for each of the two resources in the 'one' group (leaving out remainders)
+                                Debug.Log(two + one + (cost.count % 2));
+                                Debug.Log(one);
+                                resources[relevantResources[2]] = resources[relevantResources[2]].Deduct(two + one + (cost.count % 2));
+                                resources[relevantResources[1]] = resources[relevantResources[1]].Deduct(one);
+                                break;
+                            }
+
+                            //no need for an if; this is the last one
+
+                            int zero = resources[relevantResources[0]].count;
+                            zero = zero - (two + 2 * one + 3 * zero - cost.count) / 3;
+                            Debug.Log(two + one + zero + cost.count % 3 > 0 ? 1 : 0);
+                            Debug.Log(one + zero + cost.count % 3 > 1 ? 1 : 0);
+                            Debug.Log(zero);
+                            resources[relevantResources[2]] = resources[relevantResources[2]].Deduct(two + one + zero + cost.count % 3 > 0 ? 1 : 0);
+                            resources[relevantResources[1]] = resources[relevantResources[1]].Deduct(one + zero + cost.count % 3 > 1 ? 1 : 0);
+                            resources[relevantResources[1]] = resources[relevantResources[1]].Deduct(zero);
+
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+
     void OnDestroy()
     {
         // save data
@@ -110,7 +358,7 @@ public static class resourceTypeExtension
         switch (type)
         {
             case resourceType.PURECOLOR:
-                return "Pure Colors";
+                return "Pure";
             case resourceType.UNSTABLE:
                 return "Unstable";
             case resourceType.HARDENED:
@@ -142,7 +390,7 @@ public class Resource : System.IEquatable<Resource>, System.IComparable<Resource
     public resourceType type;
     public colorType color;
     public int count;
-    public Resource(resourceType type, colorType color, int count)
+    public Resource(resourceType type, colorType color, int count = 0)
     {
         this.type = type;
         this.color = color;
@@ -152,6 +400,16 @@ public class Resource : System.IEquatable<Resource>, System.IComparable<Resource
     public Resource Resize(int count)
     {
         return new Resource(this.type, this.color, count);
+    }
+
+    public Resource Deduct(int count)
+    {
+        return new Resource(this.type, this.color, this.count - count);
+    }
+
+    public Resource Deduct(Resource other)
+    {
+        return new Resource(this.type, this.color, this.count - other.count);
     }
 
     public bool Equals(Resource obj)
@@ -176,6 +434,26 @@ public class Resource : System.IEquatable<Resource>, System.IComparable<Resource
     public static Resource operator +(Resource c1, int count)
     {
         return new Resource(c1.type, c1.color, c1.count + count);
+    }
+
+    public static bool operator <(Resource r1, Resource r2)
+    {
+        return r1.count < r2.count;
+    }
+
+    public static bool operator <=(Resource r1, Resource r2)
+    {
+        return r1.count <= r2.count;
+    }
+
+    public static bool operator >(Resource r1, Resource r2)
+    {
+        return r1.count > r2.count;
+    }
+
+    public static bool operator >=(Resource r1, Resource r2)
+    {
+        return r1.count >= r2.count;
     }
 
     public int CompareTo(Resource other)

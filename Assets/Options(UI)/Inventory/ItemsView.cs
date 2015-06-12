@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class ItemsView : MonoBehaviour, IDisabledAwake {
     List<Item> items;
     GameObject[,] cells;
+    AudioSource source;
+    BaseInventory inventory;
     private GameObject player;
     private Rect cellSize;
     private const int rows = 4;
@@ -16,6 +18,8 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public int destroyRange = 3;
 	// Use this for initialization
 	public void Awaken () {
+        source = GetComponent<AudioSource>();
+        inventory = transform.parent.parent.Find("InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>();
         player = GameObject.FindGameObjectWithTag(Tags.player);
 
         //spawn cells
@@ -47,7 +51,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             {
                 Draggable drag = SimplePool.Spawn(draggable).GetComponent<Draggable>();
                 drag.ID = data[3 * i];
-                setCell(drag, data[3 * i + 1], data[3 * i + 2]);
+                setCell(drag, data[3 * i + 1], data[3 * i + 2], false);
                 drag.Instantiate(data[3 * i], this, data[3 * i + 1], data[3 * i + 2]);
                 setCellRangeFill(data[3 * i + 1], data[3 * i + 2], drag.cellWidth, drag.cellHeight, open: false);
                 ((RectTransform)drag.transform).anchoredPosition = Vector3.zero;
@@ -115,7 +119,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
                 cells[x, y].GetComponent<CellEntry>().Empty = open;
     }
 
-    public void removeCell(Draggable drag, int x, int y)
+    public void removeCell(Draggable drag, int x, int y, bool notARearrangement)
     {
         Item target = new Item(x, y, drag.ID);
         for (int i = 0; i < items.Count; i++)
@@ -131,9 +135,13 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             Debug.Log("Error: We've lost a component!");
         }
         Debug.Log(items.Count);
+        if (notARearrangement)
+        {
+            source.Play();
+        }
     }
 
-    public void setCell(Draggable drag, int x, int y)
+    public void setCell(Draggable drag, int x, int y, bool notARearrangement)
     {
         drag.transform.SetParent(cells[x, y].transform);
         Debug.Log("Set!");
@@ -142,6 +150,11 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         newItem.component = theUpgradeData.IDToUpgrade[drag.ID].AddComponentTo(player);
         items.Add(newItem);
         Debug.Log(items.Count);
+        if (notARearrangement)
+        {
+            source.Play();
+            inventory.PayCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
+        }
     }
 
     private static bool inModRange(float value, float mod, float tolerance)
