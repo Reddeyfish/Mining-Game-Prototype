@@ -15,6 +15,7 @@ public class EnergyView : MonoBehaviour {
     private const float warnFlashTime = 0.5f;
     public AudioClip ready;
     public AudioClip drain;
+    public AudioClip warnSound;
     void Awake()
     {
         slider = GetComponent<Slider>();
@@ -93,6 +94,9 @@ public class EnergyView : MonoBehaviour {
         
         while (levelTarget < warnLevel)
         {
+            source.clip = warnSound;
+            source.Play();
+
             float time = 0;
             fill.color = Color.white;
             while (time < warnFlashTime)

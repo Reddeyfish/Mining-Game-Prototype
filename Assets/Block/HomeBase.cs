@@ -28,8 +28,11 @@ public class HomeBase : Block {
             UI.alpha = 1;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max
-            keyShortcut = inspectButton.AddComponent<UIKeyboardShortcut>();
-            keyShortcut.key = key;
+            if (keyShortcut == null)
+            {
+                keyShortcut = inspectButton.AddComponent<UIKeyboardShortcut>();
+                keyShortcut.key = key;
+            }
             UIMode.setStoreMode(true);
         }
     }
