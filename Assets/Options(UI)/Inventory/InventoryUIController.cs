@@ -20,14 +20,12 @@ public class InventoryUIController : MonoBehaviour {
         BaseInventory inventory;
         if(baseMode)
         {
-            Debug.Log("base");
             inventory = GetComponent<BaseInventory>();
             GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>().Merge(inventory);
             fill.set(inventory.Fill);
         }
         else
         {
-            Debug.Log("notbase");
             inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
             fill.set(inventory.Fill, ((Inventory)inventory).maxSize);
         }

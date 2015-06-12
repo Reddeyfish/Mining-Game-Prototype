@@ -11,12 +11,12 @@ public class theUpgradeData : MonoBehaviour {
     {
         {1 , new Upgrade("Inventory Space", 2, 1, 
             delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); }, 
-            new List<Cost>(){
+            new Cost[]{
             new Cost(resourceType.PURECOLOR, 12, costType.ANY), 
             })},
         {2 , new Upgrade("Drill Toughness", 1, 2, 
             delegate(GameObject player) { return player.AddComponent<UDrillToughness>(); }, 
-            new List<Cost>(){
+            new Cost[]{
             new Cost(resourceType.HARDENED, 12, costType.ANY), 
             })},
     };
@@ -40,8 +40,8 @@ public class Upgrade
     public int cellWidth;
     public int cellHeight;
     public AddComponentDelegate AddComponentTo;
-    public List<Cost> costs;
-    public Upgrade(string ComponentName, int cellWidth, int cellHeight, AddComponentDelegate AddComponent, List<Cost> costs)
+    public Cost[] costs;
+    public Upgrade(string ComponentName, int cellWidth, int cellHeight, AddComponentDelegate AddComponent, Cost[] costs)
     {
         this.ComponentName = ComponentName;
         this.cellWidth = cellWidth;

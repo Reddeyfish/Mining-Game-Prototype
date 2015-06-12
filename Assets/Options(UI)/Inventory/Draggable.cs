@@ -65,19 +65,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
      manager.positionToCellIndex(centerToTopLeftCell + Input.mousePosition, cellWidth, cellHeight, out x, out y);
      if (x != null && y != null)
      {
-         //switch parents!
-         if (cellX != -1 && cellY != -1)
-         {
-             //remove ourself from the old parent cell
-             manager.removeCell(this, cellX, cellY, notARearrangement : x == -1 && y == -1);
-             manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: true);
-         }
-         else
-         {
-             //if we don't have a cell parent, then we have a store parent
-             parent.parent.GetComponent<StoreEntry>().restock(ID);
-         }
-
          if (x == -1 && y == -1)
          {
              //remove ourselves
@@ -86,6 +73,19 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
          else
          {
              manager.setCell(this, x.GetValueOrDefault(), y.GetValueOrDefault(), notARearrangement : cellX == -1 && cellY == -1);
+         }
+
+         //switch parents!
+         if (cellX != -1 && cellY != -1)
+         {
+             //remove ourself from the old parent cell
+             manager.removeCell(this, cellX, cellY, notARearrangement: x == -1 && y == -1);
+             manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: true);
+         }
+         else
+         {
+             //if we don't have a cell parent, then we have a store parent
+             parent.parent.GetComponent<StoreEntry>().restock(ID);
          }
 
          cellX = x.GetValueOrDefault();

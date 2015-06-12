@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 public class StoreEntry : MonoBehaviour {
-    List<CostEntry> costEntries;
+    CostEntry[] costEntries;
     Text itemName;
     RectTransform draggableHolder;
     LayoutElement layout;
     ItemsView manager;
+    GameObject blocker;
     private int _id;
     private const float wrapperHeight = 27;
     public GameObject draggablePrefab;
@@ -18,8 +19,8 @@ public class StoreEntry : MonoBehaviour {
         {
             _id = value;
             itemName.text = theUpgradeData.IDToUpgrade[value].ComponentName;
-            restock(value);
             setCosts(theUpgradeData.IDToUpgrade[value].costs);
+            restock(value);
         }
     }
 	// Use this for initialization
@@ -27,6 +28,7 @@ public class StoreEntry : MonoBehaviour {
         itemName = transform.Find("Name").GetComponent<Text>();
         draggableHolder = (RectTransform)(transform.Find("DraggableHolder"));
         layout = GetComponent<LayoutElement>();
+        blocker = transform.Find("Blocker").gameObject;
 	    
 	}
 
@@ -43,26 +45,41 @@ public class StoreEntry : MonoBehaviour {
         draggable.GetComponent<Draggable>().Instantiate(ID, manager);
         draggableHolder.sizeDelta = draggable.sizeDelta;
         layout.preferredHeight = draggable.rect.height + wrapperHeight;
+        recheckCosts();
     }
 
-    void setCosts(List<Cost> costs)
+    void setCosts(Cost[] costs)
     {
         if (costEntries != null)
             foreach (CostEntry costEntry in costEntries)
                 SimplePool.Despawn(costEntry.gameObject);
-        costEntries = new List<CostEntry>();
+        costEntries = new CostEntry[costs.Length];
         Transform costParent = transform.Find("Costs");
-
-        foreach (Cost cost in costs)
+        blocker.SetActive(false);
+        for (int i = 0; i < costs.Length; i++ )//(Cost cost in costs)
         {
             Transform newEntry = SimplePool.Spawn(costEntryPrefab).transform;
             newEntry.SetParent(costParent);
             newEntry.localScale = Vector3.one;
             CostEntry newCostEntry = newEntry.GetComponent<CostEntry>();
-            newCostEntry.Initialize(cost);
-            costEntries.Add(newCostEntry);
+            bool afforded = newCostEntry.Initialize(costs[i], manager);
+            if (!afforded)
+                blocker.SetActive(true);
+            costEntries[i] = newCostEntry;
         }
+    }
 
+    public void recheckCosts()
+    {
+        blocker.SetActive(false);
+        foreach (CostEntry cost in costEntries)
+        {
+            if (!cost.affordable(manager))
+            {
+                blocker.SetActive(true);
+                return;
+            }      
+        }
     }
 }
 

@@ -5,20 +5,21 @@ public class CostEntry : MonoBehaviour {
     Text title;
     Image icon;
     Text countDisplay;
+    GameObject blocker;
     private int _count;
-    public int Count { get { return _count; }
+    private int Count { get { return _count; }
         set { _count = value;
         countDisplay.text = "x" + value.ToString();
         }
     }
     private resourceType _type;
-    public resourceType Type { get { return _type;}
+    private resourceType Type { get { return _type;}
         set { _type = value;
         title.text = value.ToReadableString();
         }
     }
     private costType _cost;
-    public costType Cost
+    private costType Cost
     {
         get { return _cost; }
         set
@@ -61,11 +62,7 @@ public class CostEntry : MonoBehaviour {
         title = transform.Find("Title").GetComponent<Text>();
         icon = transform.Find("Icon").GetComponent<Image>();
         countDisplay = transform.Find("Count").GetComponent<Text>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+        blocker = transform.Find("Blocker").gameObject;
 	}
 
     void Initialize(resourceType type, int count, costType cost)
@@ -75,11 +72,27 @@ public class CostEntry : MonoBehaviour {
         Cost = cost;
     }
 
-    public void Initialize(Cost cost)
+    public bool Initialize(Cost cost, ItemsView manager)
     {
         Type = cost.type;
         Count = cost.count;
         Cost = cost.cost;
+
+        return affordable(manager);
+    }
+
+    public bool affordable(ItemsView manager)
+    {
+        if (manager.getInventory().canPayCost(new Cost(Type, Count, Cost)))
+        {
+            blocker.SetActive(false);
+            return true;
+        }
+        else
+        {
+            blocker.SetActive(true);
+        }
+        return false;
     }
 }
 

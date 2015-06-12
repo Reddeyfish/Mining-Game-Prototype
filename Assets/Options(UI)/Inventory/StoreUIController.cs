@@ -29,4 +29,10 @@ public class StoreUIController : MonoBehaviour {
             entries.Add(storeEntry);
         }
     }
+
+    public void recheckCosts()
+    {
+        foreach(StoreEntry entry in entries)
+            entry.recheckCosts();
+    }
 }

@@ -7,6 +7,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     GameObject[,] cells;
     AudioSource source;
     BaseInventory inventory;
+    StoreUIController store;
     private GameObject player;
     private Rect cellSize;
     private const int rows = 4;
@@ -21,7 +22,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         source = GetComponent<AudioSource>();
         inventory = transform.parent.parent.Find("InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>();
         player = GameObject.FindGameObjectWithTag(Tags.player);
-
+        store = transform.parent.parent.Find("Store/SlotsBackground/Content").GetComponent<StoreUIController>();
         //spawn cells
         cells = new GameObject[rows, cols];
         cellSize = ((RectTransform)(cell.transform)).rect;
@@ -138,6 +139,8 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         if (notARearrangement)
         {
             source.Play();
+            inventory.RefundCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
+            store.recheckCosts();
         }
     }
 
@@ -178,6 +181,8 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         else
             Debug.Log("Items Save Failed!");
     }
+
+    public BaseInventory getInventory() { return inventory; }
 }
 
 public class Item : System.IEquatable<Item>
