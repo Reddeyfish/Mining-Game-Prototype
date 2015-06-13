@@ -181,7 +181,7 @@ public class WorldController : MonoBehaviour {
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForFixedUpdate();
             UpdateCreatedBlocks();
         }
 

@@ -77,19 +77,19 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         }
     }
 
-    IEnumerator Die()
+    private const float deathTipDuration = 10f;
+    IEnumerator Die() //might need to move this to it's own seperate behavior
     {
         remainingDrainTime = _startDrainTime;
         this.GetComponent<Inventory>().Wipe();
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-        flash.Fade(1.5f);
-
-        yield return new WaitForSeconds(1.5f);
+        yield return flash.Fade(1.5f);
 
         this.transform.position = Vector3.zero;
         Camera.main.transform.parent.parent.position = Vector3.zero;
         WorldController.thi.RecreateCreatedBlocks();
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTimedTip(TutorialTipType.ENERGYDEATH, deathTipDuration);
     }
 }
 

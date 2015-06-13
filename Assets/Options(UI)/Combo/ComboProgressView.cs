@@ -47,9 +47,9 @@ public class ComboProgressView : MonoBehaviour {
         group.alpha = 0;
     }
 
-    public void Hide()
+    public Coroutine Hide()
     {
-        StartCoroutine(HideRoutine());
+        return StartCoroutine(HideRoutine());
     }
 
     private IEnumerator FillRoutine(float level)
@@ -67,7 +67,7 @@ public class ComboProgressView : MonoBehaviour {
         lerpfilling = null;
     }
 
-    public void setFillLevel(float level)
+    public Coroutine setFillLevel(float level)
     {
         
         if (lerpfilling != null)
@@ -75,7 +75,7 @@ public class ComboProgressView : MonoBehaviour {
             StopCoroutine(lerpfilling);
         }
         lerpfilling = FillRoutine(Mathf.Clamp01(level));
-        StartCoroutine(lerpfilling);
+        return StartCoroutine(lerpfilling);
     }
 
     private IEnumerator DingRoutine(float level)
@@ -102,7 +102,7 @@ public class ComboProgressView : MonoBehaviour {
         fill.color = target;
     }
 
-    public void Ding(float level)
+    public Coroutine Ding(float level)
     {
         source.clip = ding;
         source.Play();
@@ -112,7 +112,7 @@ public class ComboProgressView : MonoBehaviour {
             StopCoroutine(lerpfilling);
             lerpfilling = null;
         }
-        StartCoroutine(DingRoutine(Mathf.Clamp01(level)));
+        return StartCoroutine(DingRoutine(Mathf.Clamp01(level)));
     }
 
     private IEnumerator ShowRoutine() //oppisite of hiding
@@ -132,8 +132,8 @@ public class ComboProgressView : MonoBehaviour {
         group.alpha = 1;
     }
 
-    public void Show()
+    public Coroutine Show()
     {
-        StartCoroutine(ShowRoutine());
+        return StartCoroutine(ShowRoutine());
     }
 }

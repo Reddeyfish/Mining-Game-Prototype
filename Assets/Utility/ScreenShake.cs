@@ -19,9 +19,9 @@ public class ScreenShake : MonoBehaviour {
         Camera.main.transform.localPosition = Vector3.zero; //reset to default
     }
 
-    public static void RandomShake(MonoBehaviour callingScript, float duration, float magnitude) //wrapper to include StartCoroutine
+    public static Coroutine RandomShake(MonoBehaviour callingScript, float duration, float magnitude) //wrapper to include StartCoroutine
     {
-        callingScript.StartCoroutine(RandomShakeRoutine(duration, magnitude));
+        return callingScript.StartCoroutine(RandomShakeRoutine(duration, magnitude));
     }
 
     public static IEnumerator SmoothShakeRoutine(float duration, float magnitude, float frequency)
@@ -56,8 +56,8 @@ public class ScreenShake : MonoBehaviour {
         return (2 * Mathf.PerlinNoise(x, y)) - 1;
     }
 
-    public static void SmoothShake(MonoBehaviour callingScript, float duration, float magnitude, float frequency) //wrapper to include StartCoroutine
+    public static Coroutine SmoothShake(MonoBehaviour callingScript, float duration, float magnitude, float frequency) //wrapper to include StartCoroutine
     {
-        callingScript.StartCoroutine(SmoothShakeRoutine(duration, magnitude, frequency));
+        return callingScript.StartCoroutine(SmoothShakeRoutine(duration, magnitude, frequency));
     }
 }

@@ -80,11 +80,13 @@ public class Pause : MonoBehaviour {
         Time.timeScale = currentTimeScale ?? 1.0f;
     }
 
-	public static void Freeze(MonoBehaviour callingScript, float durationRealSeconds, float timeScale = 0f) //wrapper for FreezeRoutine so that we don't need to call StartCoroutine()
+	public static Coroutine Freeze(MonoBehaviour callingScript, float durationRealSeconds, float timeScale = 0f) //wrapper for FreezeRoutine so that we don't need to call StartCoroutine()
 	{
+        Coroutine result = null;
         if (!frozen)
-            callingScript.StartCoroutine(FreezeRoutine(durationRealSeconds, timeScale));
+            result = callingScript.StartCoroutine(FreezeRoutine(durationRealSeconds, timeScale));
         frozen = true;
+        return result;
 	}
 
     public static IEnumerator SlowRoutine(float durationRealSeconds, float startTimeScale = 0.5f)
@@ -104,10 +106,12 @@ public class Pause : MonoBehaviour {
         Time.timeScale = endTimeScale;
     }
 
-    public static void Slow(MonoBehaviour callingScript, float durationRealSeconds, float startTimeScale = 0.5f) //wrapper for SlowRoutine so that we don't need to call StartCoroutine()
+    public static Coroutine Slow(MonoBehaviour callingScript, float durationRealSeconds, float startTimeScale = 0.5f) //wrapper for SlowRoutine so that we don't need to call StartCoroutine()
     {
+        Coroutine result = null;
         if (!frozen)
-            callingScript.StartCoroutine(SlowRoutine(durationRealSeconds, startTimeScale));
+            result = callingScript.StartCoroutine(SlowRoutine(durationRealSeconds, startTimeScale));
         frozen = true;
+        return result;
     }
 }

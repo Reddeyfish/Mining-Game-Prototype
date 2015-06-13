@@ -56,14 +56,16 @@ public class EnergyView : MonoBehaviour {
         source.Play();
     }
 
-    public void takeEnergyHit(float level)
+    public Coroutine takeEnergyHit(float level)
     {
+        Coroutine result = null;
         levelTarget = Mathf.Clamp01(level);
         if (hit == null)
         {
             hit = takeEnergyHitRoutine();
-            StartCoroutine(hit);
+            result = StartCoroutine(hit);
         }
+        return result;
         /*
         source.clip = drain;
         source.Play();
@@ -91,7 +93,8 @@ public class EnergyView : MonoBehaviour {
 
     public IEnumerator warnRoutine()
     {
-        
+        TutorialTip tip = GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>();
+        tip.SetTip(TutorialTipType.LOWENERGY);
         while (levelTarget < warnLevel)
         {
             source.clip = warnSound;
@@ -114,14 +117,17 @@ public class EnergyView : MonoBehaviour {
             }
         }
         warn = null;
+        tip.EndTip(TutorialTipType.LOWENERGY);
     }
 
-    public void CheckWarn()
+    public Coroutine CheckWarn()
     {
+        Coroutine result = null;
         if (levelTarget < warnLevel && warn == null)
         {
             warn = warnRoutine();
-            StartCoroutine(warn);
+            result = StartCoroutine(warn);
         }
+        return result;
     }
 }

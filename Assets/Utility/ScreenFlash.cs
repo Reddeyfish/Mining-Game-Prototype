@@ -24,12 +24,12 @@ public class ScreenFlash : MonoBehaviour {
         flash = null;
     }
 
-    public void Flash(float durationRealSeconds, float startAlpha = 0.5f)
+    public Coroutine Flash(float durationRealSeconds, float startAlpha = 0.5f)
     {
         if(flash != null)
             StopCoroutine(flash);
         flash = FlashRoutine(durationRealSeconds, startAlpha);
-        StartCoroutine(flash);
+        return StartCoroutine(flash);
     }
 
     IEnumerator FadeRoutine(float duration)
@@ -46,8 +46,8 @@ public class ScreenFlash : MonoBehaviour {
         group.alpha = 0;
     }
 
-    public void Fade(float duration)
+    public Coroutine Fade(float duration)
     {
-        StartCoroutine(FadeRoutine(duration));
+        return StartCoroutine(FadeRoutine(duration));
     }
 }
