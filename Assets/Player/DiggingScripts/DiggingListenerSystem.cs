@@ -13,12 +13,12 @@ public class DiggingListenerSystem : MonoBehaviour {
         undiggableListeners = new List<IUndiggableListener>();
 	}
 
-    public void SubscribeDig(IDigListener listener)
+    public void Subscribe(IDigListener listener)
     {
         digListeners.Add(listener);
     }
 
-    public void UnSubscribeDig(IDigListener listener)
+    public void UnSubscribe(IDigListener listener)
     {
         digListeners.Remove(listener);
     }
@@ -31,12 +31,12 @@ public class DiggingListenerSystem : MonoBehaviour {
         }
     }
 
-    public void SubscribeUndiggable(IUndiggableListener listener)
+    public void Subscribe(IUndiggableListener listener)
     {
         undiggableListeners.Add(listener);
     }
 
-    public void UnSubscribeUndiggable(IUndiggableListener listener)
+    public void UnSubscribe(IUndiggableListener listener)
     {
         undiggableListeners.Remove(listener);
     }
@@ -63,12 +63,12 @@ public abstract class BaseDigListener : MonoBehaviour, IDigListener
     protected virtual void Start()
     {
         listener = GetComponentInChildren<DiggingListenerSystem>();
-        listener.SubscribeDig(this);
+        listener.Subscribe(this);
     }
     public abstract void OnNotify(Block block);
     public void OnDestroy()
     {
-        listener.UnSubscribeDig(this);
+        listener.UnSubscribe(this);
     }
 }
 
@@ -76,4 +76,20 @@ public interface IUndiggableListener
 {
     void OnNotifyUndiggable(Block block);
     void OnDestroy();
+}
+
+public abstract class BaseUndiggableListener : MonoBehaviour, IUndiggableListener
+{
+    private DiggingListenerSystem listener;
+
+    protected virtual void Start()
+    {
+        listener = GetComponentInChildren<DiggingListenerSystem>();
+        listener.Subscribe(this);
+    }
+    public abstract void OnNotifyUndiggable(Block block);
+    public void OnDestroy()
+    {
+        listener.UnSubscribe(this);
+    }
 }

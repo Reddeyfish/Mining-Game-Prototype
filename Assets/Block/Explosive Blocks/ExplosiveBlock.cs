@@ -23,7 +23,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public override void Create()
     {
-        listener.SubscribeDig(this);
+        listener.Subscribe(this);
         stable = true;
         setVisuals();
     }
@@ -75,7 +75,7 @@ public class ExplosiveBlock : Block, IDigListener {
             yield return new WaitForFixedUpdate();
             time += Time.fixedDeltaTime / detonationTime();
         }
-        listener.UnSubscribeDig(this);
+        listener.UnSubscribe(this);
         SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
         Despawn();
 
@@ -98,7 +98,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public override void Despawn()
     {
-        listener.UnSubscribeDig(this);
+        listener.UnSubscribe(this);
         stable = true;
         base.Despawn();
     }
@@ -111,7 +111,7 @@ public class ExplosiveBlock : Block, IDigListener {
         {
             SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
         }
-        listener.UnSubscribeDig(this);
+        listener.UnSubscribe(this);
         base.Destroy();
     }
 
@@ -136,7 +136,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public void OnDestroy()
     {
-        listener.UnSubscribeDig(this);
+        listener.UnSubscribe(this);
     }
     
 }

@@ -9,7 +9,6 @@ public class TutorialTip : MonoBehaviour {
     IEnumerator fade;
     TutorialTipType currentTip;
 
-    private const string UIblue = "0083C8FF";
     private const float fadeTime = 0.25f;
 
 	// Use this for initialization
@@ -20,6 +19,8 @@ public class TutorialTip : MonoBehaviour {
 
     public Coroutine SetTip(TutorialTipType tip)
     {
+        if (currentTip == tip && group.alpha != 0f)
+            return null;
         return StartCoroutine(SetTipRoutine(tip));
     }
 
@@ -97,7 +98,7 @@ public class TutorialTip : MonoBehaviour {
             case TutorialTipType.MOVEMENT:
                 return "Welcome to Chromatose! Use <color=yellow>WASD</color> or the <color=yellow>Arrow Keys</color> to move, and press the <color=yellow>Space Bar</color> to activate your drill.";
             case TutorialTipType.BOULDER:
-                return "<color=" + UIblue + ">Boulders</color> must be cracked open with an <color=yellow>explosion</color> before they can be mined.";
+                return "<color=cyan>Boulders</color> must be cracked open with an <color=yellow>explosion</color> before they can be mined.";
             default:
                 return "";
         }
