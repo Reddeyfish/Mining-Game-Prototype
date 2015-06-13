@@ -13,7 +13,7 @@ public class TutorialTip : MonoBehaviour {
     private const float fadeTime = 0.25f;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         text = transform.Find("Text").GetComponent<Text>();
         group = GetComponent<CanvasGroup>();
 	}
@@ -94,6 +94,10 @@ public class TutorialTip : MonoBehaviour {
                 return "You are low on <color=yellow>energy</color>. Return to base and refill your energy or you will die.";
             case TutorialTipType.ENERGYDEATH:
                 return "You ran out of <color=yellow>energy</color> and died.";
+            case TutorialTipType.MOVEMENT:
+                return "Welcome to Chromatose! Use <color=yellow>WASD</color> or the <color=yellow>Arrow Keys</color> to move, and press the <color=yellow>Space Bar</color> to activate your drill.";
+            case TutorialTipType.BOULDER:
+                return "<color=" + UIblue + ">Boulders</color> must be cracked open with an <color=yellow>explosion</color> before they can be mined.";
             default:
                 return "";
         }
@@ -102,6 +106,8 @@ public class TutorialTip : MonoBehaviour {
 
 public enum TutorialTipType
 {
-    LOWENERGY = 0,
-    ENERGYDEATH = 1,
+    LOWENERGY,
+    ENERGYDEATH,
+    MOVEMENT,
+    BOULDER,
 }

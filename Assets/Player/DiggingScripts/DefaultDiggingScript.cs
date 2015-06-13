@@ -55,6 +55,10 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
                     StartCoroutine(digroutine);
                     return true;
                 }
+                else
+                {
+                    listeners.UndiggableNotify(hitBlock);
+                }
             }
         }
         return false;

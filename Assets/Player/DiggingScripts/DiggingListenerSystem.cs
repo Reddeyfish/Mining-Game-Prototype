@@ -5,28 +5,47 @@ using System.Collections.Generic;
 
 public class DiggingListenerSystem : MonoBehaviour {
 
-    private List<IDigListener> listeners;
-
+    private List<IDigListener> digListeners;
+    private List<IUndiggableListener> undiggableListeners;
 	// Use this for initialization
 	void Awake () {
-        listeners = new List<IDigListener>();
+        digListeners = new List<IDigListener>();
+        undiggableListeners = new List<IUndiggableListener>();
 	}
 
-    public void Subscribe(IDigListener listener)
+    public void SubscribeDig(IDigListener listener)
     {
-        listeners.Add(listener);
+        digListeners.Add(listener);
     }
 
-    public void UnSubscribe(IDigListener listener)
+    public void UnSubscribeDig(IDigListener listener)
     {
-        listeners.Remove(listener);
+        digListeners.Remove(listener);
     }
 
     public void DigNotify(Block block)
     {
-        foreach (IDigListener listener in listeners)
+        foreach (IDigListener listener in digListeners)
         {
             listener.OnNotify(block);
+        }
+    }
+
+    public void SubscribeUndiggable(IUndiggableListener listener)
+    {
+        undiggableListeners.Add(listener);
+    }
+
+    public void UnSubscribeUndiggable(IUndiggableListener listener)
+    {
+        undiggableListeners.Remove(listener);
+    }
+
+    public void UndiggableNotify(Block block)
+    {
+        foreach (IUndiggableListener listener in undiggableListeners)
+        {
+            listener.OnNotifyUndiggable(block);
         }
     }
 }
@@ -44,11 +63,17 @@ public abstract class BaseDigListener : MonoBehaviour, IDigListener
     protected virtual void Start()
     {
         listener = GetComponentInChildren<DiggingListenerSystem>();
-        listener.Subscribe(this);
+        listener.SubscribeDig(this);
     }
     public abstract void OnNotify(Block block);
     public void OnDestroy()
     {
-        listener.UnSubscribe(this);
+        listener.UnSubscribeDig(this);
     }
+}
+
+public interface IUndiggableListener
+{
+    void OnNotifyUndiggable(Block block);
+    void OnDestroy();
 }
