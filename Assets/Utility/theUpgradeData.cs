@@ -7,25 +7,32 @@ public class theUpgradeData : MonoBehaviour {
     public const float cellPixelWidth = 40f;
     public const float cellPixelHeight = 30f;
     public static theUpgradeData thi;
-    public static Dictionary<int, Upgrade> IDToUpgrade = new Dictionary<int, Upgrade>()
+    public static Upgrade[] IDToUpgrade = new Upgrade[]
     {
-        {1 , new Upgrade("Inventory Space", 2, 1, 
+        new Upgrade("Inventory Space", 2, 1, 
             delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); }, 
             new Cost[]{
             new Cost(resourceType.PURECOLOR, 12, costType.ANY), 
-            })},
-        {2 , new Upgrade("Drill Toughness", 1, 2, 
+            }),
+        new Upgrade("Drill Toughness", 1, 2, 
             delegate(GameObject player) { return player.AddComponent<UDrillToughness>(); }, 
             new Cost[]{
             new Cost(resourceType.HARDENED, 12, costType.ANY), 
-            })},
+            }),
+        new Upgrade("TestAbility", 1, 2, 
+            delegate(GameObject player) { return player.AddComponent<BaseActiveAbility>(); }, 
+            new Cost[]{
+            }),
     };
-
-    public Sprite[] sprites;
 
     public static Sprite IDToSprite(int ID)
     {
-        return thi.sprites[ID - 1];
+        return Resources.Load<Sprite>(IDToUpgrade[ID].ComponentName + "/" + IDToUpgrade[ID].ComponentName);
+    }
+
+    public static GameObject IDToUI(int ID)
+    {
+        return Resources.Load<GameObject>(IDToUpgrade[ID].ComponentName + "/" + IDToUpgrade[ID].ComponentName);
     }
 
     void Awake()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 //class to notify all the various scripts when something is dug
 
+[DisallowMultipleComponent]
 public class DiggingListenerSystem : MonoBehaviour {
 
     private List<IDigListener> digListeners;

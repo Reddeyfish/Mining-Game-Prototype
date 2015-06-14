@@ -19,7 +19,7 @@ public class StoreUIController : MonoBehaviour {
 
     void Initialize()
     {
-        foreach (int i in theUpgradeData.IDToUpgrade.Keys)
+        for(int i = 0; i < theUpgradeData.IDToUpgrade.Length; i++)
         {
             GameObject entry = SimplePool.Spawn(StoreEntryPrefab);
             entry.transform.SetParent(this.transform);

@@ -2,12 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 
+//maybe optimize with sorting and binary search?
+//abilities needs it in sorted order anyways.
+
+/*
+var index = TimeList.BinarySearch(dateTimeOffset);
+if (index < 0) index = ~index;
+TimeList.Insert(index, dateTimeOffset);
+ * */
+
+
 public class ItemsView : MonoBehaviour, IDisabledAwake {
     List<Item> items;
     GameObject[,] cells;
     AudioSource source;
     BaseInventory inventory;
     StoreUIController store;
+    AbilityController abilities;
     private GameObject player;
     private Rect cellSize;
     private const int rows = 4;
@@ -23,6 +34,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         inventory = transform.parent.parent.Find("InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>();
         player = GameObject.FindGameObjectWithTag(Tags.player);
         store = transform.parent.parent.Find("Store/SlotsBackground/Content").GetComponent<StoreUIController>();
+        abilities = transform.parent.parent.parent.Find("Abilities").GetComponent<AbilityController>();
         //spawn cells
         cells = new GameObject[rows, cols];
         cellSize = ((RectTransform)(cell.transform)).rect;
@@ -58,6 +70,9 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
                 ((RectTransform)drag.transform).anchoredPosition = Vector3.zero;
             }
         }
+        //again, if more are added refactor into listener
+        items.Sort();
+        abilities.notifyChanged(items);
 	}
 
     public void positionToCellIndex(Vector3 position, int cellWidth, int cellHeight, out int? xIndex, out int? yIndex)
@@ -135,12 +150,14 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         {
             Debug.Log("Error: We've lost a component!");
         }
-        Debug.Log(items.Count);
         if (notARearrangement)
         {
             source.Play();
             inventory.RefundCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
             store.recheckCosts();
+            //if we add another thing that needs to be notified, refactor this into a listener
+            items.Sort();
+            abilities.notifyChanged(items);
         }
     }
 
@@ -155,6 +172,9 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         {
             source.Play();
             inventory.PayCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
+            //if we add another thing that needs to be notified, refactor this into a listener
+            items.Sort();
+            abilities.notifyChanged(items);
         }
     }
 
@@ -183,7 +203,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public BaseInventory getInventory() { return inventory; }
 }
 
-public class Item : System.IEquatable<Item>
+public class Item : System.IEquatable<Item>, System.IComparable<Item>
 {
     public int x;
     public int y;
@@ -213,5 +233,12 @@ public class Item : System.IEquatable<Item>
 
         // Return true if the fields match:
         return (x == p.x) && (y == p.y) && (ID == p.ID);
+    }
+
+    public int CompareTo(Item other)
+    {
+        //default is ascending, and we want them in order (left-to-right, top-to-bottom)
+        if (this.x - other.x != 0) return this.x - other.x;
+        return this.y - other.y;
     }
 }

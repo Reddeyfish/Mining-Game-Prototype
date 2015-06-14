@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//upgrade
+
 public class UDrillToughness : MonoBehaviour {
     private const int amount = 100;
     void Start()

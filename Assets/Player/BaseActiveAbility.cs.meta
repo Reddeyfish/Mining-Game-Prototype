@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 09d4981a14c425041a4a1086a868c81a
+timeCreated: 1434255478
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - AbilityUIPrefab: {fileID: 175720, guid: 59c3a21418fd1dc4f93d857ddb66202b, type: 2}
+  - testPublicSprite: {fileID: 21300000, guid: 341e6e80a4a41814e9fd79c784b0c18b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

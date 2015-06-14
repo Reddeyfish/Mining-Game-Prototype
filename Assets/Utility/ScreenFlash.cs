@@ -2,12 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 public class ScreenFlash : MonoBehaviour {
-    Image image;
     CanvasGroup group;
     IEnumerator flash;
     void Awake()
     {
-        image = GetComponent<Image>();
         group = GetComponent<CanvasGroup>();
     }
     private IEnumerator FlashRoutine(float durationRealSeconds, float startAlpha = 0.5f)
