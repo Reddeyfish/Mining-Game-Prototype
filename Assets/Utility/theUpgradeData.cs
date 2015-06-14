@@ -19,7 +19,7 @@ public class theUpgradeData : MonoBehaviour {
             new Cost[]{
             new Cost(resourceType.HARDENED, 12, costType.ANY), 
             }),
-        new Upgrade("TestAbility", 1, 2, 
+        new Upgrade("Mining Blast", 1, 3, 
             delegate(GameObject player) { return player.AddComponent<BaseActiveAbility>(); }, 
             new Cost[]{
             }),

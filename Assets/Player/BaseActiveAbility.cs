@@ -4,6 +4,7 @@ using UnityEngine.Assertions;
 public class BaseActiveAbility : MonoBehaviour {
 
     //goes on the player
+
     AbilityView view;
     
     protected bool _active;
@@ -48,11 +49,13 @@ public class BaseActiveAbility : MonoBehaviour {
     {
         while (_cooldownRemaining > 0)
         {
+            view.Fill = 1- (_cooldownRemaining / getCooldown());
             yield return new WaitForFixedUpdate();
             _cooldownRemaining -= Time.fixedDeltaTime;
         }
         _cooldownRemaining = 0;
         view.Ready = Ready;
+        view.Fill = 1;
     }
 
     public virtual float getCooldown()

@@ -4,8 +4,10 @@ using UnityEngine.UI;
 
 public class AbilityView : MonoBehaviour {
     Image mainIcon;
+    Image arc;
+    Text number;
 
-    private static Color readyColor = new Color(0, 0.5f, 0.78f); //should really be const, but the compiler throws errors
+    private static Color readyColor = new Color(1f, 1f, 1f); //should really be const, but the compiler throws errors
     private static Color cooldownColor = new Color(0.5f, 0.5f, 0.5f);
     private bool _ready;
     public bool Ready
@@ -16,13 +18,20 @@ public class AbilityView : MonoBehaviour {
             mainIcon.color = value ? readyColor : cooldownColor;
         }
     }
+    public float Fill
+    {
+        get { return arc.fillAmount; }
+        set { arc.fillAmount = value; }
+    }
 	// Use this for initialization
-	void Start () {
-        mainIcon = GetComponent<Image>(); //temp code
+	void Awake () {
+        mainIcon = transform.Find("Arc/Icon").GetComponent<Image>();
+        arc = transform.Find("Arc").GetComponent<Image>();
+        number = transform.Find("Number").GetComponent<Text>();
 	}
 
-    public void Initialize(int number)
+    public void Initialize(int num)
     {
-        //temp code
+        number.text = num.ToString();
     }
 }
