@@ -21,7 +21,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
 
     public virtual int Add(Resource resource)
     {
-        Debug.Log(resources.Count);
         int loc = findResource(resource);
         if (loc != -1)
         {

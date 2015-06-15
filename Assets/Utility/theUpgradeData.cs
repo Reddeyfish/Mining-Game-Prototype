@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public delegate MonoBehaviour AddComponentDelegate(GameObject player);
+public delegate MonoBehaviour AddComponentDelegate(GameObject player, int ID);
 public class theUpgradeData : MonoBehaviour {
     public const float cellPixelWidth = 40f;
     public const float cellPixelHeight = 30f;
@@ -10,18 +10,23 @@ public class theUpgradeData : MonoBehaviour {
     public static Upgrade[] IDToUpgrade = new Upgrade[]
     {
         new Upgrade("Inventory Space", 2, 1, 
-            delegate(GameObject player) { return player.AddComponent<inventoryExpansion>(); }, 
+            delegate(GameObject player, int ID) { return player.AddComponent<inventoryExpansion>(); }, 
             new Cost[]{
             new Cost(resourceType.PURECOLOR, 12, costType.ANY), 
             }),
         new Upgrade("Drill Toughness", 1, 2, 
-            delegate(GameObject player) { return player.AddComponent<UDrillToughness>(); }, 
+            delegate(GameObject player, int ID) { return player.AddComponent<UDrillToughness>(); }, 
             new Cost[]{
             new Cost(resourceType.HARDENED, 12, costType.ANY), 
             }),
         new Upgrade("Mining Blast", 1, 3, 
-            delegate(GameObject player) { return player.AddComponent<BaseActiveAbility>(); }, 
+            delegate(GameObject player, int ID) {
+                SpawningAbility result = player.AddComponent<SpawningAbility>();
+                result.ID = ID;
+                return result; }, 
             new Cost[]{
+                new Cost(resourceType.PURECOLOR, 24, costType.WHITE), 
+                new Cost(resourceType.UNSTABLE, 30, costType.WHITE), 
             }),
     };
 

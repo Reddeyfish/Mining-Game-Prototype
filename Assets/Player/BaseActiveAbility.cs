@@ -18,10 +18,6 @@ public class BaseActiveAbility : MonoBehaviour {
     }
     public bool Ready { get { return _cooldownRemaining == 0; } }
 
-    public GameObject AbilityUIPrefab;
-    public int testPublicField;
-    public Sprite testPublicSprite;
-
     public void Initialize(Transform AbilityUI, int number)
     {
         view = AbilityUI.GetComponent<AbilityView>();
