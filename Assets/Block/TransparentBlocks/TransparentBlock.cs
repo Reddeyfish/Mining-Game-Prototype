@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TransparentBlock : DirtBlock
+public class TransparentBlock : SolidBlock
 {
     public override void Create()
     {

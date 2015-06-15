@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Boulder : DirtBlock {
+public class Boulder : SolidBlock {
     public override bool isMinable() { return false; }
     public override blockDataType getBlockType()
     {
