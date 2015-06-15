@@ -20,8 +20,11 @@ public class BaseActiveAbility : MonoBehaviour {
 
     public void Initialize(Transform AbilityUI, int number)
     {
+        _cooldownRemaining = 0;
         view = AbilityUI.GetComponent<AbilityView>();
         view.Initialize(number);
+        view.Fill = 1;
+        view.Ready = true;
     }
 
     public Coroutine Activate()

@@ -19,7 +19,7 @@ public class theUpgradeData : MonoBehaviour {
             new Cost[]{
             new Cost(resourceType.HARDENED, 12, costType.ANY), 
             }),
-        new Upgrade("Mining Blast", 1, 3, 
+        new Upgrade("Mining Blast", 2, 3, 
             delegate(GameObject player, int ID) {
                 SpawningAbility result = player.AddComponent<SpawningAbility>();
                 result.ID = ID;

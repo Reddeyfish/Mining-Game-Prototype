@@ -156,9 +156,9 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             inventory.RefundCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
             store.recheckCosts();
             //if we add another thing that needs to be notified, refactor this into a listener
-            items.Sort();
-            abilities.notifyChanged(items);
         }
+        items.Sort();
+        abilities.notifyChanged(items);
     }
 
     public void setCell(Draggable drag, int x, int y, bool notARearrangement)
@@ -173,9 +173,10 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             source.Play();
             inventory.PayCosts(theUpgradeData.IDToUpgrade[drag.ID].costs);
             //if we add another thing that needs to be notified, refactor this into a listener
-            items.Sort();
-            abilities.notifyChanged(items);
+            
         }
+        items.Sort();
+        abilities.notifyChanged(items);
     }
 
     private static bool inModRange(float value, float mod, float tolerance)

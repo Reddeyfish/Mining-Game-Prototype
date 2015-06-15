@@ -9,7 +9,7 @@ public class MiningBlastScript : MonoBehaviour, ISpawnable {
     ParticleSystem mainBlast;
     Transform rotate;
 
-    public AudioClip riserClio;
+    public AudioClip riserClip;
     public AudioClip blastClip;
     private const float range = 1.25f;
     private const float rotationSpeed = 300f;
@@ -41,16 +41,13 @@ public class MiningBlastScript : MonoBehaviour, ISpawnable {
 
     IEnumerator MainBehaviour()
     {
-        /*
         source.clip = riserClip;
-         * source.Play();
-         * */
+        source.Play();
         riser.Play();
         yield return new WaitForSeconds(0.5f);
-        /*
-        source.clip = mainBlast;
-         * source.Play();
-         * */
+
+        source.clip = blastClip;
+        source.Play();
         riser.Stop();
         mainBlast.Play();
         ScreenShake.RandomShake(this, 0.1f, 0.3f);
