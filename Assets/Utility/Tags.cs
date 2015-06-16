@@ -48,6 +48,7 @@ public class PlayerPrefKeys
     public const string TransX = "TransSeedX";
     public const string TransY = "TransSeedY";
     public const string obstacle = "Obstacle";
+    public const string guffin = "Guffin";
 }
 
 public class Options
