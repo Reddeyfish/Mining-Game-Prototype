@@ -25,7 +25,9 @@ public class WorldController : MonoBehaviour {
     private const int tunnelLengthMax = 8;
 
     private const float explosiveFrequency = 0.9f; //have these frequencies descending, because they're used in an if/elseif
+    private const float explosiveMinRange = 50f;
     private const float boulderFrequency = 0.8f;
+    private const float boulderMinRange = 25f;
     private const float oreFrequency = 0.65f;
     public const float transFrequency = 0.9f;
     public int loadedRange = 16;
@@ -139,7 +141,7 @@ public class WorldController : MonoBehaviour {
             {
                 return enumToBlock(blockDataType.BASE);
             }
-            if (obstacleValue > boulderFrequency)
+            if (obstacleValue > boulderFrequency && new Vector2(x, y).magnitude > boulderMinRange)
             {
                 return enumToBlock(blockDataType.EMPTYBLOCK);
             }
@@ -154,11 +156,11 @@ public class WorldController : MonoBehaviour {
         }
         else
         {
-            if (obstacleValue > explosiveFrequency)
+            if (obstacleValue > explosiveFrequency && new Vector2(x, y).magnitude > explosiveMinRange)
             {
                 return enumToBlock(blockDataType.EXPLOSIVE);
             }
-            else if (obstacleValue > boulderFrequency)
+            else if (obstacleValue > boulderFrequency && new Vector2(x, y).magnitude > boulderMinRange)
             {
                 return enumToBlock(blockDataType.BOULDER);
             }

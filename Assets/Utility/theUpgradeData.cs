@@ -17,7 +17,7 @@ public class theUpgradeData : MonoBehaviour {
         new Upgrade("Drill Toughness", 1, 2, 
             delegate(GameObject player, int ID) { return player.AddComponent<UDrillToughness>(); }, 
             new Cost[]{
-            new Cost(resourceType.HARDENED, 12, costType.ANY), 
+            new Cost(resourceType.HARDENED, 12, costType.WHITE), 
             }),
         new Upgrade("Mining Blast", 2, 3, 
             delegate(GameObject player, int ID) {
@@ -27,6 +27,11 @@ public class theUpgradeData : MonoBehaviour {
             new Cost[]{
                 new Cost(resourceType.PURECOLOR, 24, costType.WHITE), 
                 new Cost(resourceType.UNSTABLE, 30, costType.WHITE), 
+            }),
+        new Upgrade("Energy Capacity", 2, 1, 
+            delegate(GameObject player, int ID) { return player.AddComponent<EnergyCapacityUpgrade>(); }, 
+            new Cost[]{
+            new Cost(resourceType.PURECOLOR, 12, costType.WHITE), 
             }),
     };
 
