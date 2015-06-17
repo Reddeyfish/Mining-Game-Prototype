@@ -59,6 +59,8 @@ public class GuffinController : MonoBehaviour {
             
 
             spawnedGuffinTracker.GetComponent<GuffinTracker>().Initialize(spawnedGuffin, maxGuffinTrackingRange, this);
+
+            GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip(TutorialTipType.GUFFIN);
         }
         else
         {
@@ -69,6 +71,8 @@ public class GuffinController : MonoBehaviour {
 
     public void NotifyComplete(bool success)
     {
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().EndTip(TutorialTipType.GUFFIN);
+
         if (success)
         {
             //guffinNumber++;

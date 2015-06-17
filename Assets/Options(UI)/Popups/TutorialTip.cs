@@ -99,6 +99,8 @@ public class TutorialTip : MonoBehaviour {
                 return "Welcome to Chromatose! Use <color=yellow>WASD</color> or the <color=yellow>Arrow Keys</color> to move, and press the <color=yellow>Space Bar</color> to activate your drill.";
             case TutorialTipType.BOULDER:
                 return "<color=cyan>Boulders</color> must be cracked open with an <color=yellow>explosion</color> before they can be mined.";
+            case TutorialTipType.GUFFIN:
+                return "You've detected a <color=cyan>Guffin</color>. Use the pings to track it down. Faster pinging means you're getting closer.";
             default:
                 return "";
         }
@@ -107,8 +109,15 @@ public class TutorialTip : MonoBehaviour {
 
 public enum TutorialTipType
 {
+    //energy
     LOWENERGY,
     ENERGYDEATH,
+
+
     MOVEMENT,
+
+    //blocks
     BOULDER,
+    GUFFIN,
+
 }
