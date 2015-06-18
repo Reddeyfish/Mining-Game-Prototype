@@ -24,7 +24,11 @@ public class WorldController : MonoBehaviour {
     private const int tunnelLengthMin = 3;
     private const int tunnelLengthMax = 8;
 
-    private const float explosiveFrequency = 0.9f; //have these frequencies descending, because they're used in an if/elseif
+    //have these frequencies descending, because they're used in an if/elseif
+
+    private const float plusExplosiveFrequency = 0.95f;
+    private const float plusExplosiveMinRange = 100f;
+    private const float explosiveFrequency = 0.9f; 
     private const float explosiveMinRange = 50f;
     private const float boulderFrequency = 0.8f;
     private const float boulderMinRange = 25f;
@@ -39,6 +43,7 @@ public class WorldController : MonoBehaviour {
     public GameObject Boulder;
     public GameObject BoulderInterior;
     public GameObject ExplosiveBlock;
+    public GameObject PlusExplosiveBlock;
     public GameObject TransparentBlock;
     public GameObject homeBase;
     
@@ -156,7 +161,11 @@ public class WorldController : MonoBehaviour {
         }
         else
         {
-            if (obstacleValue > explosiveFrequency && new Vector2(x, y).magnitude > explosiveMinRange)
+            if (obstacleValue > plusExplosiveFrequency && new Vector2(x, y).magnitude > plusExplosiveMinRange)
+            {
+                return enumToBlock(blockDataType.PLUSEXPLOSIVE);
+            }
+            else if (obstacleValue > explosiveFrequency && new Vector2(x, y).magnitude > explosiveMinRange)
             {
                 return enumToBlock(blockDataType.EXPLOSIVE);
             }
@@ -306,6 +315,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.BoulderInterior);
             case blockDataType.EXPLOSIVE:
                 return new MapBlock(thi.ExplosiveBlock);
+            case blockDataType.PLUSEXPLOSIVE:
+                return new MapBlock(thi.PlusExplosiveBlock);
             case blockDataType.TRANSPARENTMAP:
                 return new MapBlock(thi.TransparentBlock);
             case blockDataType.BASE:
@@ -334,8 +345,9 @@ public enum blockDataType
     BOULDER = 4,
     BOULDERINTERIOR = 5,
     EXPLOSIVE = 6,
-    TRANSPARENTMAP = 7,
-    BASE = 8,
+    PLUSEXPLOSIVE = 7,
+    TRANSPARENTMAP = 8,
+    BASE = 9,
 }
 
 public class Point

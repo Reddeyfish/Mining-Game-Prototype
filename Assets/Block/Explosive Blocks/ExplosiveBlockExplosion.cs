@@ -30,13 +30,18 @@ public class ExplosiveBlockExplosion : MonoBehaviour, ISpawnable
         ScreenShake.RandomShake(this, 0.1f, 0.4f);
         Pause.Slow(this, 0.5f);
         //actual explosion
-        Collider2D[] hits = Physics2D.OverlapAreaAll((Vector2)(this.transform.position) + (range * Vector2.one), (Vector2)(this.transform.position) - (range * Vector2.one));
+        Collider2D[] hits = getHits();
         foreach (Collider2D hit in hits)
             foreach(IObliterable target in hit.GetComponents<IObliterable>())
                 target.Obliterate();
 
         //cleanup
         Callback.FireAndForget(Remove, duration, this);
+    }
+
+    protected virtual Collider2D[] getHits()
+    {
+        return Physics2D.OverlapAreaAll((Vector2)(this.transform.position) + (range * Vector2.one), (Vector2)(this.transform.position) - (range * Vector2.one));
     }
 
     public void Instantiate(float hue)

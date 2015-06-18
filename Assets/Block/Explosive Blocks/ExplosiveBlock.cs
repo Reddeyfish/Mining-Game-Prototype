@@ -88,12 +88,17 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public void OnNotify(Block block)
     {
-        if (block != this && stable && (block.transform.position - this.transform.position).magnitude < getRadius())
+        if (block != this && stable && willTrigger(block))
         {
             StopAllCoroutines();
             if(gameObject.activeInHierarchy)
                 StartCoroutine(Detonate());
         }
+    }
+
+    protected virtual bool willTrigger(Block block)
+    {
+        return (block.transform.position - this.transform.position).magnitude < getRadius();
     }
 
     public override void Despawn()
