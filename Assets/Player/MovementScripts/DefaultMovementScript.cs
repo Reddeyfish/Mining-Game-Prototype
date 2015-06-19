@@ -23,15 +23,16 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
 
     public void DoMovement(Vector2 direction, bool XAxis)
     {
+        Debug.Log(direction.sqrMagnitude);
         if (direction.sqrMagnitude != 0 && Vector3.Dot(rigid.velocity, direction) >= 0)
         {
             if (Vector3.Project(rigid.velocity, direction).magnitude < minSpeed)
             {
-                rigid.velocity = rigid.velocity + minAccel * Time.fixedDeltaTime * direction.normalized;
+                rigid.velocity = rigid.velocity + minAccel * Time.deltaTime * direction.normalized;
             }
             else
             {
-                rigid.AddForce(direction * powerConstant * Time.fixedDeltaTime / rigid.velocity.magnitude, ForceMode2D.Impulse);
+                rigid.AddForce(direction * powerConstant * Time.deltaTime / rigid.velocity.magnitude, ForceMode2D.Impulse);
             }
         }
         else

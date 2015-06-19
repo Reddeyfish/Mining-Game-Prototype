@@ -46,7 +46,7 @@ public class Controls : MonoBehaviour {
             {
                 break; //control flow moves to Digging
             }
-            yield return new WaitForFixedUpdate();
+            yield return 0;
         }
     }
 
