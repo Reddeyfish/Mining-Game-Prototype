@@ -8,9 +8,11 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
     public float powerConstant = 25.0f;
     public float minSpeed = 5.0f;
     public float minAccel = 15.0f;
-
+    
     //private Controls control; //don't need it for this version of movement
     private Rigidbody2D rigid;
+    private Transform thisTransform;
+
     public void SetControlScript(Controls control)
     {
         //this.control = control; //don't need it for this version of movement
@@ -19,11 +21,12 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        thisTransform = this.transform;
     }
 
     public void DoMovement(Vector2 direction, bool XAxis)
     {
-        Debug.Log(direction.sqrMagnitude);
+        Debug.Log(rigid.velocity.x);
         if (direction.sqrMagnitude != 0 && Vector3.Dot(rigid.velocity, direction) >= 0)
         {
             if (Vector3.Project(rigid.velocity, direction).magnitude < minSpeed)
