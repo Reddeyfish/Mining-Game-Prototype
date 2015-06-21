@@ -180,7 +180,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                             int max = resources[newRelevantResources[1]].count - resources[newRelevantResources[0]].count;
                             if (max >= cost.count)
                             {
-                                Debug.Log(cost.count);
                                 resources[newRelevantResources[1]] = resources[newRelevantResources[1]].Deduct(cost.count);
                                 break;
                             }
@@ -194,9 +193,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
 
                         case 3:
                             //sort
-                            Debug.Log(resources[relevantResources[0]].count);
-                            Debug.Log(resources[relevantResources[1]].count);
-                            Debug.Log(resources[relevantResources[2]].count);
                             if (resources[relevantResources[0]] <= resources[relevantResources[1]])
                             {
                                 if (resources[relevantResources[1]] > resources[relevantResources[2]])
@@ -204,7 +200,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                     if (resources[relevantResources[0]] > resources[relevantResources[2]])
                                     {
                                         //swap
-                                        Debug.Log(".");
                                         int temp = relevantResources[0];
                                         relevantResources[0] = relevantResources[2];
                                         relevantResources[2] = relevantResources[1];
@@ -212,7 +207,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                     }
                                     else
                                     {
-                                        Debug.Log(".");
                                         int temp = relevantResources[1];
                                         relevantResources[1] = relevantResources[2];
                                         relevantResources[2] = temp;
@@ -220,7 +214,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                 }
                                 else
                                 {
-                                    Debug.Log(".");
                                     // do nothing; correctly sorted
                                 }
                             }
@@ -230,7 +223,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                 {
                                     if (resources[relevantResources[1]] < resources[relevantResources[2]])
                                     {
-                                        Debug.Log(".");
                                         int temp = relevantResources[0];
                                         relevantResources[0] = relevantResources[1];
                                         relevantResources[1] = relevantResources[2];
@@ -238,7 +230,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                     }
                                     else
                                     {
-                                        Debug.Log(".");
                                         int temp = relevantResources[0];
                                         relevantResources[0] = relevantResources[2];
                                         relevantResources[2] = temp;
@@ -246,17 +237,12 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                                 }
                                 else
                                 {
-                                    Debug.Log(".");
                                     int temp = relevantResources[0];
                                     relevantResources[0] = relevantResources[1];
                                     relevantResources[1] = temp;
                                 }
                             }
                             //now sorted in ascending order
-                            Debug.Log("Ascending");
-                            Debug.Log(resources[relevantResources[0]].count);
-                            Debug.Log(resources[relevantResources[1]].count);
-                            Debug.Log(resources[relevantResources[2]].count);
                             int two = resources[relevantResources[2]].count - resources[relevantResources[1]].count;
                             Debug.Log(two);
                             if (two >= cost.count)
@@ -271,8 +257,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
                             if (two + 2 * one >= cost.count)
                             {
                                 one = (cost.count - two) / 2; //deduction for each of the two resources in the 'one' group (leaving out remainders)
-                                Debug.Log(two + one + (cost.count % 2));
-                                Debug.Log(one);
                                 resources[relevantResources[2]] = resources[relevantResources[2]].Deduct(two + one + ((cost.count - two) % 2));
                                 resources[relevantResources[1]] = resources[relevantResources[1]].Deduct(one);
                                 break;
@@ -282,9 +266,6 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
 
                             int zero = (cost.count - two - 2 * one) / 3;
                             int remainder = (cost.count - two - 2 * one) % 3;
-                            Debug.Log(two + one + zero + (cost.count % 3 > 0 ? 1 : 0));
-                            Debug.Log(one + zero + (cost.count % 3 > 1 ? 1 : 0));
-                            Debug.Log(zero);
                             resources[relevantResources[2]] = resources[relevantResources[2]].Deduct(two + one + zero + (remainder > 0 ? 1 : 0));
                             resources[relevantResources[1]] = resources[relevantResources[1]].Deduct(one + zero + (remainder > 1 ? 1 : 0));
                             resources[relevantResources[0]] = resources[relevantResources[0]].Deduct(zero);

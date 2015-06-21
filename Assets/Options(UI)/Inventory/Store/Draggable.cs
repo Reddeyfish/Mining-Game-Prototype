@@ -8,6 +8,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     Vector3 offset;
     Vector3 centerToTopLeftCell;
     Transform parent;
+    GameObject outline;
     private int cellX = -1;
     private int cellY = -1;
     public int cellWidth = 1;
@@ -17,6 +18,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	// Use this for initialization
 	void Awake () {
         icon = GetComponent<Image>();
+        outline = transform.Find("DraggableOutline").gameObject;
 	}
     /*
     public void Create()
@@ -43,11 +45,21 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         this.cellY = cellY;
     }
 
+    public void OnMouseEnter()
+    {
+        outline.SetActive(true);
+        TooltipView tooltip = GameObject.FindGameObjectWithTag(Tags.mouseParent).transform.Find("ItemTooltip").GetComponent<TooltipView>();
+        tooltip.Initialize(ID);
+        Debug.Log("tooltip!");
+        tooltip.setVisible(true);
+    }
+
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
     {
+        OnMouseExit();
         //Cursor.visible = false;
         parent = transform.parent;
-        transform.SetParent(GameObject.FindGameObjectWithTag(Tags.canvas).transform);
+        transform.SetParent(GameObject.FindGameObjectWithTag(Tags.mouseParent).transform);
         //transform.parent.SetAsLastSibling(); //the dragged thing renders over all the other cells; no longer needed due to parenting to the canvas
         if (cellX != -1 && cellY != -1)
             manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: true); //so we can be placed right where we started
@@ -100,6 +112,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
      if (cellX != -1 && cellY != -1)
          manager.setCellRangeFill(cellX, cellY, cellWidth, cellHeight, open: false);
      Cursor.visible = true;
+ }
+
+ public void OnMouseExit()
+ {
+     outline.SetActive(false);
+     GameObject.FindGameObjectWithTag(Tags.mouseParent).transform.Find("ItemTooltip").GetComponent<TooltipView>().setVisible(false);
  }
 
 

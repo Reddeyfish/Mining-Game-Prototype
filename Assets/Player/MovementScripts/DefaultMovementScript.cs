@@ -26,7 +26,6 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
 
     public void DoMovement(Vector2 direction, bool XAxis)
     {
-        Debug.Log(rigid.velocity.x);
         if (direction.sqrMagnitude != 0 && Vector3.Dot(rigid.velocity, direction) >= 0)
         {
             if (Vector3.Project(rigid.velocity, direction).magnitude < minSpeed)
