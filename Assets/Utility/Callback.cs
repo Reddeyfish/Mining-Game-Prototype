@@ -19,7 +19,10 @@ public static class Callback {
     //wrapper so that we don't need to call StartCoroutine()
     public static Coroutine FireAndForget(this CallbackMethod code, float time, MonoBehaviour callingScript)
     {
-        return callingScript.StartCoroutine(FireAndForgetRoutine(code, time));
+        if (callingScript.isActiveAndEnabled)
+            return callingScript.StartCoroutine(FireAndForgetRoutine(code, time));
+        else
+            return null;
     }
 
     public static IEnumerator FireForFixedUpdateRoutine(CallbackMethod code)
@@ -30,7 +33,10 @@ public static class Callback {
     //wrapper so that we don't need to call StartCoroutine()
     public static Coroutine FireForFixedUpdate(this CallbackMethod code, MonoBehaviour callingScript)
     {
-        return callingScript.StartCoroutine(FireForFixedUpdateRoutine(code));
+        if (callingScript.isActiveAndEnabled)
+            return callingScript.StartCoroutine(FireForFixedUpdateRoutine(code));
+        else
+            return null;
     }
 
     public static IEnumerator FireForNextFrameRoutine(CallbackMethod code)
@@ -41,6 +47,9 @@ public static class Callback {
 
     public static Coroutine FireForNextFrame(this CallbackMethod code, MonoBehaviour callingScript)
     {
-        return callingScript.StartCoroutine(FireForNextFrameRoutine(code));
+        if (callingScript.isActiveAndEnabled)
+            return callingScript.StartCoroutine(FireForNextFrameRoutine(code));
+        else
+            return null;
     }
 }

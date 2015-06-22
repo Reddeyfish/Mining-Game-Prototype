@@ -50,7 +50,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         outline.SetActive(true);
         TooltipView tooltip = GameObject.FindGameObjectWithTag(Tags.mouseParent).transform.Find("ItemTooltip").GetComponent<TooltipView>();
         tooltip.Initialize(ID);
-        Debug.Log("tooltip!");
         tooltip.setVisible(true);
     }
 
