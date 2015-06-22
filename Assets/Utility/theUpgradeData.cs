@@ -43,6 +43,17 @@ adjacent to you as if you had used your drill"),
             },
 @"Increases your energy capacity. A necessity for
 making it back to base alive"),
+        new Upgrade("Directional Mining Blast", 2, 3, 
+            delegate(GameObject player, int ID) {
+                SpawningAbility result = player.AddComponent<SpawningAbility>();
+                result.ID = ID;
+                return result; }, 
+            new Cost[]{
+                new Cost(resourceType.PURECOLOR, 24, costType.WHITE), 
+                new Cost(resourceType.UNSTABLE, 30, costType.WHITE), 
+            },
+@"When activated, instantly mines eight blocks in a
+straight line as if you had used your drill"),
     };
 
     public static Sprite IDToSprite(int ID)

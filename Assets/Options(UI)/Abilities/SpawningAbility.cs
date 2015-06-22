@@ -4,6 +4,7 @@ using UnityEngine.Assertions;
 public class SpawningAbility : BaseActiveAbility {
 
     GameObject spawnPrefab;
+    VisualsFaceVelocityScript direction;
     private int _id;
     public int ID
     {
@@ -21,11 +22,17 @@ public class SpawningAbility : BaseActiveAbility {
               }
     }
 
+    void Awake()
+    {
+        direction = transform.Find("Visuals").GetComponent<VisualsFaceVelocityScript>();
+    }
+
     protected override void OnActivation()
     {
         Transform spawnedPrefab = SimplePool.Spawn(spawnPrefab).transform;
         spawnedPrefab.SetParent(this.transform);
         spawnedPrefab.localPosition = Vector3.zero;
+        spawnedPrefab.rotation = direction.Rotation;
     }
 
 }

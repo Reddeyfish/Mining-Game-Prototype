@@ -11,7 +11,6 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
     
     //private Controls control; //don't need it for this version of movement
     private Rigidbody2D rigid;
-    private Transform thisTransform;
 
     public void SetControlScript(Controls control)
     {
@@ -21,7 +20,6 @@ public class DefaultMovementScript : MonoBehaviour , IMovementScript
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        thisTransform = this.transform;
     }
 
     public void DoMovement(Vector2 direction, bool XAxis)

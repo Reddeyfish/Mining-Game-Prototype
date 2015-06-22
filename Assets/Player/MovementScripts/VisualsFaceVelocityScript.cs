@@ -4,10 +4,14 @@ using System.Collections;
 public class VisualsFaceVelocityScript : MonoBehaviour {
     Rigidbody2D rigid;
     Transform thisTransform;
-
-    private float _angle;
-    public float Angle { get { return _angle; } }
-
+    private Quaternion _targetRotation = Quaternion.identity;
+    public Quaternion Rotation
+    {
+        get
+        {
+            return _targetRotation;
+        }
+    }
     public float rotateSpeed = 360;
 	// Use this for initialization
 	void Start () {
@@ -23,8 +27,8 @@ public class VisualsFaceVelocityScript : MonoBehaviour {
         {
             return;
         }
-        _angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        var q = Quaternion.AngleAxis(_angle, Vector3.forward);
-        thisTransform.rotation = Quaternion.RotateTowards(thisTransform.rotation, q, rotateSpeed * Time.deltaTime);
+        float _angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        _targetRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
+        thisTransform.rotation = Quaternion.RotateTowards(thisTransform.rotation, _targetRotation, rotateSpeed * Time.deltaTime);
     }
 }
