@@ -16,7 +16,7 @@ public class OreBlock : ExplosiveBlock
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
         hue = colorValues.x;
         mat = visuals.GetComponent<Renderer>().material;
-        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
+        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z / hierarchy);
         mat.SetColor(ShaderParams.emission, mat.color * defaultEmission);
         
         //add 'crystals'
