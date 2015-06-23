@@ -35,6 +35,7 @@ public class WorldController : MonoBehaviour {
     private const float oreFrequency = 0.65f;
     public const float transFrequency = 0.9f;
     public int loadedRange = 16;
+    public int numHierarchies = 3;
 
     [Header("the prefabs for each block type")]
     public GameObject DirtBlock;
@@ -331,6 +332,12 @@ public class WorldController : MonoBehaviour {
     {
         theMap[x][y] = enumToBlock(newBlock);
         theMap[x][y].Create(x, y);
+    }
+
+
+    public static int PerlinHierarchy(float seedX, float seedY, float x, float y)
+    {
+        return Mathf.RoundToInt(thi.numHierarchies * Mathf.PerlinNoise(seedX + x / 151, seedY + y / 151));
     }
 }
 

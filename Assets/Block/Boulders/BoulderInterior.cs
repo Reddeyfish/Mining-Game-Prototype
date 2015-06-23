@@ -14,6 +14,7 @@ public class BoulderInterior : Block
 
     public override void Create() //change to create once I get that set up
     {
+        setHierarchy();
         rigid.angularVelocity = (accelScalar / 2) * Random.insideUnitSphere;
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
         

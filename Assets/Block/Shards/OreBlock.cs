@@ -65,5 +65,5 @@ public class OreBlock : ExplosiveBlock
         return transform.Find("Visuals").GetComponent<Renderer>().material.color;
     }
 
-    public override float digTime() { return 1f; }
+    public override float baseDigTime() { return 1f; }
 }

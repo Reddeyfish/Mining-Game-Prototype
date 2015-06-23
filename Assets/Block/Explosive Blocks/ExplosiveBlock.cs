@@ -23,6 +23,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     public override void Create()
     {
+        base.Create();
         listener.Subscribe(this);
         stable = true;
         setVisuals();
@@ -32,7 +33,7 @@ public class ExplosiveBlock : Block, IDigListener {
     {
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
         mat = transform.Find("Visuals").GetComponent<Renderer>().material;
-        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
+        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z / hierarchy);
         hue = (colorValues.x + 0.425f + 0.15f * Random.value) % 1;
         StartCoroutine(EmissionPulse());
     }

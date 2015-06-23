@@ -4,7 +4,7 @@ using System.Collections;
 public class SolidBlock : Block {
     Material mat;
     public GameObject deathEffect;
-
+    
 	// Use this for initialization
     void Awake()
     {
@@ -20,9 +20,9 @@ public class SolidBlock : Block {
 
     public override void Create()
     {
+        base.Create();
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
-        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
-        
+        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z / hierarchy);
     }
 
     public override void Destroy()
