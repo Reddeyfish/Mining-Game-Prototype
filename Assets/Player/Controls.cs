@@ -11,6 +11,8 @@ public class Controls : MonoBehaviour {
     private IDigScript digScript;
     private IMovementScript movementScript;
 
+    IEnumerator currentCoroutine; //current control coroutine, or null if control is in a delegate
+    IEnumerator queuedCoroutine; //queued routine. May expand into a list if we need more than one in a queue
     void Awake()
     {
         digScript = GetComponent<IDigScript>();
@@ -21,7 +23,8 @@ public class Controls : MonoBehaviour {
     }
 
 	void Start () {
-        StartCoroutine("Idle");
+        currentCoroutine = Idle();
+        StartCoroutine(currentCoroutine);
 	}
 
     IEnumerator Idle()
@@ -35,6 +38,7 @@ public class Controls : MonoBehaviour {
             movementScript.DoMovement(input * transform.right, XAxis: true);
             if (digScript.DoDigging(input * transform.right))
             {
+                currentCoroutine = null;
                 break; //control flow moves to Digging
             }
 
@@ -44,6 +48,7 @@ public class Controls : MonoBehaviour {
             movementScript.DoMovement(input * transform.up, XAxis: false);
             if (digScript.DoDigging(input * transform.up))
             {
+                currentCoroutine = null;
                 break; //control flow moves to Digging
             }
             yield return 0;
@@ -52,7 +57,40 @@ public class Controls : MonoBehaviour {
 
     public void StartIdle() // to be called by extensions of dig 
     {
-        StartCoroutine("Idle");
+
+        if (queuedCoroutine == null) //no coroutine was queued
+        {
+            currentCoroutine = Idle();
+            StartCoroutine(currentCoroutine);
+        }
+        else
+        {
+            StartCoroutine(DelegateCoroutine(queuedCoroutine));
+            queuedCoroutine = null; //clear the queue, since we're starting the queued routine
+        }
+        
+    }
+
+    //queues an (unstarted) coroutine for when control is within control
+    public void QueueCoroutine(IEnumerator next)
+    {
+        if (currentCoroutine != null) //if we have control
+        {
+            StopCoroutine(currentCoroutine);
+            currentCoroutine = null;
+            StartCoroutine(DelegateCoroutine(next));
+        }
+        else
+        {
+            //we don't have control; queue the coroutine until we do
+            queuedCoroutine = next;
+        }
+    }
+
+    IEnumerator DelegateCoroutine(IEnumerator delegat)
+    {
+        yield return StartCoroutine(delegat); //wait until the delegate coroutine is done
+        StartIdle();
     }
 }
 
