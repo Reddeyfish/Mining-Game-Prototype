@@ -47,6 +47,7 @@ public class WorldController : MonoBehaviour {
     public GameObject PlusExplosiveBlock;
     public GameObject TransparentBlock;
     public GameObject homeBase;
+    public GameObject capsule;
     
     public static WorldController thi;
 	// Use this for initialization
@@ -147,6 +148,10 @@ public class WorldController : MonoBehaviour {
             {
                 return enumToBlock(blockDataType.BASE);
             }
+            else if (x % 40 == 0 && y % 40 == 0) //I will make this more randomized, but this works for now
+            {
+                return enumToBlock(blockDataType.CAPSULE);
+            }
             if (obstacleValue > boulderFrequency && new Vector2(x, y).magnitude > boulderMinRange)
             {
                 return enumToBlock(blockDataType.EMPTYBLOCK);
@@ -162,6 +167,11 @@ public class WorldController : MonoBehaviour {
         }
         else
         {
+            if (x % 40 == 0 && y % 40 == 0) //I will make this more randomized, but this works for now
+            {
+                return enumToBlock(blockDataType.CAPSULE);
+            }
+
             if (obstacleValue > plusExplosiveFrequency && new Vector2(x, y).magnitude > plusExplosiveMinRange)
             {
                 return enumToBlock(blockDataType.PLUSEXPLOSIVE);
@@ -322,6 +332,8 @@ public class WorldController : MonoBehaviour {
                 return new MapBlock(thi.TransparentBlock);
             case blockDataType.BASE:
                 return new MapBlock(thi.homeBase);
+            case blockDataType.CAPSULE:
+                return new MapBlock(thi.capsule);
             default:
                 Debug.Log("Data error");
                 return null;
@@ -357,6 +369,7 @@ public enum blockDataType
     PLUSEXPLOSIVE = 7,
     TRANSPARENTMAP = 8,
     BASE = 9,
+    CAPSULE = 10,
 }
 
 public class Point
