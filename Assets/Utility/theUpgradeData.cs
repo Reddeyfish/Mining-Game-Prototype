@@ -54,6 +54,14 @@ making it back to base alive"),
             },
 @"When activated, instantly mines eight blocks in a
 straight line as if you had used your drill"),
+       new Upgrade("Grappling Drone", 2, 3, 
+            delegate(GameObject player, int ID) {
+                LaunchingAbility result = player.AddComponent<LaunchingAbility>();
+                result.ID = ID;
+                return result; }, 
+            new Cost[]{
+            },
+@"Grappling Drone"),
     };
 
     public static Sprite IDToSprite(int ID)

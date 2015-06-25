@@ -39,4 +39,12 @@ public class Format : MonoBehaviour {
             default: return "";
         }
     }
+
+    //gives the Vector2 world position of the mouse
+    public static Vector2 mouseWorldPos()
+    {
+        Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        pz.z = 0;
+        return pz;
+    }
 }

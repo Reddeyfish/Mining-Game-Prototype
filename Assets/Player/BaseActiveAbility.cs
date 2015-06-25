@@ -5,7 +5,7 @@ public class BaseActiveAbility : MonoBehaviour {
 
     //goes on the player
 
-    AbilityView view;
+    protected AbilityView view;
     
     protected bool _active;
     public bool Active { get { return _active; } }
@@ -24,18 +24,25 @@ public class BaseActiveAbility : MonoBehaviour {
         view = AbilityUI.GetComponent<AbilityView>();
         view.Initialize(number);
         view.Fill = 1;
-        view.Ready = true;
+        view.setReady(true);
     }
 
-    public Coroutine Activate()
+    //called when the ability's button is pressed
+    public virtual Coroutine Activate()
     {
         //the ability stuff would go here
         if(!Ready) return null;
+        return DoActivation();
+    }
+
+    //handles the activation and cooldown
+    protected Coroutine DoActivation()
+    {
         OnActivation();
 
         //cooldown
         _cooldownRemaining = getCooldown();
-        view.Ready = Ready;
+        view.setReady(this.Ready);
         return StartCoroutine(CoolDown());
     }
 
@@ -53,7 +60,7 @@ public class BaseActiveAbility : MonoBehaviour {
             _cooldownRemaining -= Time.fixedDeltaTime;
         }
         _cooldownRemaining = 0;
-        view.Ready = Ready;
+        view.setReady(this.Ready);
         view.Fill = 1;
     }
 
