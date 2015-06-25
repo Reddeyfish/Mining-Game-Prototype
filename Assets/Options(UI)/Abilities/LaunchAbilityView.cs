@@ -2,18 +2,21 @@
 using System.Collections;
 
 public class LaunchAbilityView : AbilityView {
+    GameObject reticle;
     protected IEnumerator targetingRoutine;
     protected const float lerpTime = 3f;
     protected const float targetingSaturation = 0.5f; //how close the targeting pulse color gets to being white
     protected bool targeting = false;
 	// Use this for initialization
-	void Start () {
-	
+	protected override void Awake () {
+        base.Awake();
+        reticle = transform.Find("Reticle").gameObject;
 	}
 
     public void setIsTargeting(bool value)
     {
         targeting = value;
+        reticle.SetActive(value);
         if (value && targetingRoutine == null)
         {
             //start targeting
