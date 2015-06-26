@@ -6,13 +6,14 @@ using System.Collections;
 public class BaseReticle : MonoBehaviour {
     Transform thisTransform;
 	// Use this for initialization
-	void Awake () {
+	protected virtual void Awake () {
         thisTransform = this.transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         thisTransform.position = Input.mousePosition;
+        OnUpdate();
 	}
 
     //for polymorphism. I doubt that there is going to be much shared between reticles to override update

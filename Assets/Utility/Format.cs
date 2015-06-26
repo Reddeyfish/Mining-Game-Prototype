@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Format : MonoBehaviour {
 
+    static Transform cameraTransform = Camera.main.transform;
+
     //transform it into 2k, 3m, etc.
     public static string makeReadable(int number) //int, so no decimals (YAY!)
     {
@@ -40,11 +42,19 @@ public class Format : MonoBehaviour {
         }
     }
 
-    //gives the Vector2 world position of the mouse
-    public static Vector2 mouseWorldPos()
+    public static Vector3 mousePosInWorld()
     {
-        Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        pz.z = 0;
-        return pz;
+        Vector3 screenPoint = Input.mousePosition;
+        screenPoint.z = -cameraTransform.position.z;
+        return screenPoint.toWorldPoint();
+    }
+
+}
+
+public static class VectorExtension
+{
+    public static Vector3 toWorldPoint(this Vector3 screenPoint)
+    {
+        return Camera.main.ScreenToWorldPoint(screenPoint);
     }
 }
