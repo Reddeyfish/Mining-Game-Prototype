@@ -101,6 +101,8 @@ public class TutorialTip : MonoBehaviour {
                 return "<color=cyan>Boulders</color> must be cracked open with an <color=yellow>explosion</color> before they can be mined.";
             case TutorialTipType.GUFFIN:
                 return "You've detected a <color=cyan>Guffin</color>. Use the pings to track it down. Faster pinging means you're getting closer.";
+            case TutorialTipType.CAPSULE:
+                return "This is a <color=cyan>Capsule</color>. When activated, it transports you back to base. The transport requires some energy, but it's always better (and faster) than just flying back.";
             default:
                 return "";
         }
@@ -119,5 +121,6 @@ public enum TutorialTipType
     //blocks
     BOULDER,
     GUFFIN,
+    CAPSULE,
 
 }

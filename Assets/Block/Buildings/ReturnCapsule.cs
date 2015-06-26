@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class ReturnCapsule : Block {
+    TutorialTip tips;
     CanvasGroup UI;
     IEnumerator inputCheck; //store the IEnumerator so we can stop it when it is no longer needed
     KeyCode code = KeyCode.Space;
@@ -11,6 +12,7 @@ public class ReturnCapsule : Block {
 	// Use this for initialization
 	void Awake () {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
+        tips = GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>();
 	}
 	
 
@@ -21,6 +23,7 @@ public class ReturnCapsule : Block {
             UI.alpha = 1;
             inputCheck = InputCheck();
             StartCoroutine(inputCheck);
+            tips.SetTip(TutorialTipType.CAPSULE);
         }
     }
 
@@ -30,6 +33,7 @@ public class ReturnCapsule : Block {
         {
             UI.alpha = 0;
             StopCoroutine(inputCheck);
+            tips.EndTip(TutorialTipType.CAPSULE);
         }
     }
 
