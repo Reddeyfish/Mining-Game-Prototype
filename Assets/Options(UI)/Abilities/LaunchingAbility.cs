@@ -67,11 +67,15 @@ public class LaunchingAbility : BaseActiveAbility
     protected override void OnActivation()
     {
         Debug.Log("Activated!");
-        /*
+        //spawn the launched object
         Transform spawnedPrefab = SimplePool.Spawn(spawnPrefab).transform;
-        spawnedPrefab.SetParent(this.transform);
-        spawnedPrefab.localPosition = Vector3.zero;
-      * */
+        spawnedPrefab.position = this.transform.position;
+        spawnedPrefab.GetComponent<ILaunchable>().Instantiate(Format.mousePosInWorld());
     }
 
+}
+
+public interface ILaunchable
+{
+    void Instantiate(Vector3 target);
 }

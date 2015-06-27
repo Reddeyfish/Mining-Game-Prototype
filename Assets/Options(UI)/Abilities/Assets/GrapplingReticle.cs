@@ -16,7 +16,6 @@ public class GrapplingReticle : BaseReticle {
     {
         base.OnUpdate();
         line.SetPosition(0, player.position);
-        Debug.Log(Format.mousePosInWorld());
         line.SetPosition(1, Format.mousePosInWorld());
     }
 }

@@ -57,4 +57,10 @@ public static class VectorExtension
     {
         return Camera.main.ScreenToWorldPoint(screenPoint);
     }
+
+    public static Quaternion ToRotation(this Vector2 dir)
+    {
+        float _angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        return Quaternion.AngleAxis(_angle, Vector3.forward);
+    }
 }
