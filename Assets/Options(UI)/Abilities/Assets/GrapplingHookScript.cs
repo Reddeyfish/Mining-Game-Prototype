@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//goes on the grappling hook object spawned by the ability
+
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class GrapplingHookScript : MonoBehaviour, ILaunchable {
@@ -9,8 +11,12 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
     Transform thisTransform;
     LineRenderer line;
 
+    static LayerMask mask; //constant
     
     public float speed = 15f;
+
+    [Tooltip("Material for the grappling line")]
+    public Material mat;
 
 	// Use this for initialization
 	void Awake () {
@@ -18,6 +24,7 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
         line = GetComponent<LineRenderer>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         thisTransform = this.transform;
+        mask = LayerMask.GetMask(new string[] { Layers.blocks, Layers.transBlocks });
 	}
 	
 	// Update is called once per frame
@@ -39,7 +46,13 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
         Debug.Log("collided!");
         if (!other.transform.CompareTag(Tags.block)) return;
         Debug.Log("Grapple!");
+
         //turn the hit collider into a grappled block
+        GrappledBehaviour grapple = other.gameObject.AddComponent<GrappledBehaviour>();
+        
+        //raycast to find the precise collision point; tell that to the grappled block
+        grapple.Instantiate(Physics2D.Raycast(thisTransform.position, other.transform.position - thisTransform.position, 1, mask).point, mat);
+
         SimplePool.Despawn(this.gameObject);
     }
 }
