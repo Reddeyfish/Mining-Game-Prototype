@@ -22,9 +22,8 @@ public class GrappledBehaviour : MonoBehaviour {
 	void Awake () {
         rigid = GetComponent<Rigidbody2D>();
         rigid.gravityScale = 0;
-        rigid.drag = 0.2f;
+        rigid.drag = 0f;
         rigid.angularDrag = 0.2f;
-        rigid.mass = 50;
 
         line = GetComponent<LineRenderer>();
         line.SetWidth(0.1f, 0.1f);
@@ -38,6 +37,8 @@ public class GrappledBehaviour : MonoBehaviour {
 
         thisTransform = this.transform;
         StartCoroutine(DrawGrapplingLine());
+
+        GetComponent<Block>().UpdateMap(); //the block is going to be destroyed anyway, so might as well update it now.
 	}
 
     IEnumerator DrawGrapplingLine()
@@ -70,6 +71,11 @@ public class GrappledBehaviour : MonoBehaviour {
         spring.connectedAnchor = Format.mousePosInWorld();
     }
 
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        Debug.Log(other.relativeVelocity);
+    }
+
     public void Instantiate(Vector2 collisionPoint, Material spriteMat) //set the grappled point; collisionPoint is in world space
     {
         //addComponent scripts can't have serialized references to assets, so as a workaround I'm passing in the material from the grappling object.
@@ -83,10 +89,12 @@ public class GrappledBehaviour : MonoBehaviour {
         //when the object is disabled, it's despawned for pooling
 
         //reset the object to a normal block
-        Destroy(rigid);
+        Destroy(this);
+       
         Destroy(line);
         gameObject.isStatic = true;
         Destroy(spring);
-        Destroy(this);
+        Destroy(rigid);
+        
     }
 }

@@ -7,7 +7,7 @@ public class Boulder : SolidBlock {
     {
         return blockDataType.BOULDER;
     }
-    protected override void UpdateMap()
+    public override void UpdateMap()
     {
         WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.BOULDERINTERIOR);
     }

@@ -22,7 +22,7 @@ public class SolidBlock : Block {
     {
         base.Create();
         Vector3 colorValues = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
-        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z / hierarchy);
+        mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z);
     }
 
     public override void Destroy()

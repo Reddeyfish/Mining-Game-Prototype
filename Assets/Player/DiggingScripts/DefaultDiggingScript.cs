@@ -7,12 +7,6 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
     public KeyCode digKey = KeyCode.Space;
     public float digPower = 100f;
 
-    private int _hierarchy = 2;
-    public int Hierarchy {
-        get { return _hierarchy; }
-        set { _hierarchy = value; }
-    }
-
     protected static LayerMask blocks;
 
     private Controls control;
@@ -81,11 +75,12 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         drillParticles.startColor = target.GetComponent<Block>().getColor();
         drillParticles.Play();
 
-        float digTime = target.digTime(_hierarchy) * (1 + this.transform.position.magnitude/digPower); //drill gets slower the farther away we are from the center
+        float digTime = target.digTime() * (1 + this.transform.position.magnitude/digPower); //drill gets slower the farther away we are from the center
 
         theStateMachine.SetBool(AnimatorParams.dig, true);
         Collider2D otherCollider = target.transform.GetComponent<Collider2D>();
         otherCollider.enabled = false;
+        target.StartDig();
         Vector3 targetPos = target.transform.position;
         while ((this.transform.position - targetPos).magnitude > 0.03f)
         {

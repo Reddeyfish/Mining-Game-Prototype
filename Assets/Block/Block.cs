@@ -3,16 +3,20 @@ using System.Collections;
 
 public class Block : MonoBehaviour, ISpawnable, IObliterable {
 	// Use this for initialization
-    protected int hierarchy;
 
     public virtual void Create()
     {
-        setHierarchy();
+
     }
 
-    protected virtual void setHierarchy()
+    public virtual void StartDig()
     {
-        hierarchy = WorldController.PerlinHierarchy(WorldController.ColorSeedX, WorldController.ColorSeedY, (int)(transform.position.x), (int)(transform.position.y));
+        //stuff to disable movement and physics so the block does not move while digging
+        SpringJoint2D spring = GetComponent<SpringJoint2D>();
+        if (spring != null) spring.enabled = false;
+
+        Rigidbody2D rigid = GetComponent<Rigidbody2D>();
+        if (rigid != null) rigid.constraints = RigidbodyConstraints2D.FreezeAll; 
     }
 
     public virtual void Destroy()
@@ -31,7 +35,7 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
         Despawn();
     }
 
-    protected virtual void UpdateMap()
+    public virtual void UpdateMap()
     {
         WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK);
     }
@@ -54,14 +58,8 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
     //attributes
     public virtual bool isMinable() { return true; }
     public virtual float baseDigTime() { return 0.8f; }
-    public float digTime(int diggerHierarchy)
+    public float digTime()
     {
-        Debug.Log(hierarchy);
-        if (diggerHierarchy > hierarchy)
-            return baseDigTime();
-        else
-        {
-            return baseDigTime() * Mathf.Pow(2, hierarchy + 1 - diggerHierarchy);
-        }
+        return baseDigTime();
     }
 }
