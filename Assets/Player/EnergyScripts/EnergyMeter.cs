@@ -12,6 +12,8 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     private float remainingDrainTime;
     private float _startDrainTime = 60.0f;
     private float explosionDamage = 10f;
+    public string energyDeathTip = "You ran out of <color=yellow>energy</color> and died.";
+    public float energyDeathTipDuration = 10f;
     public float StartDrainTime
     {
         get { return _startDrainTime; }
@@ -77,7 +79,6 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         }
     }
 
-    private const float deathTipDuration = 10f;
     IEnumerator Die() //might need to move this to it's own seperate behavior
     {
         remainingDrainTime = _startDrainTime;
@@ -89,7 +90,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         Camera.main.transform.parent.parent.position = Vector3.zero;
         WorldController.thi.RecreateCreatedBlocks();
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTimedTip(TutorialTipType.ENERGYDEATH, deathTipDuration);
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTimedTip(energyDeathTip, energyDeathTipDuration);
     }
 }
 

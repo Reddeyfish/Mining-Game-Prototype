@@ -7,8 +7,9 @@ public class ReturnCapsule : Block {
     IEnumerator inputCheck; //store the IEnumerator so we can stop it when it is no longer needed
     KeyCode code = KeyCode.Space;
 
-    private const float stopPercent = 0.2f; //the fraction of the original distance that the teleport will stop at
-    private const float speed = 20f;
+    public float stopPercent = 0.2f; //the fraction of the original distance that the teleport will stop at
+    public float speed = 20f;
+    public string capsuleTip = "This is a <color=cyan>Capsule</color>. When activated, it transports you back to base. The transport requires some energy, but it's always better (and faster) than just flying back.";
 	// Use this for initialization
 	void Awake () {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
@@ -23,7 +24,7 @@ public class ReturnCapsule : Block {
             UI.alpha = 1;
             inputCheck = InputCheck();
             StartCoroutine(inputCheck);
-            tips.SetTip(TutorialTipType.CAPSULE);
+            tips.SetTip(capsuleTip);
         }
     }
 
@@ -33,7 +34,7 @@ public class ReturnCapsule : Block {
         {
             UI.alpha = 0;
             StopCoroutine(inputCheck);
-            tips.EndTip(TutorialTipType.CAPSULE);
+            tips.EndTip(capsuleTip);
         }
     }
 

@@ -12,12 +12,16 @@ public class GuffinController : MonoBehaviour {
     static float[] ranges = {
                                50,75,100,125,150,175,200,225,250
                            }; //should be constant
+
+    //maybe make these public so we can add abilities to modify them?
     const float checkFrequency = 30;
     const float checkInterval = 30;
     const float failureResetTime = 120;
     const float guffinSpawnRange = 20;
     const float guffinSpawnVariance = 5;
     const float maxGuffinTrackingRange = 30;
+
+    public string guffinTip = "You've detected a <color=cyan>Guffin</color>. Use the pings to track it down. Faster pinging means you're getting closer.";
 
     public GameObject guffin;
     public GameObject guffinTracker;
@@ -60,7 +64,7 @@ public class GuffinController : MonoBehaviour {
 
             spawnedGuffinTracker.GetComponent<GuffinTracker>().Initialize(spawnedGuffin, maxGuffinTrackingRange, this);
 
-            GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip(TutorialTipType.GUFFIN);
+            GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip(guffinTip);
         }
         else
         {
@@ -71,7 +75,7 @@ public class GuffinController : MonoBehaviour {
 
     public void NotifyComplete(bool success)
     {
-        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().EndTip(TutorialTipType.GUFFIN);
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().EndTip(guffinTip);
 
         if (success)
         {

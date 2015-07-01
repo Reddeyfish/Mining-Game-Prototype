@@ -5,7 +5,8 @@ public class UndiggableTip : BaseUndiggableListener{
     //place on player
     TutorialTip tips;
     // Use this for initialization
-    private const float tipDuration = 5f;
+    public float tipDuration = 5f;
+    public string undiggableTip = "This block cannot be mined.";
     protected override void Start()
     {
         base.Start();
@@ -15,7 +16,7 @@ public class UndiggableTip : BaseUndiggableListener{
     {
         if (block.getBlockType() == blockDataType.BOULDER)
         {
-            tips.SetTip(TutorialTipType.BOULDER);
+            tips.SetTip(undiggableTip);
             StopAllCoroutines(); //refresh the countdown
             Callback.FireAndForget(EndTip, tipDuration, this); 
         }
@@ -23,6 +24,6 @@ public class UndiggableTip : BaseUndiggableListener{
 
     void EndTip()
     {
-        tips.EndTip(TutorialTipType.BOULDER);
+        tips.EndTip(undiggableTip);
     }
 }

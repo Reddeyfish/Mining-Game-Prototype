@@ -7,7 +7,7 @@ public class TutorialTip : MonoBehaviour {
     Text text;
     CanvasGroup group;
     IEnumerator fade;
-    TutorialTipType currentTip;
+    string currentTip; //the text doesn't always match the tip, because of the fade out/fade in needed to change tips
 
     private const float fadeTime = 0.25f;
 
@@ -17,29 +17,29 @@ public class TutorialTip : MonoBehaviour {
         group = GetComponent<CanvasGroup>();
 	}
 
-    public Coroutine SetTip(TutorialTipType tip)
+    public Coroutine SetTip(string tip)
     {
         if (currentTip == tip && group.alpha != 0f)
             return null;
         return StartCoroutine(SetTipRoutine(tip));
     }
 
-    IEnumerator SetTipRoutine(TutorialTipType tip)
+    IEnumerator SetTipRoutine(string tip)
     {
         currentTip = tip;
         if (group.alpha != 0)
             yield return SetVisible(false);
-        text.text = TipToText(tip);
+        text.text = tip;
         SetVisible(true);
     }
 
-    public Coroutine SetTimedTip(TutorialTipType tip, float time)
+    public Coroutine SetTimedTip(string tip, float time)
     {
         SetTip(tip);
         return StartCoroutine(SetTimedEndTip(tip, time));
     }
 
-    public Coroutine EndTip(TutorialTipType tip)
+    public Coroutine EndTip(string tip)
     {
         Coroutine result = null;
         if (currentTip == tip)
@@ -47,7 +47,7 @@ public class TutorialTip : MonoBehaviour {
         return result;
     }
 
-    IEnumerator SetTimedEndTip(TutorialTipType tip, float time)
+    IEnumerator SetTimedEndTip(string tip, float time)
     {
         yield return new WaitForSeconds(time);
         EndTip(tip);
@@ -86,10 +86,9 @@ public class TutorialTip : MonoBehaviour {
         fade = visible ? fadeInRoutine() : fadeOutRoutine();
         return StartCoroutine(fade);
     }
-
-    string TipToText(TutorialTipType tip)
-    {
-        switch (tip)
+}
+/*
+ * switch (tip)
         {
             case TutorialTipType.LOWENERGY:
                 return "You are low on <color=yellow>energy</color>. Return to base and refill your energy or you will die.";
@@ -106,21 +105,4 @@ public class TutorialTip : MonoBehaviour {
             default:
                 return "";
         }
-    }
-}
-
-public enum TutorialTipType
-{
-    //energy
-    LOWENERGY,
-    ENERGYDEATH,
-
-
-    MOVEMENT,
-
-    //blocks
-    BOULDER,
-    GUFFIN,
-    CAPSULE,
-
-}
+*/

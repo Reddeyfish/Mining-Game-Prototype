@@ -10,9 +10,10 @@ public class EnergyView : MonoBehaviour {
     private AudioSource source;
     private float levelTarget;
     private Color targetColor;
-    private const float lerpSpeed = 0.2f;
-    private const float warnLevel = 0.2f;
-    private const float warnFlashTime = 0.5f;
+    public float lerpSpeed = 0.2f;
+    public float warnLevel = 0.2f;
+    public float warnFlashTime = 0.5f;
+    public string lowEnergyTip = "You are low on <color=yellow>energy</color>. Return to base and refill your energy or you will die.";
     public AudioClip ready;
     public AudioClip drain;
     public AudioClip warnSound;
@@ -94,7 +95,7 @@ public class EnergyView : MonoBehaviour {
     public IEnumerator warnRoutine()
     {
         TutorialTip tip = GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>();
-        tip.SetTip(TutorialTipType.LOWENERGY);
+        tip.SetTip(lowEnergyTip);
         while (levelTarget < warnLevel)
         {
             source.clip = warnSound;
@@ -117,7 +118,7 @@ public class EnergyView : MonoBehaviour {
             }
         }
         warn = null;
-        tip.EndTip(TutorialTipType.LOWENERGY);
+        tip.EndTip(lowEnergyTip);
     }
 
     public Coroutine CheckWarn()
