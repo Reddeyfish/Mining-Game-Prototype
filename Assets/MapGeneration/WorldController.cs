@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 
 public class WorldController : MonoBehaviour {
-    private static Map theMap;
-    private const int mapSize = 300;
+    protected static Map theMap;
+    public static int mapSize = 300;
     private Point loadedTopRight = new Point(0, 0);
     private Point loadedBottomLeft = new Point(0, 0);
     [HideInInspector] //public for the random library to use
-    public static float ColorSeedX;
+    public static float ColorSeedX = -288;
     [HideInInspector]
-    public static float ColorSeedY;
-    private static float OreSeedX;
-    private static float OreSeedY;
+    public static float ColorSeedY = -800;
+    private static float OreSeedX = 0;
+    private static float OreSeedY = 0;
     [HideInInspector]
-    public static float TransSeedX;
+    public static float TransSeedX = 0;
     [HideInInspector]
-    public static float TransSeedY;
-    private static float ObstacleSeed;
+    public static float TransSeedY = 0;
+    private static float ObstacleSeed = 0;
 
     private const float tunnelFrequency = 0.97f;
     private const int tunnelLengthMin = 3;
@@ -52,7 +52,7 @@ public class WorldController : MonoBehaviour {
     public static WorldController thi;
 	// Use this for initialization
 
-	void Start () {
+	protected virtual void Start () {
         thi = this;
 
         LoadData();
@@ -64,7 +64,7 @@ public class WorldController : MonoBehaviour {
         
 	}
 
-    private void InitializeMap()
+    protected virtual void InitializeMap()
     {
          // definitely something to optimize
 
@@ -209,7 +209,7 @@ public class WorldController : MonoBehaviour {
 
     }
 
-    public void LoadData()
+    protected virtual void LoadData()
     {
         //load our seeds
         LoadSeed(out ColorSeedX, PlayerPrefKeys.ColorX);
@@ -266,7 +266,7 @@ public class WorldController : MonoBehaviour {
     {
         Transform target = Camera.main.transform;
         Point newTopRight = new Point(Mathf.Clamp((int)(target.position.x) + loadedRange, 1-mapSize, mapSize - 1), Mathf.Clamp((int)(target.position.y) + loadedRange, 1-mapSize, mapSize - 1));
-        Point newBottomLeft = new Point(Mathf.Clamp((int)(target.position.x) - loadedRange, -mapSize, mapSize - 1), Mathf.Clamp((int)(target.position.y) - loadedRange, 1-mapSize, mapSize - 1));
+        Point newBottomLeft = new Point(Mathf.Clamp((int)(target.position.x) - loadedRange, 1-mapSize, mapSize - 1), Mathf.Clamp((int)(target.position.y) - loadedRange, 1-mapSize, mapSize - 1));
 
         //add the new edges (invert the order of the points from removal)
         theMap.LoadRange(new Point(loadedTopRight.x + 1, loadedTopRight.y + 1), newTopRight); //top right
@@ -308,7 +308,7 @@ public class WorldController : MonoBehaviour {
         loadedBottomLeft = newBottomLeft;
     }
 
-    private static EmptyBlock enumToBlock(blockDataType data)
+    public static EmptyBlock enumToBlock(blockDataType data)
     {
         switch(data)
         {
@@ -479,7 +479,9 @@ public class Map
             if (index >= 0)
                 return positives[index];
             else
+            {
                 return negatives[Mathf.Abs(index) - 1];
+            }
         }
         set {
             if (index >= 0)

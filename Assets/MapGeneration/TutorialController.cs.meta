@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 26a7ab0820003dd41a6bb3bf438f24b3
+timeCreated: 1437195513
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - DirtBlock: {fileID: 132896, guid: 719fcd48bc32dfa4bae2e5c98eaa18c1, type: 2}
+  - OreBlock: {fileID: 198340, guid: e5aa021b4d67f9e449b0baa2f17560e0, type: 2}
+  - CrystalLight: {fileID: 118750, guid: 5285e49c976c1604181a6e7bd5a3131f, type: 2}
+  - Boulder: {fileID: 160004, guid: 5f8ac0ddaef44f5419f59582100f4bd8, type: 2}
+  - BoulderInterior: {fileID: 128968, guid: 0cfbfc953960c2f45a6fc67a0f0dc86b, type: 2}
+  - ExplosiveBlock: {fileID: 144740, guid: 70a8b6e5885cf2745b78cf9e9325b748, type: 2}
+  - PlusExplosiveBlock: {fileID: 105464, guid: 7aa58e60caaeb4d40acd80b65a746672, type: 2}
+  - TransparentBlock: {fileID: 115804, guid: e90adc85071ae6d4fa218fb3655e6cb0, type: 2}
+  - homeBase: {fileID: 136310, guid: 15370bd3e1e894244869c40748df6bfe, type: 2}
+  - capsule: {fileID: 171288, guid: d3bd140b97c56f544bbbe6762443bb49, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

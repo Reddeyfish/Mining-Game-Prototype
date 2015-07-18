@@ -4,7 +4,6 @@ using System.Collections;
 public class DirectionalMiningBlastScript : BaseMiningAbility
 {
     private const float range = 8.5f;
-    private static Vector2 size = Vector2.one; //constant
 
     protected override Collider2D[] getHits()
     {
