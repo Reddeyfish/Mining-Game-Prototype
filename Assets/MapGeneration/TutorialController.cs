@@ -32,13 +32,25 @@ public class TutorialController : WorldController, IDigListener {
         {
             for (int y = -mapSize + 1; y < mapSize; y++)
             {
-                theMap[x][y] = enumToBlock(blockDataType.TRANSPARENTMAP);
+                theMap[x][y] = enumToBlock(blockDataType.MAPBLOCK);
             }
         }
 
-        for (int x = -3; x <= 3; x++)
+        for (int x = -mapSize + 15; x <= mapSize - 15; x++)
             for (int y = -3; y <= 3; y++)
                 theMap[x][y] = enumToBlock(blockDataType.EMPTYBLOCK);
+
+        for (int x = 0; x <= mapSize - 15; x += 5)
+        {
+            theMap[x][4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[x][-4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[-x][4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[-x][-4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[x-1][4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[x-1][-4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[1-x][4] = enumToBlock(blockDataType.LIGHTBLOCK);
+            theMap[1-x][-4] = enumToBlock(blockDataType.LIGHTBLOCK);
+        }
     }
 
     public void OnNotify(Block block)

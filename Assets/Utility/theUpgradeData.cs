@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public delegate MonoBehaviour AddComponentDelegate(GameObject player, int ID);
+public delegate MonoBehaviour AddUpgradeComponentDelegate(GameObject player, int ID);
 public class theUpgradeData : MonoBehaviour {
     public const float cellPixelWidth = 40f;
     public const float cellPixelHeight = 30f;
@@ -85,10 +85,10 @@ public class Upgrade
     public string ComponentName;
     public int cellWidth;
     public int cellHeight;
-    public AddComponentDelegate AddComponentTo;
+    public AddUpgradeComponentDelegate AddComponentTo;
     public Cost[] costs;
     public string description;
-    public Upgrade(string ComponentName, int cellWidth, int cellHeight, AddComponentDelegate AddComponent, Cost[] costs, string description)
+    public Upgrade(string ComponentName, int cellWidth, int cellHeight, AddUpgradeComponentDelegate AddComponent, Cost[] costs, string description)
     {
         this.ComponentName = ComponentName;
         this.cellWidth = cellWidth;
