@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CameraLerp : MonoBehaviour {
-    public float smoothTime = 0.5f;
+    public float smoothTime = 1f;
 
     private Transform player;
     private Rigidbody rigid;
@@ -14,7 +14,7 @@ public class CameraLerp : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         Vector3 velocity = Vector3.zero;
         transform.position = Vector3.SmoothDamp(transform.position, player.position, ref velocity, smoothTime);
         rigid.velocity = velocity;

@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
 public delegate MonoBehaviour AddUpgradeComponentDelegate(GameObject player, int ID);
 public class theUpgradeData : MonoBehaviour {
     public const float cellPixelWidth = 40f;
     public const float cellPixelHeight = 30f;
     public static theUpgradeData thi;
-    public static Upgrade[] IDToUpgrade = new Upgrade[]
+    public static Upgrade[] IDToUpgrade = new Upgrade[]  //static because const hates delegates; is constant
     {
         new Upgrade("Inventory Space", 2, 1, 
             delegate(GameObject player, int ID) { return player.AddComponent<inventoryExpansion>(); }, 

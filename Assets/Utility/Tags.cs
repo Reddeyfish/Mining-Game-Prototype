@@ -16,6 +16,7 @@ public class Tags : MonoBehaviour {
     public const string inventory = "BaseInventory";
     public const string tutorial = "Tutorial";
     public const string mouseParent = "MouseParent";
+    public const string objective = "Objective";
 }
 
 public class Axis

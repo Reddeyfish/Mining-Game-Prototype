@@ -4,15 +4,12 @@ using System.IO;
 
     //unlike the world controller, loads a pre-set map. This particular scripts will load the tutorial level, but this script can be extended to load other levels (just ovrride the InitializeMat() method)
 
-public class TutorialController : WorldController, IDigListener {
-
-    private DiggingListenerSystem listener;
+public class TutorialController : WorldController {
 
     protected override void Start()
     {
         base.Start();
-        listener = GameObject.FindGameObjectWithTag(Tags.player).GetComponentInChildren<DiggingListenerSystem>();
-        listener.Subscribe(this);
+        GameObject.FindGameObjectWithTag(Tags.objective).GetComponent<ObjectivesController>().AddObjective(ID: 1); //start the tutorial objectives
     }
 
     protected override void LoadData()
@@ -53,13 +50,8 @@ public class TutorialController : WorldController, IDigListener {
         }
     }
 
-    public void OnNotify(Block block)
-    {
-
-    }
     public void OnDestroy()
     {
-        listener.UnSubscribe(this);
         theMap = null;
     }
 }
