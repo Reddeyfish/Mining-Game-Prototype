@@ -5,7 +5,6 @@ using System.Collections;
 public class EnergyMeter: MonoBehaviour, IObliterable {
     private ComboListenerSystem listeners;
     private EnergyView view;
-    private ComboProgressView progress;
     private Vector3 position;
     private Transform player;
     private ScreenFlash flash;
@@ -29,7 +28,6 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     void Start()
     {
         view = GameObject.FindGameObjectWithTag(Tags.energyUI).GetComponent<EnergyView>();
-        progress = GameObject.FindGameObjectWithTag(Tags.comboProgressUI).GetComponent<ComboProgressView>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         flash = GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>();
         position = player.position;

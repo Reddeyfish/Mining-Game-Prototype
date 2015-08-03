@@ -4,11 +4,20 @@ using System.Collections;
 public class DiggingTutorialObjective : ResettingObjective, IDigListener
 {
 
-    Vector2 blockPos; //position of the ore block in the tutorial level
+    const int wallPos = -13;//the x-position of the wall
     DiggingListenerSystem listener;
 	// Use this for initialization
-	protected override void Start () {
+    protected override void Start()
+    {
         base.Start();
+        
+        //spawn the wall
+        for(int i = -3; i <= 3; i++)
+            WorldController.UpdateBlock(wallPos, i, blockDataType.MAPBLOCK);
+        //tutorial tip
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Use the <color=yellow>Space Bar</color> to activate your drill. Drill through this <color=cyan>wall</color>.");
+
+
         listener = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<DiggingListenerSystem>();
         listener.Subscribe(this);
 	}
@@ -16,7 +25,7 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
 	// Update is called once per frame
     public void OnNotify(Block block)
     {
-        if ((Vector2)(block.transform.position) == blockPos) //then they've dug the correct block
+        if (block.transform.position.x == wallPos) //then they've dug the correct block
         {
             completeObjective();
         }
@@ -36,7 +45,7 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
 
     protected override string getText()
     {
-        throw new System.NotImplementedException();
+        return "Dig through the wall on the right";
     }
 
     public override int getID() { return 2; }

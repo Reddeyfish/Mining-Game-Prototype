@@ -12,12 +12,12 @@ public class MovementTutorialObjective : ResettingObjective {
         
         //tutorial tip
 
-        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Welcome to Chromatose! Use <color=yellow>WASD </color> or <color=yellow>the Arrow Keys</color> to move. Try moving to the right.");
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Welcome to Chromatose! Use <color=yellow>WASD </color> or <color=yellow>the Arrow Keys</color> to move. Try moving to the <color=cyan>right</color>.");
 	}
 
     void FixedUpdate()
     {
-        if (player.position.x - basePlayerPos.x > 5)
+        if (player.position.x - basePlayerPos.x > 3)
         {
             completeObjective();
         }

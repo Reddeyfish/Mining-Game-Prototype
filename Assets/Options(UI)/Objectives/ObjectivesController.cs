@@ -45,21 +45,19 @@ public class ObjectivesController : MonoBehaviour {
     {
         //save the data!
 
-        int[] data = new int[transform.childCount * 2];
-        int i = 0;
-        foreach(Transform trans in transform)
+        List<int> data = new List<int>();
+
+        foreach (Transform trans in transform)
         {
-            if (trans.gameObject.activeSelf)//if it's disabled, then it's a pooled object
+            if (trans.gameObject.activeSelf) //inactive ones are pooled
             {
                 Objective objectiveScript = trans.GetComponent<Objective>();
-                data[i] = objectiveScript.getID();
-                i++;
-                data[i] = objectiveScript.getProgress();
-                i++;
+                data.Add(objectiveScript.getID());
+                data.Add(objectiveScript.getProgress());
             }
         }
 
-        bool success = PlayerPrefsX.SetIntArray(PlayerPrefKeys.objectives, data);
+        bool success = PlayerPrefsX.SetIntArray(PlayerPrefKeys.objectives, data.ToArray());
         if (!success)
         {
             Debug.Log("Objective Save Failed!");
