@@ -346,6 +346,21 @@ public class WorldController : MonoBehaviour {
         theMap[x][y].Create(x, y);
     }
 
+    //same as modify block, but does checking to see when things should be spawned/despawned
+    public static void ModifyBlock(int x, int y, blockDataType newBlock)
+    {
+        bool loaded = x <= thi.loadedTopRight.x && x >= thi.loadedBottomLeft.x && y <= thi.loadedTopRight.y && y >= thi.loadedBottomLeft.y;
+        if (loaded)
+        {
+            theMap[x][y].Remove();
+        }
+        theMap[x][y] = enumToBlock(newBlock);
+        if (loaded)
+        {
+            theMap[x][y].Create(x, y);
+        }
+    }
+
     //gives the hierarchy value for a certain position
     public static int PerlinHierarchy(float seedX, float seedY, float x, float y)
     {
@@ -406,6 +421,8 @@ public class MapBlock : EmptyBlock //just a dirt block, nothing special
         }
         else
         {
+            Debug.Log(x);
+            Debug.Log(y);
             Debug.Log("Already Created!");
         }
     }

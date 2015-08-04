@@ -4,19 +4,26 @@ using System.Collections;
 public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, IDigListener
 {
     const int blockPos = 2;
-    static Vector2 respawnPoint = new Vector2(-12, 0); //constant
+    protected static Vector2 respawnPoint = new Vector2(-12, 0); //constant
 
     DiggingListenerSystem listener;
+
+    protected IEnumerator reset;
 
 	// Use this for initialization
 	protected virtual void Awake () {
         //tutorial tip
 
-        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("This is a block of <color=yellow>ore</color>. Blocks of ore will <color=yellow>trigger</color> when nearby blocks are mined. <color=cyan>Mine the Ore Block</color>.");
+        setTip();
 
         listener = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<DiggingListenerSystem>();
         listener.Subscribe(this);
 	}
+
+    protected virtual void setTip()
+    {
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("This is a block of <color=yellow>ore</color>. Blocks of ore will <color=yellow>trigger</color> when nearby blocks are mined. <color=cyan>Mine the Ore Block</color>.");
+    }
 
     protected override void Start()
     {
@@ -24,7 +31,7 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
        SpawnObjects();
     }
 
-    private void SpawnObjects()
+    protected virtual void SpawnObjects()
     {
         //create the actual block
         GameObject tutorialOreBlockPrefab = Resources.Load("TutorialOreBlock(3D)") as GameObject;
@@ -33,35 +40,35 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
 
         //surround it with normal blocks
         //left
-        WorldController.UpdateBlock(blockPos - 2, -1, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 2, 0, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 2, 1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, -1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, 0, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, 1, blockDataType.MAPBLOCK);
 
         //right
-        WorldController.UpdateBlock(blockPos + 2, -1, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos + 2, 0, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos + 2, 1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos + 2, -1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos + 2, 0, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos + 2, 1, blockDataType.MAPBLOCK);
 
         //top
-        WorldController.UpdateBlock(blockPos - 1, 2, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos, 2, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos + 1, 2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 1, 2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos, 2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos + 1, 2, blockDataType.MAPBLOCK);
 
         //bottom
-        WorldController.UpdateBlock(blockPos - 1, -2, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos, -2, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos + 1, -2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 1, -2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos, -2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos + 1, -2, blockDataType.MAPBLOCK);
 
         //and a wall in front of left to demonstrate ore blocks not triggering
-        WorldController.UpdateBlock(blockPos - 2, -3, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 2, -2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, -3, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, -2, blockDataType.MAPBLOCK);
 
-        WorldController.UpdateBlock(blockPos - 3, -1, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 3, 0, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 3, 1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 3, -1, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 3, 0, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 3, 1, blockDataType.MAPBLOCK);
 
-        WorldController.UpdateBlock(blockPos - 2, 2, blockDataType.MAPBLOCK);
-        WorldController.UpdateBlock(blockPos - 2, 3, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, 2, blockDataType.MAPBLOCK);
+        WorldController.ModifyBlock(blockPos - 2, 3, blockDataType.MAPBLOCK);
     }
 
     protected override void spawnNextObjectives()
@@ -69,31 +76,43 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
         GetComponentInParent<ObjectivesController>().AddObjective(ID: 4);
     }
 
-    public void OnNotifyExplosion(ExplosiveBlock block)
+    public virtual void OnNotifyExplosion(ExplosiveBlock block)
     {
-        Debug.Log("reset");
+        
         //reset things since it exploded
-        StartCoroutine(Reset());
+        if (reset == null) //else we're already resetting
+        {
+            Debug.Log("reset");
+            reset = Reset();
+            StartCoroutine(reset);
+        }
     }
 
-    public void OnNotifyDig(Block block)
+    public virtual void OnNotifyDig(Block block)
     {
         if (block.transform.position == new Vector3(blockPos, 0, 0))
             Callback.FireForNextFrame(completeObjective, this); //keeps it from screwing with the listener
     }
 
-    private IEnumerator Reset()
+    protected IEnumerator Reset()
     {
         GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         yield return GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Fade(1.5f);
 
-        player.transform.position = respawnPoint;
-        Camera.main.transform.parent.parent.position = respawnPoint;
+        player.transform.position = getRespawnPoint();
+        Camera.main.transform.parent.parent.position = getRespawnPoint();
         WorldController.thi.RecreateCreatedBlocks();
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
         SpawnObjects();
+
+        reset = null;
+    }
+
+    protected virtual Vector2 getRespawnPoint() //for inheritance
+    {
+        return respawnPoint;
     }
 
     public void OnDestroy()

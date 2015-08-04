@@ -11,7 +11,7 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
     {
         //spawn the wall
         for(int i = -3; i <= 3; i++)
-            WorldController.UpdateBlock(wallPos, i, blockDataType.MAPBLOCK);
+            WorldController.ModifyBlock(wallPos, i, blockDataType.MAPBLOCK);
         //tutorial tip
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Use the <color=yellow>Space Bar</color> to activate your drill. Drill through this <color=cyan>wall</color>.");
 
