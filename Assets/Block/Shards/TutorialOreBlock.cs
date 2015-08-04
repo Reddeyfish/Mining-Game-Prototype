@@ -8,15 +8,15 @@ public class TutorialOreBlock : OreBlock {
 
     IExplosionListener listener;
 
-    new protected IEnumerator Detonate()
+    protected override void OnDetonate()
     {
-        yield return StartCoroutine(base.Detonate());
         listener.OnNotifyExplosion(this);
     }
 
-    public void Instantiate(IExplosionListener listener)
+    public void Instantiate(IExplosionListener listen)
     {
-        this.listener = listener;
+        listener = listen;
+        Debug.Log("listener set!");
     }
 }
 

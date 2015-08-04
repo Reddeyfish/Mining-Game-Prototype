@@ -62,7 +62,7 @@ public class ExplosiveBlock : Block, IDigListener {
         }
     }
 
-    protected virtual IEnumerator Detonate()
+    protected IEnumerator Detonate()
     {
         AlterVisuals();
         stable = false;
@@ -78,8 +78,13 @@ public class ExplosiveBlock : Block, IDigListener {
         }
         listener.UnSubscribe(this);
         SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
+        OnDetonate();
         Despawn();
 
+    }
+
+    protected virtual void OnDetonate()
+    {
     }
 
     protected virtual void AlterVisuals()
@@ -92,7 +97,7 @@ public class ExplosiveBlock : Block, IDigListener {
         if (block != this && stable && willTrigger(block))
         {
             StopAllCoroutines();
-            if(gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
                 StartCoroutine(Detonate());
         }
     }
