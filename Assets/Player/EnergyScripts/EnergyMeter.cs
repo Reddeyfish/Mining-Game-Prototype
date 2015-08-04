@@ -28,6 +28,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     void Start()
     {
         view = GameObject.FindGameObjectWithTag(Tags.energyUI).GetComponent<EnergyView>();
+        Debug.Log(view);
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         flash = GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>();
         position = player.position;

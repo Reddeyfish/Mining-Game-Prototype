@@ -28,7 +28,7 @@ public class DiggingListenerSystem : MonoBehaviour {
     {
         foreach (IDigListener listener in digListeners)
         {
-            listener.OnNotify(block);
+            listener.OnNotifyDig(block);
         }
     }
 
@@ -42,6 +42,7 @@ public class DiggingListenerSystem : MonoBehaviour {
         undiggableListeners.Remove(listener);
     }
 
+    //note: the listeners can't remove themselves immediately; it'll cause a problem with the for-loop. use Callback.FireForNextFrame on the removal if necessary
     public void UndiggableNotify(Block block)
     {
         foreach (IUndiggableListener listener in undiggableListeners)
@@ -53,7 +54,7 @@ public class DiggingListenerSystem : MonoBehaviour {
 
 public interface IDigListener
 {
-    void OnNotify(Block block);
+    void OnNotifyDig(Block block);
     void OnDestroy();
 }
 
@@ -66,7 +67,7 @@ public abstract class BaseDigListener : MonoBehaviour, IDigListener
         listener = GetComponentInChildren<DiggingListenerSystem>();
         listener.Subscribe(this);
     }
-    public abstract void OnNotify(Block block);
+    public abstract void OnNotifyDig(Block block);
     public void OnDestroy()
     {
         listener.UnSubscribe(this);

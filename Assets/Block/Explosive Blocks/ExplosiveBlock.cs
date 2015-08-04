@@ -69,7 +69,7 @@ public class ExplosiveBlock : Block, IDigListener {
         float time = 0;
         Color color = HSVColor.HSVToRGB(hue, 1f, 1);
         Transform visuals = transform.Find("Visuals");
-        while (time < 1)
+        while (time < 1 && !stable)
         {
             mat.SetColor(ShaderParams.emission, color * detonationVariance * Random.value);
             visuals.localPosition = Random.insideUnitSphere * detonationShake;
@@ -80,7 +80,12 @@ public class ExplosiveBlock : Block, IDigListener {
         SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
         OnDetonate();
         Despawn();
+    }
 
+    public override void StartDig()
+    {
+        base.StartDig();
+        stable = true;
     }
 
     protected virtual void OnDetonate()
@@ -92,7 +97,7 @@ public class ExplosiveBlock : Block, IDigListener {
 
     }
 
-    public void OnNotify(Block block)
+    public void OnNotifyDig(Block block)
     {
         if (block != this && stable && willTrigger(block))
         {

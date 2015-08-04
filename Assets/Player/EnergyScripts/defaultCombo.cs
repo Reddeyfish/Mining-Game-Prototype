@@ -22,7 +22,7 @@ public class defaultCombo : BaseDigListener
         base.Start();
     }
 
-    public override void OnNotify(Block block)
+    public override void OnNotifyDig(Block block)
     {
         combo.Add(blockValues[block.getBlockType()]);
     }

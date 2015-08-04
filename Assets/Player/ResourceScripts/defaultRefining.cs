@@ -16,7 +16,7 @@ public class defaultRefining : BaseDigListener {
         base.Start();
     }
 
-    public override void OnNotify(Block block)
+    public override void OnNotifyDig(Block block)
     {
         foreach (ResourceConversion conversion in conversionTable)
         {

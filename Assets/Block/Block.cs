@@ -11,7 +11,9 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
 
     public virtual void StartDig()
     {
-        //stuff to disable movement and physics so the block does not move while digging
+        //stuff to disable movement/physics so the block does not move while digging
+
+        //as well as any other stuff to do when being dug (i.e. animations)
         SpringJoint2D spring = GetComponent<SpringJoint2D>();
         if (spring != null) spring.enabled = false;
 

@@ -18,12 +18,7 @@ public class UndiggableTip : BaseUndiggableListener{
         {
             tips.SetTip(undiggableTip);
             StopAllCoroutines(); //refresh the countdown
-            Callback.FireAndForget(EndTip, tipDuration, this); 
+            Callback.FireAndForget((() => tips.EndTip(undiggableTip)), tipDuration, this); 
         }
-    }
-
-    void EndTip()
-    {
-        tips.EndTip(undiggableTip);
     }
 }

@@ -7,10 +7,8 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
     const int wallPos = -13;//the x-position of the wall
     DiggingListenerSystem listener;
 	// Use this for initialization
-    protected override void Start()
+    protected virtual void Awake()
     {
-        base.Start();
-        
         //spawn the wall
         for(int i = -3; i <= 3; i++)
             WorldController.UpdateBlock(wallPos, i, blockDataType.MAPBLOCK);
@@ -23,11 +21,11 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
 	}
 	
 	// Update is called once per frame
-    public void OnNotify(Block block)
+    public void OnNotifyDig(Block block)
     {
         if (block.transform.position.x == wallPos) //then they've dug the correct block
         {
-            completeObjective();
+            Callback.FireForNextFrame(completeObjective, this); //delayed for a frame to stop the listener from freaking out about removing the listenee
         }
 
     }

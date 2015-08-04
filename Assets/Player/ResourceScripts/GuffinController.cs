@@ -29,13 +29,8 @@ public class GuffinController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         guffinNumber = PlayerPrefs.HasKey(PlayerPrefKeys.guffin) ? PlayerPrefs.GetInt(PlayerPrefKeys.guffin) : 0;
-        distanceTriggerWrapper();
-	}
-
-    void distanceTriggerWrapper()
-    {
         StartCoroutine(distanceTrigger());
-    }
+	}
 
     IEnumerator distanceTrigger()
     {
@@ -86,7 +81,7 @@ public class GuffinController : MonoBehaviour {
         else
         {
             Debug.Log("Guffin Lost");
-            Callback.FireAndForget(distanceTriggerWrapper, failureResetTime, this);
+            Callback.FireAndForget(() => { StartCoroutine(distanceTrigger()); }, failureResetTime, this);
         }
     }
 }
