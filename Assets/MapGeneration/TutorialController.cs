@@ -23,8 +23,6 @@ public class TutorialController : WorldController {
         mapSize = 50;
         theMap = new Map(mapSize);
 
-        Debug.Log(mapSize);
-
         for (int x = -mapSize + 1; x < mapSize; x++)
         {
             for (int y = -mapSize + 1; y < mapSize; y++)

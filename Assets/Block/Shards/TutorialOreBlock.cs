@@ -16,7 +16,6 @@ public class TutorialOreBlock : OreBlock {
     public void Instantiate(IExplosionListener listen)
     {
         listener = listen;
-        Debug.Log("listener set!");
     }
 }
 

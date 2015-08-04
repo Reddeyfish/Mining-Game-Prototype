@@ -31,8 +31,6 @@ public class ObjectivesController : MonoBehaviour {
 
     public void AddObjective(int ID, int progress = 0)
     {
-        Debug.Log(ID);
-        Debug.Log(progress);
         GameObject newObjective = SimplePool.Spawn(objectivePrefab);
         newObjective.transform.SetParent(this.transform);
         newObjective.transform.localScale = Vector3.one;

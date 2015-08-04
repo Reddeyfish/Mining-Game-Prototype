@@ -69,7 +69,7 @@ public class ExplosiveBlock : Block, IDigListener {
         float time = 0;
         Color color = HSVColor.HSVToRGB(hue, 1f, 1);
         Transform visuals = transform.Find("Visuals");
-        while (time < 1 && !stable)
+        while (time < 1 || stable) //stable is flipped back to true if the player starts mining the block
         {
             mat.SetColor(ShaderParams.emission, color * detonationVariance * Random.value);
             visuals.localPosition = Random.insideUnitSphere * detonationShake;

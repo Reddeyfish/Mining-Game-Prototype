@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, IDigListener
 {
-    const int blockPos = 1;
+    const int blockPos = 2;
     static Vector2 respawnPoint = new Vector2(-12, 0); //constant
 
     DiggingListenerSystem listener;
@@ -51,6 +51,17 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
         WorldController.UpdateBlock(blockPos - 1, -2, blockDataType.MAPBLOCK);
         WorldController.UpdateBlock(blockPos, -2, blockDataType.MAPBLOCK);
         WorldController.UpdateBlock(blockPos + 1, -2, blockDataType.MAPBLOCK);
+
+        //and a wall in front of left to demonstrate ore blocks not triggering
+        WorldController.UpdateBlock(blockPos - 2, -3, blockDataType.MAPBLOCK);
+        WorldController.UpdateBlock(blockPos - 2, -2, blockDataType.MAPBLOCK);
+
+        WorldController.UpdateBlock(blockPos - 3, -1, blockDataType.MAPBLOCK);
+        WorldController.UpdateBlock(blockPos - 3, 0, blockDataType.MAPBLOCK);
+        WorldController.UpdateBlock(blockPos - 3, 1, blockDataType.MAPBLOCK);
+
+        WorldController.UpdateBlock(blockPos - 2, 2, blockDataType.MAPBLOCK);
+        WorldController.UpdateBlock(blockPos - 2, 3, blockDataType.MAPBLOCK);
     }
 
     protected override void spawnNextObjectives()
