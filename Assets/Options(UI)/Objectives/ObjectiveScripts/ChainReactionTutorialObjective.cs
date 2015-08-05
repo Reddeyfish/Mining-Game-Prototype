@@ -16,9 +16,6 @@ public class ChainReactionTutorialObjective : OreBlockTutorialObjectve
         new Vector2(1,2),
         new Vector2(2,2),
         new Vector2(2,1),
-        new Vector2(2,0),
-        new Vector2(2,-1),
-        new Vector2(2,-2),
     };
 
     TutorialOreBlock[] spawnedBlocks;
@@ -99,7 +96,7 @@ public class ChainReactionTutorialObjective : OreBlockTutorialObjectve
         return respawnPoint;
     }
 
-    protected override string getText() { return "Mine all 12 blocks with no explosions"; }
+    protected override string getText() { return "Mine all 9 blocks with no explosions"; }
 
     public override int getID() { return 4; }
 }

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class WorldController : MonoBehaviour {
     protected static Map theMap;
-    public static int mapSize = 300;
+    protected static int mapSize;
+    public static int maxDistance = 300;
     private Point loadedTopRight = new Point(0, 0);
     private Point loadedBottomLeft = new Point(0, 0);
     [HideInInspector] //public for the random library to use
@@ -67,7 +68,7 @@ public class WorldController : MonoBehaviour {
     protected virtual void InitializeMap()
     {
          // definitely something to optimize
-
+        mapSize = maxDistance;
 
         if (theMap != null)
         {
@@ -245,7 +246,7 @@ public class WorldController : MonoBehaviour {
         }
     }
 
-    void OnDestroy()
+    public virtual void OnDestroy()
     {
         bool[] test = theMap.toArray();
         bool success = PlayerPrefsX.SetBoolArray(PlayerPrefKeys.map, test);

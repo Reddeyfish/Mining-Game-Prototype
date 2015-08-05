@@ -48,7 +48,7 @@ public class TutorialController : WorldController {
         }
     }
 
-    public void OnDestroy()
+    public override void OnDestroy()
     {
         theMap = null;
     }
