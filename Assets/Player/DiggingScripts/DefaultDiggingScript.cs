@@ -64,6 +64,11 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         return false;
     }
 
+    protected virtual float getDigTimeMultiplier()
+    {
+        return (1 + this.transform.position.magnitude / digPower); //drill gets slower the farther away we are from the center
+    }
+
     IEnumerator Dig(Block target)
     {
         //sound start
@@ -75,7 +80,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         drillParticles.startColor = target.GetComponent<Block>().getColor();
         drillParticles.Play();
 
-        float digTime = target.digTime() * (1 + this.transform.position.magnitude/digPower); //drill gets slower the farther away we are from the center
+        float digTime = target.digTime() * getDigTimeMultiplier(); 
 
         theStateMachine.SetBool(AnimatorParams.dig, true);
         Collider2D otherCollider = target.transform.GetComponent<Collider2D>();
