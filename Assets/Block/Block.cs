@@ -42,7 +42,7 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
         WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK);
     }
 
-    public virtual bool getDataValue() //counted as an air(false) or dirt(true) block
+    public virtual bool isSolid() //counted as an air(false) or dirt(true) block
     {
         return true;
     }

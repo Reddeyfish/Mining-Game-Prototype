@@ -19,6 +19,8 @@ public class theObjectiveData : MonoBehaviour {
         delegate(GameObject objectivePrefab) { return objectivePrefab.AddComponent<ChainReactionTutorialObjective>(); }, 
         //5
         delegate(GameObject objectivePrefab) { return objectivePrefab.AddComponent<CapsuleTutorialObjective>(); }, 
+        //6
+        delegate(GameObject objectivePrefab) { return objectivePrefab.AddComponent<EnergyTutorialObjective>(); }, 
     };
 
     public static Objective IDToObjective(GameObject target, int ID)

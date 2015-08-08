@@ -49,7 +49,7 @@ public class BoulderInterior : Block
         return color;
     }
 
-    public override bool getDataValue() //counted as an air(false) or dirt(true) block
+    public override bool isSolid() //counted as an air(false) or dirt(true) block
     {
         return false; //turns into nothing if you leave
     }

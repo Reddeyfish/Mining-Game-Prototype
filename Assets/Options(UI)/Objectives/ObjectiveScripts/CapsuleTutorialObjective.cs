@@ -23,7 +23,7 @@ public class CapsuleTutorialObjective : ResettingObjective
 
     protected override void spawnNextObjectives()
     {
-        //GetComponentInParent<ObjectivesController>().AddObjective(ID : 6);
+        GetComponentInParent<ObjectivesController>().AddObjective(ID : 6);
         Application.LoadLevel("MainScene");
     }
 

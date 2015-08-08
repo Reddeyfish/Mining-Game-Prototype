@@ -6,6 +6,11 @@ using System.IO;
 
 public class TutorialController : WorldController {
 
+    protected override int mapSize()
+    {
+        return 50;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -20,22 +25,21 @@ public class TutorialController : WorldController {
 
     protected override void InitializeMap()
     {
-        mapSize = 50;
-        theMap = new Map(mapSize);
+        theMap = new Map(mapSize());
 
-        for (int x = -mapSize + 1; x < mapSize; x++)
+        for (int x = -mapSize() + 1; x < mapSize(); x++)
         {
-            for (int y = -mapSize + 1; y < mapSize; y++)
+            for (int y = -mapSize() + 1; y < mapSize(); y++)
             {
                 theMap[x][y] = enumToBlock(blockDataType.MAPBLOCK);
             }
         }
 
-        for (int x = -mapSize + 15; x <= mapSize - 15; x++)
+        for (int x = -mapSize() + 15; x <= mapSize() - 15; x++)
             for (int y = -3; y <= 3; y++)
                 theMap[x][y] = enumToBlock(blockDataType.EMPTYBLOCK);
 
-        for (int x = 0; x <= mapSize - 15; x += 5)
+        for (int x = 0; x <= mapSize() - 15; x += 5)
         {
             theMap[x][4] = enumToBlock(blockDataType.LIGHTBLOCK);
             theMap[x][-4] = enumToBlock(blockDataType.LIGHTBLOCK);

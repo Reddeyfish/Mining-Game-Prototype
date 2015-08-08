@@ -14,7 +14,7 @@ public class CrystalLight : Block {
         mat.SetColor("_EmissionColor", HSVColor.HSVToRGB(colorValues.x, 1, 1));
     }
 
-    public override bool getDataValue()
+    public override bool isSolid()
     {
         return false;
     }

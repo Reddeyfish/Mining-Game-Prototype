@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 public class WorldController : MonoBehaviour {
     protected static Map theMap;
-    protected static int mapSize;
-    public static int maxDistance = 300;
+    protected virtual int mapSize() { return 300; }
     private Point loadedTopRight = new Point(0, 0);
     private Point loadedBottomLeft = new Point(0, 0);
     [HideInInspector] //public for the random library to use
@@ -68,32 +67,31 @@ public class WorldController : MonoBehaviour {
     protected virtual void InitializeMap()
     {
          // definitely something to optimize
-        mapSize = maxDistance;
 
         if (theMap != null)
         {
             Debug.Log("ERROR: THERE SHOULD ONLY BE ONE MAP");
             Destroy(this.gameObject);
         }
-        theMap = new Map(mapSize);
+        theMap = new Map(mapSize());
 
         //initialize data blocks
-        for (int x = -mapSize + 1; x < mapSize; x++)
-            for (int y = -mapSize + 1; y < mapSize; y++)
+        for (int x = -mapSize() + 1; x < mapSize(); x++)
+            for (int y = -mapSize() + 1; y < mapSize(); y++)
             {
                 if (Random.value > tunnelFrequency) //tunnel in x direction
                 {
                     int start = x - Random.Range(tunnelLengthMin, tunnelLengthMax);
-                    if(start < -mapSize + 1)
-                        start = -mapSize + 1;
+                    if(start < -mapSize() + 1)
+                        start = -mapSize() + 1;
                     for (int i = start; i <= x; i++)
                         theMap[i][y] = new EmptyBlock();
                 }
                 else if (Random.value > tunnelFrequency) //tunnel in y direction
                 {
                     int start = y - Random.Range(tunnelLengthMin, tunnelLengthMax);
-                    if (start < -mapSize + 1)
-                        start = -mapSize + 1;
+                    if (start < -mapSize() + 1)
+                        start = -mapSize() + 1;
                     for (int i = start; i <= y; i++)
                         theMap[x][i] = new EmptyBlock();
                 }
@@ -114,23 +112,23 @@ public class WorldController : MonoBehaviour {
 
     private void LoadMapFromArray(bool[] boolArray)
     {
-        if (boolArray.Length != (((2 * mapSize) - 1) * ((2 * mapSize) - 1)))
+        if (boolArray.Length != (((2 * mapSize()) - 1) * ((2 * mapSize()) - 1)))
         {
             Debug.Log("Data array size mismatch");
-            Debug.Log(mapSize);
-            Debug.Log((((2 * mapSize) - 1) * ((2 * mapSize) - 1)));
+            Debug.Log(mapSize());
+            Debug.Log((((2 * mapSize()) - 1) * ((2 * mapSize()) - 1)));
             Debug.Log(boolArray.Length);
         }
-        theMap = new Map(mapSize);
+        theMap = new Map(mapSize());
 
         int newRandomSeed = Random.Range(-9999, 9999);
 
         Random.seed = (int)ObstacleSeed;
 
         int i = 0;
-        for (int x = -mapSize + 1; x < mapSize; x++)
+        for (int x = -mapSize() + 1; x < mapSize(); x++)
         {
-            for (int y = -mapSize + 1; y < mapSize; y++)
+            for (int y = -mapSize() + 1; y < mapSize(); y++)
             {
                 theMap[x][y] = getBlockTypeByPosition(x, y, boolArray[i]);
                 i++;
@@ -266,8 +264,8 @@ public class WorldController : MonoBehaviour {
     private void UpdateCreatedBlocks()
     {
         Transform target = Camera.main.transform;
-        Point newTopRight = new Point(Mathf.Clamp((int)(target.position.x) + loadedRange, 1-mapSize, mapSize - 1), Mathf.Clamp((int)(target.position.y) + loadedRange, 1-mapSize, mapSize - 1));
-        Point newBottomLeft = new Point(Mathf.Clamp((int)(target.position.x) - loadedRange, 1-mapSize, mapSize - 1), Mathf.Clamp((int)(target.position.y) - loadedRange, 1-mapSize, mapSize - 1));
+        Point newTopRight = new Point(Mathf.Clamp((int)(target.position.x) + loadedRange, 1-mapSize(), mapSize() - 1), Mathf.Clamp((int)(target.position.y) + loadedRange, 1-mapSize(), mapSize() - 1));
+        Point newBottomLeft = new Point(Mathf.Clamp((int)(target.position.x) - loadedRange, 1-mapSize(), mapSize() - 1), Mathf.Clamp((int)(target.position.y) - loadedRange, 1-mapSize(), mapSize() - 1));
 
         //add the new edges (invert the order of the points from removal)
         theMap.LoadRange(new Point(loadedTopRight.x + 1, loadedTopRight.y + 1), newTopRight); //top right
@@ -298,8 +296,8 @@ public class WorldController : MonoBehaviour {
     public void RecreateCreatedBlocks()
     {
         Transform target = Camera.main.transform;
-        Point newTopRight = new Point(Mathf.Clamp(Mathf.RoundToInt(target.position.x) + loadedRange, -mapSize, mapSize), Mathf.Clamp(Mathf.RoundToInt(target.position.y) + loadedRange, -mapSize, mapSize));
-        Point newBottomLeft = new Point(Mathf.Clamp(Mathf.RoundToInt(target.position.x) - loadedRange, -mapSize, mapSize), Mathf.Clamp(Mathf.RoundToInt(target.position.y) - loadedRange, -mapSize, mapSize));
+        Point newTopRight = new Point(Mathf.Clamp(Mathf.RoundToInt(target.position.x) + loadedRange, -mapSize(), mapSize()), Mathf.Clamp(Mathf.RoundToInt(target.position.y) + loadedRange, -mapSize(), mapSize()));
+        Point newBottomLeft = new Point(Mathf.Clamp(Mathf.RoundToInt(target.position.x) - loadedRange, -mapSize(), mapSize()), Mathf.Clamp(Mathf.RoundToInt(target.position.y) - loadedRange, -mapSize(), mapSize()));
 
         theMap.RemoveRange(loadedBottomLeft, loadedTopRight);
 
@@ -339,6 +337,13 @@ public class WorldController : MonoBehaviour {
                 Debug.Log("Data error");
                 return null;
         }
+    }
+
+
+    //returns the block at the specified locations if it exists, else returns null
+    public static GameObject getBlock(int x, int y)
+    {
+        return theMap[x][y].getBlock();
     }
 
     public static void UpdateBlock(int x, int y, blockDataType newBlock)
@@ -428,9 +433,22 @@ public class MapBlock : EmptyBlock //just a dirt block, nothing special
         }
     }
 
-    public override bool getBlockType()
+    public override bool isSolid()
     {
-        return (bool)(prefab.GetComponent<Block>().getDataValue());
+        return (bool)(prefab.GetComponent<Block>().isSolid());
+    }
+
+    public override blockDataType getBlockDataType()
+    {
+        return prefab.GetComponent<Block>().getBlockType();
+    }
+
+    public override GameObject getBlock()
+    {
+        if (created)
+            return self;
+        else
+            return null;
     }
 
     public override void Remove()
@@ -455,9 +473,19 @@ public class EmptyBlock
     public virtual void Create(int x, int y)
     {
     }
-    public virtual bool getBlockType()
+    public virtual bool isSolid()
     {
         return false;
+    }
+
+    public virtual blockDataType getBlockDataType()
+    {
+        return blockDataType.EMPTYBLOCK;
+    }
+
+    public virtual GameObject getBlock()
+    {
+        return null;
     }
 
     public virtual void Remove()
@@ -467,7 +495,7 @@ public class EmptyBlock
 
 public class FullBlock : EmptyBlock
 {
-    public override bool getBlockType()
+    public override bool isSolid()
     {
         return true;
     }
@@ -539,7 +567,7 @@ public class Map
         for (int x = -size + 1; x < size; x++)
             for (int y = -size + 1; y < size; y++)
             {
-                result[i] = this[x][y].getBlockType();
+                result[i] = this[x][y].isSolid();
                 i++;
             }
         return result;

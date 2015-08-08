@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 public class HomeBase : Block {
     CanvasGroup UI;
@@ -57,7 +58,7 @@ public class HomeBase : Block {
 
     public override bool isMinable() { return false; }
 
-    public override bool getDataValue() //counted as an air(false) or dirt(true) block
+    public override bool isSolid() //counted as an air(false) or dirt(true) block
     {
         return false;
     }
