@@ -84,6 +84,8 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         yield return flash.Fade(1.5f);
 
+        player.GetComponent<DefaultDiggingScript>().interruptDigging(); //stop digging state
+
         this.transform.position = Vector3.zero;
         Camera.main.transform.parent.parent.position = Vector3.zero;
         WorldController.thi.RecreateCreatedBlocks();

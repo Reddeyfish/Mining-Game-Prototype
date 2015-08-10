@@ -17,6 +17,8 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
     private DiggingListenerSystem listeners;
     private IEnumerator digroutine;
 
+    private bool interrupt = false; //flag to interupt the digging coroutine
+
     private const float screenShakeIntensity = 0.03f;
     public void SetControlScript(Controls control)
     {
@@ -37,7 +39,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         drillParticles = transform.Find("DrillSounds").GetComponent<ParticleSystem>();
     }
 
-    public bool DoDigging(Vector2 direction)
+    public bool DoDigging(Vector2 direction) //could refactor to return the coroutine
     {
         if (direction.sqrMagnitude != 0 && Input.GetKey(digKey))
         {
@@ -49,7 +51,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
                 {
                     if (digroutine != null)
                     {
-                        StopCoroutine(digroutine);
+                        StopCoroutine(digroutine); //halts cleanup of the visual/audio effects
                     }
                     digroutine = Dig(hitBlock);
                     StartCoroutine(digroutine);
@@ -69,8 +71,16 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         return (1 + this.transform.position.magnitude / digPower); //drill gets slower the farther away we are from the center
     }
 
+    //returns true if digging was stopped; false if digging was already stopped
+    public void interruptDigging()
+    {
+        interrupt = true;
+    }
+
     IEnumerator Dig(Block target)
     {
+        
+
         //sound start
         drillSound.Play();
         //particle effect positioning/directioning
@@ -87,17 +97,25 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
         otherCollider.enabled = false;
         target.StartDig();
         Vector3 targetPos = target.transform.position;
-        while ((this.transform.position - targetPos).magnitude > 0.03f)
+
+        //clear interrupt
+        interrupt = false;
+
+        while (!interrupt && (this.transform.position - targetPos).magnitude > 0.03f)
         {
             rigid.velocity = (targetPos - this.transform.position).normalized / digTime; //note : the direction isn't always constant
             Camera.main.transform.localPosition = Random.insideUnitCircle * screenShakeIntensity;
             yield return new WaitForFixedUpdate();
         }
         
-        listeners.DigNotify(target);
+        if(!interrupt) //if interrupted, digging didn't complete
+            listeners.DigNotify(target);
 
         otherCollider.enabled = true; //reset it's collider so it can be reused
-        target.Destroy();
+
+        if(!interrupt)
+            target.Destroy(); //these three lines (DigNotify, collider enable, and destroy) have to be called in order.
+
         rigid.velocity = Vector3.zero; //stop moving
         theStateMachine.SetBool(AnimatorParams.dig, false); //animation stop
         Camera.main.transform.localPosition = Vector3.zero; //reset screen position to default (b/c of screen shake)
