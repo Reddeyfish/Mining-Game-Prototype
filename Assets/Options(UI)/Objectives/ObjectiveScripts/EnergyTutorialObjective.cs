@@ -3,15 +3,19 @@ using System.Collections;
 
 public class EnergyTutorialObjective : ResettingObjective
 {
-
+    int returnValue = 1;
 	// Use this for initialization
 	protected override void Start () {
         base.Start();
         EnergyMeter energyMeter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<EnergyMeter>();
-        if(energyMeter != null)
-            energyMeter.Add(-2 / 3 * energyMeter.StartDrainTime); //start at 1/3 energy //if it's null, we're still in the tutorial
+        if (energyMeter != null)
+        {
+            //if it's null, we're still in the tutorial
+            returnValue = 0;
+            energyMeter.Add(-2 / 3 * energyMeter.StartDrainTime); //start at 1/3 energy 
+        }
 
-        ((TriggerObservable)(WorldController.getBlock(0, 0).AddComponent<TriggerObservable>())).Instantiate(this); //add observable
+        Callback.FireForFixedUpdate(() => ((TriggerObservable)(WorldController.getBlock(0, 0).AddComponent<TriggerObservable>())).Instantiate(this), this); //add observable; callback so that the map initialization finishes first
 
         GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(3, 1); //fade from white, since we just changed scenes
 
@@ -31,6 +35,11 @@ public class EnergyTutorialObjective : ResettingObjective
     protected override void spawnNextObjectives()
     {
         //GetComponentInParent<ObjectivesController>().AddObjective(ID: 7);
+    }
+
+    public override int getProgress()
+    {
+        return returnValue; //if 1, we're in the main scene; don't save. otherwise, we're in the tutorial; save so that we can still have the objective in the main scene
     }
 
     public override int getID(){return 6;}

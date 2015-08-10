@@ -101,7 +101,7 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
         player.GetComponent<Inventory>().Wipe();
         yield return GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Fade(1.5f);
 
-        player.GetComponent<DefaultDiggingScript>().interruptDigging(); //stop digging state
+        player.GetComponent<IDigScript>().interruptDigging(); //stop digging state
 
         player.transform.position = getRespawnPoint();
         Camera.main.transform.parent.parent.position = getRespawnPoint();

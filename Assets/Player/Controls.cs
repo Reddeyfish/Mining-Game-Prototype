@@ -32,25 +32,26 @@ public class Controls : MonoBehaviour {
         
         while (true)
         {
-            //horizontal
+            //movement
 
+            //horizontal
             float input = Input.GetAxis(Axis.horizontal);
             movementScript.DoMovement(input * transform.right, XAxis: true);
-            if (digScript.DoDigging(input * transform.right))
-            {
-                currentCoroutine = null;
-                break; //control flow moves to Digging
-            }
+            
 
             //vertical
-
             input = Input.GetAxis(Axis.vertical);
             movementScript.DoMovement(input * transform.up, XAxis: false);
-            if (digScript.DoDigging(input * transform.up))
+
+            //digging
+
+            if (digScript.DoDigging(new Vector2(Input.GetAxis(Axis.horizontal), Input.GetAxis(Axis.vertical))))
             {
                 currentCoroutine = null;
                 break; //control flow moves to Digging
             }
+
+
             yield return 0;
         }
     }
@@ -98,6 +99,7 @@ public interface IDigScript
 {
     void SetControlScript(Controls control);
     bool DoDigging(Vector2 direction);
+    void interruptDigging();
 }
 
 public interface IMovementScript
