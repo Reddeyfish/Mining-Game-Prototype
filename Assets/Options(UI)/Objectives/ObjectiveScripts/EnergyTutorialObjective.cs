@@ -10,16 +10,20 @@ public class EnergyTutorialObjective : ResettingObjective
         EnergyMeter energyMeter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<EnergyMeter>();
         if (energyMeter != null)
         {
+            //it's only not null in the main scene
+            Callback.FireForFixedUpdate(() => energyMeter.Add((-2f/3f) * energyMeter.StartDrainTime), this); //start at 1/3 energy //callback to ensure it fires after all other starts
+        }
+        else
+        {
             //if it's null, we're still in the tutorial
             returnValue = 0;
-            energyMeter.Add(-2 / 3 * energyMeter.StartDrainTime); //start at 1/3 energy 
         }
 
         Callback.FireForFixedUpdate(() => ((TriggerObservable)(WorldController.getBlock(0, 0).AddComponent<TriggerObservable>())).Instantiate(this), this); //add observable; callback so that the map initialization finishes first
 
         GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(3, 1); //fade from white, since we just changed scenes
 
-        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("That digging used up most of your <color=yellow>energy</color>. Fortunately, Home Base has an infinite supply. Fly right next to <color=cyan>Home Base</color>, and your energy will be <color=cyan>automatically refilled</color>.");
+        GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("<size=11>That digging used most of your <color=yellow>energy</color>. Fortunately, Home Base has an infinite supply. Fly next to <color=cyan>Home Base</color> to refill <color=cyan>automatically</color>.</size>");
 	}
 
     protected override string getText()
