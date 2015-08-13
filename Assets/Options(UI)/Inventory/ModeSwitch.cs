@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ModeSwitch : MonoBehaviour, IDisabledAwake {
+public class ModeSwitch : MonoBehaviour, IDisabledStart {
     Transform tab;
     InventoryUIController inventoryController;
 	// Use this for initialization
-	public void Awaken () {
+	public void StartDisabled () {
         tab = transform.Find("Tabs/Items Tab");
         inventoryController = transform.Find("InventoryOutline/InventoryView/Content").GetComponent<InventoryUIController>();
 	}

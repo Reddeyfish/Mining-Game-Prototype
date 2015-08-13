@@ -23,6 +23,8 @@ public class EnergyTutorialObjective : ResettingObjective
 
         GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(3, 1); //fade from white, since we just changed scenes
 
+        //should probably play the capsule sound
+
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("<size=11>That digging used most of your <color=yellow>energy</color>. Fortunately, Home Base has an infinite supply. Fly next to <color=cyan>Home Base</color> to refill <color=cyan>automatically</color>.</size>");
 	}
 

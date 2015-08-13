@@ -12,13 +12,18 @@ TimeList.Insert(index, dateTimeOffset);
  * */
 
 
-public class ItemsView : MonoBehaviour, IDisabledAwake {
+public class ItemsView : MonoBehaviour, IDisabledAwake, IDisabledStart {
     List<Item> items;
+    public List<Item> Items { get { return items; } }
     GameObject[,] cells;
     AudioSource source;
     BaseInventory inventory;
     StoreUIController store;
-    AbilityController abilities;
+    List<IItemsListener> listeners;
+
+    public void Subscribe(IItemsListener listener) { listeners.Add(listener); }
+    public void UnSubscribe(IItemsListener listener) { listeners.Remove(listener); }
+
     private GameObject player;
     private Rect cellSize;
     private const int rows = 4;
@@ -29,12 +34,19 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
     public float tolerance = 0.25f; //zero tolerance == zero sense. Make sure it's greater than zero to enable snap.
     public int destroyRange = 3;
 	// Use this for initialization
-	public void Awaken () {
+    public void Awaken()
+    {
         source = GetComponent<AudioSource>();
+        listeners = new List<IItemsListener>();
+        items = new List<Item>();
+    }
+
+	public void StartDisabled () {
+
+        
         inventory = transform.parent.parent.Find("InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>();
         player = GameObject.FindGameObjectWithTag(Tags.player);
         store = transform.parent.parent.Find("Store/SlotsBackground/Content").GetComponent<StoreUIController>();
-        abilities = transform.parent.parent.parent.Find("Abilities").GetComponent<AbilityController>();
         //spawn cells
         cells = new GameObject[rows, cols];
         cellSize = ((RectTransform)(cell.transform)).rect;
@@ -52,7 +64,6 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
         cellSize.height *= transform.lossyScale.y;
 
         //now load our data
-        items = new List<Item>();
 
         if (PlayerPrefs.HasKey(PlayerPrefKeys.items))
         {
@@ -70,10 +81,11 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
                 ((RectTransform)drag.transform).anchoredPosition = Vector3.zero;
             }
         }
-        //again, if more are added refactor into listener
         items.Sort();
-        abilities.notifyChanged(items);
 	}
+
+    
+
 
     public void positionToCellIndex(Vector3 position, int cellWidth, int cellHeight, out int? xIndex, out int? yIndex)
     {
@@ -158,7 +170,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             //if we add another thing that needs to be notified, refactor this into a listener
         }
         items.Sort();
-        abilities.notifyChanged(items);
+        NotifyAll(null);
     }
 
     public void setCell(Draggable drag, int x, int y, bool notARearrangement)
@@ -176,12 +188,19 @@ public class ItemsView : MonoBehaviour, IDisabledAwake {
             
         }
         items.Sort();
-        abilities.notifyChanged(items);
+        NotifyAll(newItem);
     }
 
     private static bool inModRange(float value, float mod, float tolerance)
     {
         return mod - (value % mod) < (mod * tolerance) || (value % mod) < (mod * tolerance);
+    }
+
+    private void NotifyAll(Item message)
+    {
+        Debug.Log("notifyall");
+        foreach (IItemsListener listener in listeners)
+            listener.Notify(message);
     }
 
     void OnDisable()
@@ -242,4 +261,11 @@ public class Item : System.IEquatable<Item>, System.IComparable<Item>
         if (this.x - other.x != 0) return this.x - other.x;
         return this.y - other.y;
     }
+}
+
+public interface IItemsListener
+{
+    //item is null for removal
+    void Notify(Item item);
+    void OnDestroy(); //remind them to unsubscribe
 }

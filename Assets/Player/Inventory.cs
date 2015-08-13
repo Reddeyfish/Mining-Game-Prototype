@@ -11,7 +11,7 @@ public class Inventory : BaseInventory
 
     void Awake()
     {
-        Awaken();
+        StartDisabled();
     }
 
     public override int Add(Resource resource)

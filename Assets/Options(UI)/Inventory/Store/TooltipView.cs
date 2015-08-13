@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class TooltipView : MonoBehaviour, IDisabledAwake {
+public class TooltipView : MonoBehaviour, IDisabledStart {
     Text title;
     Text description;
     Rect currentSize =  new Rect();
     Transform thisTransform;
     // Use this for initialization
-	public void Awaken () {
+	public void StartDisabled () {
         thisTransform = this.transform;
         title = thisTransform.Find("TooltipTitle").GetComponent<Text>();
         description = thisTransform.Find("TooltipDescription").GetComponent<Text>();

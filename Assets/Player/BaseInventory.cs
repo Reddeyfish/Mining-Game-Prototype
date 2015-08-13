@@ -5,7 +5,7 @@ using System.Text;
 using System.Linq;
 //script that controls the player's in-base inventory
 
-public class BaseInventory : MonoBehaviour, IDisabledAwake
+public class BaseInventory : MonoBehaviour, IDisabledStart
 {
     protected List<Resource> resources;
     protected int currentSize = 0;
@@ -14,7 +14,7 @@ public class BaseInventory : MonoBehaviour, IDisabledAwake
     public List<Resource> Resources { get { return resources; } }
     protected virtual string getKey() { return PlayerPrefKeys.baseInventory; }
 
-    public void Awaken()
+    public void StartDisabled()
     {
         LoadData();
     }

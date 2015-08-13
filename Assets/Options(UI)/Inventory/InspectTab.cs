@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class InspectTab : MonoBehaviour, IDisabledAwake {
+public class InspectTab : MonoBehaviour, IDisabledStart {
     Outline outline;
     private static Color greyColor = new Color(0.6f, 0.6f, 0.6f);
     private static Color activeColor = new Color(0, 0.4f, 0.6f);
 	// Use this for initialization
-	public void Awaken () {
+	public void StartDisabled () {
         outline = GetComponent<Outline>();
 	}
 	
