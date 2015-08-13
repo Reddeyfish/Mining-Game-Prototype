@@ -198,7 +198,6 @@ public class ItemsView : MonoBehaviour, IDisabledAwake, IDisabledStart {
 
     private void NotifyAll(Item message)
     {
-        Debug.Log("notifyall");
         foreach (IItemsListener listener in listeners)
             listener.Notify(message);
     }

@@ -31,7 +31,6 @@ public class AbilityController : MonoBehaviour, IItemsListener {
 
     public void Notify(Item message)
     {
-        Debug.Log("notify");
         //clear the old
         foreach (Transform child in transform)
         {

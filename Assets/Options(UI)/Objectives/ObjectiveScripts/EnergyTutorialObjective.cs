@@ -40,7 +40,7 @@ public class EnergyTutorialObjective : ResettingObjective
 
     protected override void spawnNextObjectives()
     {
-        //GetComponentInParent<ObjectivesController>().AddObjective(ID: 7);
+        GetComponentInParent<ObjectivesController>().AddObjective(ID: 7);
     }
 
     public override int getProgress()
