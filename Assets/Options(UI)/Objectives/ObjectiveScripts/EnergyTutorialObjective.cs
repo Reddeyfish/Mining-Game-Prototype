@@ -3,6 +3,8 @@ using System.Collections;
 
 public class EnergyTutorialObjective : ResettingObjective
 {
+    EnergyBarLabel label;
+
     int returnValue = 1;
 	// Use this for initialization
 	protected override void Start () {
@@ -12,6 +14,16 @@ public class EnergyTutorialObjective : ResettingObjective
         {
             //it's only not null in the main scene
             Callback.FireForFixedUpdate(() => energyMeter.Add((-2f/3f) * energyMeter.StartDrainTime), this); //start at 1/3 energy //callback to ensure it fires after all other starts
+
+            //label the energy bar
+            GameObject labelPrefab = Resources.Load("EnergyBarLabel") as GameObject;
+            Transform labelObject = Instantiate(labelPrefab).transform;
+            
+            Transform energyBar = GameObject.FindGameObjectWithTag(Tags.energyUI).transform;
+            labelObject.SetParent(energyBar);
+            labelObject.localScale = Vector3.one;
+            ((RectTransform)(labelObject)).anchoredPosition = Vector3.zero;
+            label = labelObject.GetComponent<EnergyBarLabel>();
         }
         else
         {
@@ -40,6 +52,7 @@ public class EnergyTutorialObjective : ResettingObjective
 
     protected override void spawnNextObjectives()
     {
+        label.destroy();
         GetComponentInParent<ObjectivesController>().AddObjective(ID: 7);
     }
 
