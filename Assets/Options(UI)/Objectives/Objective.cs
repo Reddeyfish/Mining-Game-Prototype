@@ -11,7 +11,7 @@ public abstract class Objective : MonoBehaviour {
     {
         set 
         {
-            text.text = value;
+            text.text = "‣ " + value;
         }
         get
         {
