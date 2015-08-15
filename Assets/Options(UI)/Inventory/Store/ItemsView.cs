@@ -54,8 +54,7 @@ public class ItemsView : MonoBehaviour, IDisabledAwake, IDisabledStart {
             for (int y = 0; y < cols; y++)
             {
                 GameObject cellTrans = SimplePool.Spawn(cell);
-                cellTrans.transform.SetParent(this.transform);
-                cellTrans.transform.localScale = Vector3.one;
+                cellTrans.transform.SetParent(this.transform, Vector3.one);
                 cells[x, y] = cellTrans;
                 cellTrans.transform.localPosition = new Vector2((x - ((float)rows - 1) / 2) * cellSize.width, ((((float)cols - 1) / 2) - y) * cellSize.height);
             }

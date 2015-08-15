@@ -22,8 +22,7 @@ public class StoreUIController : MonoBehaviour {
         for(int i = 0; i < theUpgradeData.IDToUpgrade.Length; i++)
         {
             GameObject entry = SimplePool.Spawn(StoreEntryPrefab);
-            entry.transform.SetParent(this.transform);
-            entry.transform.localScale = Vector3.one;
+            entry.transform.SetParent(this.transform, false);
             StoreEntry storeEntry = entry.GetComponent<StoreEntry>();
             storeEntry.Instantiate(i, manager);
             entries.Add(storeEntry);

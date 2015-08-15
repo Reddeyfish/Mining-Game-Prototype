@@ -32,8 +32,7 @@ public class ObjectivesController : MonoBehaviour {
     public void AddObjective(int ID, int progress = 0)
     {
         GameObject newObjective = SimplePool.Spawn(objectivePrefab);
-        newObjective.transform.SetParent(this.transform);
-        newObjective.transform.localScale = Vector3.one;
+        newObjective.transform.SetParent(this.transform, false);
         Objective objectiveScript = theObjectiveData.IDToObjective(newObjective, ID);
         Assert.AreEqual<int>(ID, objectiveScript.getID());
         objectiveScript.Initialize(progress);

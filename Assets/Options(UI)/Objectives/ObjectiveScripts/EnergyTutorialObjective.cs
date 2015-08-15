@@ -20,8 +20,7 @@ public class EnergyTutorialObjective : ResettingObjective
             Transform labelObject = Instantiate(labelPrefab).transform;
             
             Transform energyBar = GameObject.FindGameObjectWithTag(Tags.energyUI).transform;
-            labelObject.SetParent(energyBar);
-            labelObject.localScale = Vector3.one;
+            labelObject.SetParent(energyBar, Vector3.one);
             ((RectTransform)(labelObject)).anchoredPosition = Vector3.zero;
             label = labelObject.GetComponent<EnergyBarLabel>();
         }

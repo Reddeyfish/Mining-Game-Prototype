@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 public class HomeBase : Block {
+    AudioSource sound;
     CanvasGroup UI;
     GameObject player;
     GameObject inspectButton;
@@ -11,6 +12,7 @@ public class HomeBase : Block {
     public KeyCode key = KeyCode.Space;
 	// Use this for initialization
 	void Awake () {
+        sound = GetComponent<AudioSource>();
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
         player = GameObject.FindGameObjectWithTag(Tags.player);
         inspectButton = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectButton").gameObject;
@@ -26,6 +28,7 @@ public class HomeBase : Block {
     {
         if (other.tag == Tags.player)
         {
+            sound.Play();
             UI.alpha = 1;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max

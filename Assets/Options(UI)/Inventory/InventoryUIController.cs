@@ -72,8 +72,7 @@ public class InventoryUIController : MonoBehaviour {
     private InventoryEntry SpawnNewEntry()
     {
         Transform newEntry = SimplePool.Spawn(InventoryEntryPrefab).transform;
-        newEntry.SetParent(this.transform); //layout manager will take care of position
-        newEntry.localScale = Vector3.one;
+        newEntry.SetParent(this.transform, false); //layout manager will take care of position
         InventoryEntry result = newEntry.GetComponent<InventoryEntry>();
         entries.Add(result);
         return result;

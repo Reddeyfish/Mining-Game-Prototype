@@ -59,8 +59,7 @@ public class StoreEntry : MonoBehaviour {
         for (int i = 0; i < costs.Length; i++ )//(Cost cost in costs)
         {
             Transform newEntry = SimplePool.Spawn(costEntryPrefab).transform;
-            newEntry.SetParent(costParent);
-            newEntry.localScale = Vector3.one;
+            newEntry.SetParent(costParent, false);
             CostEntry newCostEntry = newEntry.GetComponent<CostEntry>();
             bool afforded = newCostEntry.Initialize(costs[i], manager);
             if (!afforded)

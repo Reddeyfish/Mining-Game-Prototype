@@ -41,8 +41,7 @@ public class AbilityController : MonoBehaviour, IItemsListener {
         {
             Assert.IsNotNull(theUpgradeData.IDToUI(abilityItems[i].ID));
             Transform abilityUITransform = SimplePool.Spawn(theUpgradeData.IDToUI(abilityItems[i].ID)).transform;
-            abilityUITransform.SetParent(this.transform);
-            abilityUITransform.localScale = Vector3.one;
+            abilityUITransform.SetParent(this.transform, false);
             ((BaseActiveAbility)(abilityItems[i].component)).Initialize(abilityUITransform, i+1); //start at one
         }
     }

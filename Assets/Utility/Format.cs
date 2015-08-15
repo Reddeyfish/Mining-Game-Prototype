@@ -50,17 +50,3 @@ public class Format : MonoBehaviour {
     }
 
 }
-
-public static class VectorExtension
-{
-    public static Vector3 toWorldPoint(this Vector3 screenPoint)
-    {
-        return Camera.main.ScreenToWorldPoint(screenPoint);
-    }
-
-    public static Quaternion ToRotation(this Vector2 dir)
-    {
-        float _angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        return Quaternion.AngleAxis(_angle, Vector3.forward);
-    }
-}
