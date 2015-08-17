@@ -21,6 +21,7 @@ public class BasePopup : MonoBehaviour, ISpawnable
     {
         this.finalHeight = defaultFinalHeight;
         this.transform.SetParent(GameObject.FindGameObjectWithTag(Tags.player).transform);
+        this.transform.localPosition = Vector3.zero;
         foreach (Transform t in this.transform.parent)
         {
             if (t.CompareTag(Tags.popup) && t != this.transform)

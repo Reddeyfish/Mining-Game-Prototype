@@ -27,25 +27,27 @@ public class HomeBase : Block {
     */
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == Tags.player)
+        if (other.CompareTag(Tags.player))
         {
             sound.Play();
             UI.alpha = 1;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max
-            SimplePool.Spawn(energyRefilledPopup, other.transform.position);
+            SimplePool.Spawn(energyRefilledPopup);
             if (keyShortcut == null)
             {
                 keyShortcut = inspectButton.AddComponent<UIKeyboardShortcut>();
                 keyShortcut.key = key;
             }
             UIMode.setStoreMode(true);
+
+            other.GetComponent<SaveObservable>().Save();
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == Tags.player)
+        if (other.CompareTag(Tags.player))
         {
             UI.alpha = 0;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();

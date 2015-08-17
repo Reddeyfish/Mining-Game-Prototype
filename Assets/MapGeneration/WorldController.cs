@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class WorldController : MonoBehaviour {
+public class WorldController : MonoBehaviour, ISaveListener {
+    SaveObservable observable;
     protected static Map theMap;
     protected virtual int mapSize() { return 300; }
     private Point loadedTopRight = new Point(0, 0);
@@ -54,6 +55,9 @@ public class WorldController : MonoBehaviour {
 
 	protected virtual void Start () {
         thi = this;
+
+        observable = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<SaveObservable>();
+        observable.Subscribe(this);
 
         LoadData();
 
@@ -245,6 +249,11 @@ public class WorldController : MonoBehaviour {
     }
 
     public virtual void OnDestroy()
+    {
+        observable.UnSubscribe(this);
+    }
+
+    public virtual void NotifySave()
     {
         bool[] test = theMap.toArray();
         bool success = PlayerPrefsX.SetBoolArray(PlayerPrefKeys.map, test);

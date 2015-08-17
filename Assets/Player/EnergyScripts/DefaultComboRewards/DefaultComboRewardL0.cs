@@ -9,6 +9,6 @@ public class DefaultComboRewardL0 : BaseComboListener
 	// Update is called once per frame
 	public override void OnNotify(int comboLevel)
     {
-        SimplePool.Spawn(popup, this.transform.position);
+        SimplePool.Spawn(popup);
 	}
 }

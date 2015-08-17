@@ -17,6 +17,11 @@ public class UIButtonLoadScene : MonoBehaviour {
         Application.LoadLevel(name);
     }
 
+    public void wipeData()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
     public void OnNewGamePressed()
     {
         if (PlayerPrefs.HasKey(PlayerPrefKeys.tutorialComplete) && PlayerPrefsX.GetBool(PlayerPrefKeys.tutorialComplete)) //if saved value is true, then there is data

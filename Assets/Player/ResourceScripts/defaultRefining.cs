@@ -44,7 +44,7 @@ public class defaultRefining : BaseDigListener {
             int count = inventory.Add(new Resource(conversion.resourceType, type, Mathf.RoundToInt(conversion.yield * max)));
             if (count > 0)
             {
-                PickupPopup UI = (SimplePool.Spawn(popup, this.transform.position) as GameObject).GetComponent<PickupPopup>();
+                PickupPopup UI = (SimplePool.Spawn(popup) as GameObject).GetComponent<PickupPopup>();
                 UI.color = type.ToColor();
                 UI.count = count;
             }

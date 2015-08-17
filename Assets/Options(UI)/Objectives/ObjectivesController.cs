@@ -2,14 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
-public class ObjectivesController : MonoBehaviour {
+public class ObjectivesController : MonoBehaviour, ISaveListener {
 
     //mainly just handles saving/loading
+
+    SaveObservable observable;
 
     public GameObject objectivePrefab;
 
 	// Use this for initialization
 	void Start () {
+        observable = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<SaveObservable>();
+        observable.Subscribe(this);
         loadData();
 	}
 
@@ -38,10 +42,8 @@ public class ObjectivesController : MonoBehaviour {
         objectiveScript.Initialize(progress);
     }
 
-    void OnDestroy()
+    public void NotifySave()
     {
-        //save the data!
-
         List<int> data = new List<int>();
 
         foreach (Transform trans in transform)
@@ -63,5 +65,10 @@ public class ObjectivesController : MonoBehaviour {
         {
             Debug.Log("Objective Save Complete!");
         }
+    }
+
+    public void OnDestroy()
+    {
+        observable.UnSubscribe(this);
     }
 }

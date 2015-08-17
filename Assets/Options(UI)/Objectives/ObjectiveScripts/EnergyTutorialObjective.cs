@@ -5,14 +5,18 @@ public class EnergyTutorialObjective : ResettingObjective
 {
     EnergyBarLabel label;
 
-    int returnValue = 1;
+    int returnValue = 0;
 	// Use this for initialization
 	protected override void Start () {
         base.Start();
+        Debug.Log(".");
         EnergyMeter energyMeter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<EnergyMeter>();
         if (energyMeter != null)
         {
+            Debug.Log(",");
             //it's only not null in the main scene
+            returnValue = 1;
+
             Callback.FireForFixedUpdate(() => energyMeter.Add((-2f/3f) * energyMeter.StartDrainTime), this); //start at 1/3 energy //callback to ensure it fires after all other starts
 
             //label the energy bar
@@ -30,6 +34,7 @@ public class EnergyTutorialObjective : ResettingObjective
         }
         else
         {
+            Debug.Log(",");
             //if it's null, we're still in the tutorial
             returnValue = 0;
         }

@@ -24,6 +24,7 @@ public class CapsuleTutorialObjective : ResettingObjective
     protected override void spawnNextObjectives()
     {
         GetComponentInParent<ObjectivesController>().AddObjective(ID : 6);
+        GameObject.FindGameObjectWithTag(Tags.player).GetComponent<SaveObservable>().Save();
         Application.LoadLevel(Scenes.mainScene);
     }
 

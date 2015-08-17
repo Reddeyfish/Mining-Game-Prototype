@@ -5,9 +5,14 @@ public class MovementTutorialObjective : ResettingObjective {
     Transform player;
     Vector3 basePlayerPos;
 	// Use this for initialization
-	protected override void Start () {
-        PlayerPrefs.DeleteAll();
 
+    void Awake()
+    {
+        PlayerPrefs.DeleteAll();
+        //new game, so wipe all old data
+    }
+
+	protected override void Start () {
         base.Start();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         basePlayerPos = player.position;

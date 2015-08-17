@@ -54,6 +54,12 @@ public class TutorialController : WorldController {
 
     public override void OnDestroy()
     {
+        base.OnDestroy();
         theMap = null;
+    }
+
+    public override void NotifySave()
+    {
+        //shouldn't save this map
     }
 }

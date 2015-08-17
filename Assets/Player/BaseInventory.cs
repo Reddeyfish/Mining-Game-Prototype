@@ -5,8 +5,9 @@ using System.Text;
 using System.Linq;
 //script that controls the player's in-base inventory
 
-public class BaseInventory : MonoBehaviour, IDisabledStart
+public class BaseInventory : MonoBehaviour, IDisabledStart, ISaveListener
 {
+    SaveObservable observable;
     protected List<Resource> resources;
     protected int currentSize = 0;
     public float refundRate = 0.6f;
@@ -16,6 +17,8 @@ public class BaseInventory : MonoBehaviour, IDisabledStart
 
     public void StartDisabled()
     {
+        observable = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<SaveObservable>();
+        observable.Subscribe(this);
         LoadData();
     }
 
@@ -306,10 +309,13 @@ public class BaseInventory : MonoBehaviour, IDisabledStart
         }
     }
 
-    void OnDestroy()
+    public void OnDestroy()
     {
-        // save data
+        observable.UnSubscribe(this);
+    }
 
+    public void NotifySave()
+    {
         //could possibly optimize the format by grouping by type, but maybe later
         int[] test = new int[resources.Count * 3];
         for (int i = 0; i < resources.Count; i++)

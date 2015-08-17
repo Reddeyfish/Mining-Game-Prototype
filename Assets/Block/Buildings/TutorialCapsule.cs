@@ -19,7 +19,7 @@ public class TutorialCapsule : Block
 	
 	void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == Tags.player)
+        if (other.CompareTag(Tags.player))
         {
             UI.alpha = 1;
             inputCheck = InputCheck();
@@ -29,7 +29,7 @@ public class TutorialCapsule : Block
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == Tags.player)
+        if (other.CompareTag(Tags.player))
         {
             UI.alpha = 0;
             StopCoroutine(inputCheck);

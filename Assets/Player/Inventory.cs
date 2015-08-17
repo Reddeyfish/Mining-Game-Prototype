@@ -9,7 +9,7 @@ public class Inventory : BaseInventory
     protected override string getKey() { return PlayerPrefKeys.inventory; }
     public GameObject inventoryFullMessage;
 
-    void Awake()
+    void Start()
     {
         StartDisabled();
     }
