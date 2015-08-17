@@ -27,6 +27,7 @@ public class UpgradesTutorialObjective : ResettingObjective, IItemsListener {
 
     protected override void spawnNextObjectives()
     {
+        PlayerPrefsX.SetBool(PlayerPrefKeys.tutorialComplete, true);
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTimedTip("Congratulations! You have <color=yellow>completed</color> the <color=cyan>tutorial</color>!", 10);
         //GetComponentInParent<ObjectivesController>().AddObjective(ID: 8);
     }

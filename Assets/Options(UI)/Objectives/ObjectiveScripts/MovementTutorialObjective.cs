@@ -6,6 +6,8 @@ public class MovementTutorialObjective : ResettingObjective {
     Vector3 basePlayerPos;
 	// Use this for initialization
 	protected override void Start () {
+        PlayerPrefs.DeleteAll();
+
         base.Start();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         basePlayerPos = player.position;

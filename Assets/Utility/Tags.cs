@@ -19,6 +19,13 @@ public class Tags : MonoBehaviour {
     public const string objective = "Objective";
 }
 
+public class Scenes
+{
+    public const string mainMenu = "MainMenu";
+    public const string mainScene = "MainScene";
+    public const string tutorial = "TheTutorial";
+}
+
 public class Axis
 {
     public const string horizontal = "Horizontal";
@@ -52,6 +59,7 @@ public class PlayerPrefKeys
     public const string obstacle = "Obstacle";
     public const string guffin = "Guffin";
     public const string objectives = "Objectives";
+    public const string tutorialComplete = "tutorialComplete";
 }
 
 public class Options
