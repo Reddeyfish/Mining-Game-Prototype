@@ -28,6 +28,7 @@ public class EnergyView : MonoBehaviour {
         fill = transform.Find("Fill Area/Fill").GetComponent<Image>();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         setFillLevel(1);
+        Callback.FireForNextFrame(updateColor, this); //give everything a chance to update first
 	}
 
     public void setFillLevel(float level)
@@ -42,7 +43,7 @@ public class EnergyView : MonoBehaviour {
 
     public void updateColor()
     {
-        Vector3 color = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.y));
+        Vector3 color = RandomLib.PerlinColor(WorldController.ColorSeedX, WorldController.ColorSeedY, Mathf.RoundToInt(player.position.x), Mathf.RoundToInt(player.position.y));
         targetColor = HSVColor.HSVToRGB(color.x, 1, 0.75f + 0.125f * color.z);
         if (warn == null)
         {
@@ -81,7 +82,7 @@ public class EnergyView : MonoBehaviour {
             warn = null;
         }
         float startLevel = slider.value;
-        while (Mathf.Abs(slider.value - levelTarget) > 0.02f)
+        while (Mathf.Abs(slider.value - levelTarget) > 0.002f)
         {
             updateColor();
             fill.color = Color.Lerp(fill.color, Color.white, Mathf.Abs((slider.value - levelTarget) / (startLevel - levelTarget)));
@@ -101,24 +102,34 @@ public class EnergyView : MonoBehaviour {
             source.clip = warnSound;
             source.Play();
 
-            float time = 0;
-            fill.color = Color.white;
-            while (time < warnFlashTime)
-            {
-                yield return new WaitForFixedUpdate();
-                time += Time.fixedDeltaTime;
-            }
-            time = 0;
-
-            while (time < warnFlashTime)
-            {
-                fill.color = targetColor;
-                yield return new WaitForFixedUpdate();
-                time += Time.fixedDeltaTime;
-            }
+            yield return StartCoroutine(flashRoutine());
         }
         warn = null;
         tip.EndTip(lowEnergyTip);
+    }
+
+    public IEnumerator flashRoutine()
+    {
+        float time = 0;
+        fill.color = Color.white;
+        while (time < warnFlashTime)
+        {
+            yield return new WaitForFixedUpdate();
+            time += Time.fixedDeltaTime;
+        }
+        time = 0;
+
+        while (time < warnFlashTime)
+        {
+            fill.color = targetColor;
+            yield return new WaitForFixedUpdate();
+            time += Time.fixedDeltaTime;
+        }
+    }
+
+    public void setWarnRoutine(IEnumerator warn) //for the tutorial
+    {
+        this.warn = warn;
     }
 
     public Coroutine CheckWarn()

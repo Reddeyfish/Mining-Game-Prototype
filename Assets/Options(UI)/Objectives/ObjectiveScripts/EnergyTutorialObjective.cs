@@ -23,6 +23,10 @@ public class EnergyTutorialObjective : ResettingObjective
             labelObject.SetParent(energyBar, Vector3.one);
             ((RectTransform)(labelObject)).anchoredPosition = Vector3.zero;
             label = labelObject.GetComponent<EnergyBarLabel>();
+            EnergyView view = energyBar.GetComponent<EnergyView>();
+            IEnumerator flash = energyBarFlash(view);
+            view.setWarnRoutine(flash);
+            StartCoroutine(flash);
         }
         else
         {
@@ -51,6 +55,7 @@ public class EnergyTutorialObjective : ResettingObjective
 
     protected override void spawnNextObjectives()
     {
+        GameObject.FindGameObjectWithTag(Tags.energyUI).GetComponent<EnergyView>().setWarnRoutine(null);
         label.destroy();
         GetComponentInParent<ObjectivesController>().AddObjective(ID: 7);
     }
@@ -58,6 +63,12 @@ public class EnergyTutorialObjective : ResettingObjective
     public override int getProgress()
     {
         return returnValue; //if 1, we're in the main scene; don't save. otherwise, we're in the tutorial; save so that we can still have the objective in the main scene
+    }
+
+    private IEnumerator energyBarFlash(EnergyView bar)
+    {
+        while(true)
+            yield return StartCoroutine(bar.flashRoutine());
     }
 
     public override int getID(){return 6;}
