@@ -10,6 +10,7 @@ public class HomeBase : Block {
     UIKeyboardShortcut keyShortcut;
     ModeSwitch UIMode;
     public KeyCode key = KeyCode.Space;
+    public GameObject energyRefilledPopup;
 	// Use this for initialization
 	void Awake () {
         sound = GetComponent<AudioSource>();
@@ -32,6 +33,7 @@ public class HomeBase : Block {
             UI.alpha = 1;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max
+            SimplePool.Spawn(energyRefilledPopup, other.transform.position);
             if (keyShortcut == null)
             {
                 keyShortcut = inspectButton.AddComponent<UIKeyboardShortcut>();
