@@ -70,12 +70,12 @@ public class InventoryEntry : MonoBehaviour, ISpawnable {
         get { return _type; }
         set
         {
-            _type = value;
             nameText.text = value.ToReadableString();
             Sprite icon = value.UISprite();
             icons[0].sprite = icon;
             icons[1].sprite = icon;
             icons[2].sprite = icon;
+            _type = value;
         }
     }
 

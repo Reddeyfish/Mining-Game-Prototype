@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class CostEntry : MonoBehaviour {
     Text title;
     Image icon;
+    Image typeIcon;
     Text countDisplay;
     GameObject blocker;
     private int _count;
@@ -14,8 +15,9 @@ public class CostEntry : MonoBehaviour {
     }
     private resourceType _type;
     private resourceType Type { get { return _type;}
-        set { _type = value;
-        title.text = value.ToReadableString();
+        set {
+             typeIcon.sprite = value.UISprite();
+             _type = value;
         }
     }
     private costType _cost;
@@ -59,8 +61,8 @@ public class CostEntry : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        title = transform.Find("Title").GetComponent<Text>();
         icon = transform.Find("Icon").GetComponent<Image>();
+        typeIcon = transform.Find("Icon/Image").GetComponent<Image>();
         countDisplay = transform.Find("Count").GetComponent<Text>();
         blocker = transform.Find("Blocker").gameObject;
 	}
