@@ -401,6 +401,11 @@ public static class resourceTypeExtension
                 return Color.clear;
         }
     }
+
+    public static Sprite UISprite(this resourceType type)
+    {
+        return Resources.Load<Sprite>("ResourceUIGlyphs/" + type.ToReadableString() + "UIGlyph");
+    }
 }
 
 [System.Serializable]

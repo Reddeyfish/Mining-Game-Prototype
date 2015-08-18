@@ -5,6 +5,7 @@ public class InventoryEntry : MonoBehaviour, ISpawnable {
     private Image red;
     private Image green;
     private Image blue;
+    private Image[] icons;
     private Text redText;
     private Text greenText;
     private Text blueText;
@@ -71,6 +72,10 @@ public class InventoryEntry : MonoBehaviour, ISpawnable {
         {
             _type = value;
             nameText.text = value.ToReadableString();
+            Sprite icon = value.UISprite();
+            icons[0].sprite = icon;
+            icons[1].sprite = icon;
+            icons[2].sprite = icon;
         }
     }
 
@@ -87,6 +92,10 @@ public class InventoryEntry : MonoBehaviour, ISpawnable {
         blue = transform.Find("Blue").GetComponent<Image>();
         blueText = transform.Find("Blue/Count").GetComponent<Text>();
         nameText = transform.Find("Text").GetComponent<Text>();
+        icons = new Image[3];
+        icons[0] = transform.Find("Red/Icon").GetComponent<Image>();
+        icons[1] = transform.Find("Green/Icon").GetComponent<Image>();
+        icons[2] = transform.Find("Blue/Icon").GetComponent<Image>();
     }
 
     public void Create()
