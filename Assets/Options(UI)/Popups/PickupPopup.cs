@@ -2,15 +2,18 @@
 using System.Collections;
 using UnityEngine.UI;
 public class PickupPopup : BasePopup, ISpawnable {
+    Image icon;
     Image image;
     Text text;
     AudioSource source;
     public float basePitch;
     public float pitchVariance;
     private Color _color;
-    public Color color { get{return _color;} set {_color = value; image.color = value;} }
+    public Color color { get{return _color;} set {_color = value; icon.color = value;} }
     private int _count;
     public int count { get { return _count; } set { _count = value; text.text = "x" + value.ToString(); } }
+    resourceType _type;
+    public resourceType type { get { return _type; } set { _type = value; image.sprite = value.UISprite(); } }
 
     protected override void Awake()
     {
@@ -18,7 +21,8 @@ public class PickupPopup : BasePopup, ISpawnable {
         source = GetComponent<AudioSource>();
 
         //to get around ordering issues (create is sometimes called before start)
-        image = transform.Find("UI/Icon").GetComponent<Image>();
+        icon = transform.Find("UI/Icon").GetComponent<Image>();
+        image = transform.Find("UI/Icon/Image").GetComponent<Image>();
         text = transform.Find("UI/Label").GetComponent<Text>();
     }
 
