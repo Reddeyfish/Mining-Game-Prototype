@@ -9,7 +9,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     private Transform player;
     private ScreenFlash flash;
     private float remainingDrainTime;
-    private float _startDrainTime = 60.0f;
+    private float _startDrainTime = 10.0f;
     private float explosionDamage = 10f;
     public string energyDeathTip = "You ran out of <color=yellow>energy</color> and died.";
     public float energyDeathTipDuration = 10f;

@@ -353,6 +353,11 @@ public class BaseInventory : MonoBehaviour, IDisabledStart, ISaveListener
             }
         }
     }
+
+    public virtual void Wipe()
+    {
+        resources = new List<Resource>();
+    }
 }
 
 public enum colorType

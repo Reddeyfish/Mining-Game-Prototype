@@ -28,11 +28,11 @@ public class WorldController : MonoBehaviour, ISaveListener {
     //have these frequencies descending, because they're used in an if/elseif
 
     private const float plusExplosiveFrequency = 0.95f;
-    private const float plusExplosiveMinRange = 100f;
+    private const float plusExplosiveMinRange = 60f;
     private const float explosiveFrequency = 0.9f; 
-    private const float explosiveMinRange = 50f;
+    private const float explosiveMinRange = 40f;
     private const float boulderFrequency = 0.8f;
-    private const float boulderMinRange = 25f;
+    private const float boulderMinRange = 20f;
     private const float oreFrequency = 0.65f;
     public const float transFrequency = 0.9f;
     public int loadedRange = 16;

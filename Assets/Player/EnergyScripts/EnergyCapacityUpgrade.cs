@@ -2,15 +2,15 @@
 using System.Collections;
 
 public class EnergyCapacityUpgrade : MonoBehaviour {
-    private const int amount = 50;
+    private const float multiplier = 3;
     void Start()
     {
         EnergyMeter meter = GetComponent<EnergyMeter>();
-        meter.StartDrainTime += amount;
-        meter.Add(amount);
+        meter.StartDrainTime *= multiplier;
+        meter.Add(meter.StartDrainTime);
     }
     void OnDestroy()
     {
-        GetComponent<EnergyMeter>().StartDrainTime -= amount;
+        GetComponent<EnergyMeter>().StartDrainTime /= multiplier;
     }
 }

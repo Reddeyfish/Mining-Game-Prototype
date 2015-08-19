@@ -10,6 +10,7 @@ public class UpgradesTutorialObjective : ResettingObjective, IItemsListener {
         itemsView = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel/SlotsOutline/SlotsBackground").GetComponent<ItemsView>();
         itemsView.Subscribe(this);
         setTip();
+        GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel/InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>().Add(new Resource(resourceType.PURECOLOR, colorType.GREEN, 40));
     }
 
 	// Use this for initialization

@@ -6,7 +6,7 @@ public class UndiggableTip : BaseUndiggableListener{
     TutorialTip tips;
     // Use this for initialization
     public float tipDuration = 5f;
-    public string undiggableTip = "This block cannot be mined.";
+    public string undiggableTip = "This block cannot be mined. Use block explosions.";
     protected override void Start()
     {
         base.Start();

@@ -8,17 +8,24 @@ public class theUpgradeData : MonoBehaviour {
     public static theUpgradeData thi;
     public static Upgrade[] IDToUpgrade = new Upgrade[]  //static because const hates delegates; is constant
     {
+        new Upgrade("Energy Capacity", 2, 1, 
+            delegate(GameObject player, int ID) { return player.AddComponent<EnergyCapacityUpgrade>(); }, 
+            new Cost[]{
+            new Cost(resourceType.PURECOLOR, 80, costType.GREEN), 
+            },
+@"Increases your energy capacity. A necessity for
+making it back to base alive"),
         new Upgrade("Inventory Space", 2, 1, 
             delegate(GameObject player, int ID) { return player.AddComponent<inventoryExpansion>(); }, 
             new Cost[]{
-            new Cost(resourceType.PURECOLOR, 12, costType.ANY), 
+            new Cost(resourceType.PURECOLOR, 80, costType.BLUE), 
             },
 @"Expands the amount of resources you can hold 
 before you have to return to base"),
         new Upgrade("Drill Toughness", 1, 2, 
             delegate(GameObject player, int ID) { return player.AddComponent<UDrillToughness>(); }, 
             new Cost[]{
-            new Cost(resourceType.HARDENED, 12, costType.WHITE), 
+            new Cost(resourceType.PURECOLOR, 80, costType.RED), 
             },
 @"Blocks become more dense and harder to dig 
 through as you move farther away from the main base.
@@ -30,26 +37,19 @@ your digging speed"),
                 result.ID = ID;
                 return result; }, 
             new Cost[]{
-                new Cost(resourceType.PURECOLOR, 24, costType.WHITE), 
-                new Cost(resourceType.UNSTABLE, 30, costType.WHITE), 
+                new Cost(resourceType.PURECOLOR, 160, costType.ANY), 
+                new Cost(resourceType.UNSTABLE, 80, costType.RED), 
             },
 @"When activated, instantly mines the eight blocks
 adjacent to you as if you had used your drill"),
-        new Upgrade("Energy Capacity", 2, 1, 
-            delegate(GameObject player, int ID) { return player.AddComponent<EnergyCapacityUpgrade>(); }, 
-            new Cost[]{
-            new Cost(resourceType.PURECOLOR, 12, costType.WHITE), 
-            },
-@"Increases your energy capacity. A necessity for
-making it back to base alive"),
         new Upgrade("Directional Mining Blast", 2, 3, 
             delegate(GameObject player, int ID) {
                 SpawningAbility result = player.AddComponent<SpawningAbility>();
                 result.ID = ID;
                 return result; }, 
             new Cost[]{
-                new Cost(resourceType.PURECOLOR, 24, costType.WHITE), 
-                new Cost(resourceType.UNSTABLE, 30, costType.WHITE), 
+                new Cost(resourceType.PURECOLOR, 160, costType.BLUE), 
+                new Cost(resourceType.UNSTABLE, 80, costType.RED), 
             },
 @"When activated, instantly mines eight blocks in a
 straight line as if you had used your drill"),

@@ -43,7 +43,10 @@ public class TutorialTip : MonoBehaviour {
     {
         Coroutine result = null;
         if (currentTip == tip)
+        {
+            currentTip = "";
             result = SetVisible(false);
+        }
         return result;
     }
 

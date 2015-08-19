@@ -21,7 +21,6 @@ public class InventoryUIController : MonoBehaviour {
         if(baseMode)
         {
             inventory = GetComponent<BaseInventory>();
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>().Merge(inventory);
             fill.set(inventory.Fill);
         }
         else

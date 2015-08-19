@@ -9,6 +9,7 @@ public class HomeBase : Block {
     GameObject inspectButton;
     UIKeyboardShortcut keyShortcut;
     ModeSwitch UIMode;
+    BaseInventory baseInventory;
     public KeyCode key = KeyCode.Space;
     public GameObject energyRefilledPopup;
 	// Use this for initialization
@@ -18,6 +19,7 @@ public class HomeBase : Block {
         player = GameObject.FindGameObjectWithTag(Tags.player);
         inspectButton = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectButton").gameObject;
         UIMode = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel").GetComponent<ModeSwitch>();
+        baseInventory = GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel/InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>();
 	}
     /*
     public override void Create()
@@ -40,6 +42,9 @@ public class HomeBase : Block {
                 keyShortcut.key = key;
             }
             UIMode.setStoreMode(true);
+
+            //transfer inventories
+            other.GetComponent<Inventory>().Merge(baseInventory);
 
             other.GetComponent<SaveObservable>().Save();
         }

@@ -42,9 +42,9 @@ public class Inventory : BaseInventory
         Wipe();
     }
 
-    public void Wipe()
+    public override void Wipe()
     {
-        resources = new List<Resource>();
+        base.Wipe();
         currentSize = 0;
     }
 }

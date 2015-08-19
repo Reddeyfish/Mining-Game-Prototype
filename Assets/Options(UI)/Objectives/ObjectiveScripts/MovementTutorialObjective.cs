@@ -8,14 +8,18 @@ public class MovementTutorialObjective : ResettingObjective {
 
     void Awake()
     {
-        PlayerPrefs.DeleteAll();
+        player = GameObject.FindGameObjectWithTag(Tags.player).transform;
+        basePlayerPos = player.position;
+
         //new game, so wipe all old data
+        PlayerPrefs.DeleteAll();
+        player.GetComponent<Inventory>().Wipe();
+        GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel/InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>().Wipe();
     }
 
 	protected override void Start () {
         base.Start();
-        player = GameObject.FindGameObjectWithTag(Tags.player).transform;
-        basePlayerPos = player.position;
+        
         
         //tutorial tip
 

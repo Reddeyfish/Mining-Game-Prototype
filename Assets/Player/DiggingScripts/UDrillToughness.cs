@@ -4,13 +4,13 @@ using System.Collections;
 //upgrade
 
 public class UDrillToughness : MonoBehaviour {
-    private const int amount = 100;
+    private const float multiplier = 2;
     void Start()
     {
-        GetComponent<DefaultDiggingScript>().digPower += amount;
+        GetComponent<DefaultDiggingScript>().digPower *= multiplier;
     }
     void OnDestroy()
     {
-        GetComponent<DefaultDiggingScript>().digPower -= amount;
+        GetComponent<DefaultDiggingScript>().digPower /= multiplier;
     }
 }

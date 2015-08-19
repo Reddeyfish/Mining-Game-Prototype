@@ -7,9 +7,9 @@ public class ReturnCapsule : Block {
     IEnumerator inputCheck; //store the IEnumerator so we can stop it when it is no longer needed
     KeyCode code = KeyCode.Space;
 
-    public float stopPercent = 0.2f; //the fraction of the original distance that the teleport will stop at
+    public float stopPercent = 0.1f; //the fraction of the original distance that the teleport will stop at
     public float speed = 20f;
-    public string capsuleTip = "This is a <color=cyan>Capsule</color>. When activated, it transports you back to base. The transport requires some energy, but it's always better (and faster) than just flying back.";
+    string capsuleTip = "This is a <color=cyan>Capsule</color>. When activated, it <color=yellow>transports</color> you back to base.";
 	// Use this for initialization
 	void Awake () {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
@@ -24,7 +24,7 @@ public class ReturnCapsule : Block {
             UI.alpha = 1;
             inputCheck = InputCheck();
             StartCoroutine(inputCheck);
-            tips.SetTip(capsuleTip);
+            tips.SetTimedTip(capsuleTip, 8);
         }
     }
 
@@ -49,7 +49,9 @@ public class ReturnCapsule : Block {
                 //activate the return
 
                 Transform player = GameObject.FindGameObjectWithTag(Tags.player).transform;
+                OnTriggerExit2D(player.GetComponent<Collider2D>()); //player collider is disabled by teleport
                 player.GetComponent<Controls>().QueueCoroutine(TeleportBack(player));
+                
                 break;
             }
             yield return new WaitForFixedUpdate();
@@ -63,10 +65,10 @@ public class ReturnCapsule : Block {
     //when we add other bases, we'll have to teleport to the nearest base, not the just main base as this does
     IEnumerator TeleportBack(Transform player)
     {
-        Collider2D playerCollider = player.GetComponent<Collider2D>();
+        CircleCollider2D playerCollider = player.GetComponent<CircleCollider2D>();
         playerCollider.enabled = false; //so the player can pass over blocks
         float stopDistance = stopPercent * player.position.magnitude;
-        while (player.position.magnitude > stopDistance)
+        while (player.position.magnitude > stopDistance || Physics2D.OverlapCircle(player.position, playerCollider.radius))
         {
             player.position -= speed * player.position.normalized * Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
