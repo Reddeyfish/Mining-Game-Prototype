@@ -11,7 +11,6 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
 
     private Controls control;
     private Rigidbody2D rigid;
-    private Animator theStateMachine;
     private AudioSource drillSound; //is a looping source
     private ParticleSystem drillParticles;
     private DiggingListenerSystem listeners;
@@ -29,7 +28,6 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
     {
         blocks = LayerMask.GetMask(new string[] {Layers.blocks, Layers.transBlocks});
         rigid = GetComponent<Rigidbody2D>();
-        theStateMachine = GetComponent<Animator>();
     }
 
     void Start()
@@ -92,7 +90,6 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
 
         float digTime = target.digTime() * getDigTimeMultiplier(); 
 
-        theStateMachine.SetBool(AnimatorParams.dig, true);
         Collider2D otherCollider = target.transform.GetComponent<Collider2D>();
         otherCollider.enabled = false;
         target.StartDig();
@@ -117,7 +114,6 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
             target.Destroy(); //these three lines (DigNotify, collider enable, and destroy) have to be called in order.
 
         rigid.velocity = Vector3.zero; //stop moving
-        theStateMachine.SetBool(AnimatorParams.dig, false); //animation stop
         Camera.main.transform.localPosition = Vector3.zero; //reset screen position to default (b/c of screen shake)
         drillSound.Pause(); //sound stop
         drillParticles.Stop(); //particles stop

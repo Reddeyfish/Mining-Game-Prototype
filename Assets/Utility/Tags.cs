@@ -17,6 +17,7 @@ public class Tags : MonoBehaviour {
     public const string tutorial = "Tutorial";
     public const string mouseParent = "MouseParent";
     public const string objective = "Objective";
+    public const string playerVisuals = "PlayerVisuals";
 }
 
 public class Scenes
@@ -41,7 +42,7 @@ public class Layers
 
 public class AnimatorParams
 {
-    public static int dig = Animator.StringToHash("Digging");
+    public static int barrelRoll = Animator.StringToHash("barrelRoll");
 }
 
 public class PlayerPrefKeys

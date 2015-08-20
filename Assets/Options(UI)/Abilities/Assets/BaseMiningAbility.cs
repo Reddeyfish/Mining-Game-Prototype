@@ -9,6 +9,7 @@ public class BaseMiningAbility : MonoBehaviour, ISpawnable
     DiggingListenerSystem listeners;
     ParticleSystem riser;
     ParticleSystem mainBlast;
+    Animator animator;
 
     public AudioClip riserClip;
     public AudioClip blastClip;
@@ -21,6 +22,7 @@ public class BaseMiningAbility : MonoBehaviour, ISpawnable
         riser = transform.Find("riser Particle").GetComponent<ParticleSystem>();
         mainBlast = transform.Find("mainBlast Particle").GetComponent<ParticleSystem>();
         mask = LayerMask.GetMask(new string[] { Layers.blocks, Layers.transBlocks });
+        animator = GameObject.FindGameObjectWithTag(Tags.playerVisuals).GetComponent<Animator>();
     }
 
     void Start()
@@ -39,6 +41,8 @@ public class BaseMiningAbility : MonoBehaviour, ISpawnable
         source.clip = riserClip;
         source.Play();
         riser.Play();
+        animator.SetTrigger(AnimatorParams.barrelRoll);
+
         yield return new WaitForSeconds(riserTime);
 
         source.clip = blastClip;
@@ -46,6 +50,7 @@ public class BaseMiningAbility : MonoBehaviour, ISpawnable
         riser.Stop();
         mainBlast.Play();
         ScreenShake.RandomShake(this, 0.1f, 0.3f);
+
         Collider2D[] hits = getHits();
         foreach (Collider2D hit in hits)
         {

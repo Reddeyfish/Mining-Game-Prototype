@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(ComboListenerSystem))]
 public class EnergyMeter: MonoBehaviour, IObliterable {
-    private ComboListenerSystem listeners;
     private EnergyView view;
     private Vector3 position;
     private Transform player;

@@ -24,7 +24,7 @@ public class SpawningAbility : BaseActiveAbility {
 
     void Awake()
     {
-        direction = transform.Find("Visuals").GetComponent<VisualsFaceVelocityScript>();
+        direction = transform.Find("VisualsHolder").GetComponent<VisualsFaceVelocityScript>();
     }
 
     protected override void OnActivation()
