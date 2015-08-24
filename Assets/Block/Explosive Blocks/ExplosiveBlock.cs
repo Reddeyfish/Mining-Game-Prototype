@@ -127,7 +127,6 @@ public class ExplosiveBlock : Block, IDigListener {
         {
             SimplePool.Spawn(explosion, this.transform.position).GetComponent<ExplosiveBlockExplosion>().Instantiate(hue);
         }
-        listener.UnSubscribe(this);
         base.Destroy();
     }
 
@@ -148,6 +147,11 @@ public class ExplosiveBlock : Block, IDigListener {
     public override blockDataType getBlockType()
     {
         return blockDataType.EXPLOSIVE;
+    }
+
+    public override float getImpactTolerance()
+    {
+        return 10f;
     }
 
     public void OnDestroy()

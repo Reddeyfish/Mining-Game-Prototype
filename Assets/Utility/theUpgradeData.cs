@@ -49,7 +49,7 @@ adjacent to you as if you had used your drill"),
                 return result; }, 
             new Cost[]{
                 new Cost(resourceType.PURECOLOR, 160, costType.BLUE), 
-                new Cost(resourceType.UNSTABLE, 80, costType.RED), 
+                new Cost(resourceType.UNSTABLE, 80, costType.BLUE), 
             },
 @"When activated, instantly mines eight blocks in a
 straight line as if you had used your drill"),

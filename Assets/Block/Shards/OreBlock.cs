@@ -57,7 +57,7 @@ public class OreBlock : ExplosiveBlock
 
     public override void UpdateMap()
     {
-        WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.LIGHTBLOCK);
+        WorldController.ModifyBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.LIGHTBLOCK, false);
     }
 
     public override Color getColor()

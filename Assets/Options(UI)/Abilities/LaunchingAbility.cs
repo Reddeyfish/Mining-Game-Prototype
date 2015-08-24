@@ -68,8 +68,7 @@ public class LaunchingAbility : BaseActiveAbility
     {
         Debug.Log("Activated!");
         //spawn the launched object
-        Transform spawnedPrefab = SimplePool.Spawn(spawnPrefab).transform;
-        spawnedPrefab.position = this.transform.position;
+        GameObject spawnedPrefab = SimplePool.Spawn(spawnPrefab, this.transform.position);
         spawnedPrefab.GetComponent<ILaunchable>().Instantiate(Format.mousePosInWorld());
     }
 

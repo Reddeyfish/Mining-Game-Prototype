@@ -9,11 +9,16 @@ public class Boulder : SolidBlock {
     }
     public override void UpdateMap()
     {
-        WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.BOULDERINTERIOR);
+        WorldController.ModifyBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.BOULDERINTERIOR, false);
     }
 
     public override void Destroy()
     {
         Debug.Log("Error; boulders are NOT minable");
+    }
+
+    public override float getImpactTolerance()
+    {
+        return 40f;
     }
 }

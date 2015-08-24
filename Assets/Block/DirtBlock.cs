@@ -9,4 +9,9 @@ public class DirtBlock : SolidBlock {
         SimplePool.Spawn(obliterateEffect, this.transform.position);
         base.Obliterate();
     }
+
+    public override float getImpactTolerance()
+    {
+        return 15f;
+    }
 }

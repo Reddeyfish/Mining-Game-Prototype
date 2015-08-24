@@ -30,9 +30,9 @@ public class WorldController : MonoBehaviour, ISaveListener {
     private const float plusExplosiveFrequency = 0.95f;
     private const float plusExplosiveMinRange = 60f;
     private const float explosiveFrequency = 0.9f; 
-    private const float explosiveMinRange = 40f;
+    private const float explosiveMinRange = 15f;
     private const float boulderFrequency = 0.8f;
-    private const float boulderMinRange = 20f;
+    private const float boulderMinRange = 30f;
     private const float oreFrequency = 0.65f;
     public const float transFrequency = 0.9f;
     public int loadedRange = 16;
@@ -362,13 +362,15 @@ public class WorldController : MonoBehaviour, ISaveListener {
     }
 
     //same as modify block, but does checking to see when things should be spawned/despawned
-    public static void ModifyBlock(int x, int y, blockDataType newBlock)
+    public static void ModifyBlock(int x, int y, blockDataType newBlock, bool checkDespawn = true)
     {
         bool loaded = x <= thi.loadedTopRight.x && x >= thi.loadedBottomLeft.x && y <= thi.loadedTopRight.y && y >= thi.loadedBottomLeft.y;
-        if (loaded)
+
+        if (loaded && checkDespawn)
         {
             theMap[x][y].Remove();
         }
+
         theMap[x][y] = enumToBlock(newBlock);
         if (loaded)
         {

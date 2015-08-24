@@ -16,6 +16,8 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
     private DiggingListenerSystem listeners;
     private IEnumerator digroutine;
 
+    float colliderRadius;
+
     private bool interrupt = false; //flag to interupt the digging coroutine
 
     private const float screenShakeIntensity = 0.03f;
@@ -28,6 +30,7 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
     {
         blocks = LayerMask.GetMask(new string[] {Layers.blocks, Layers.transBlocks});
         rigid = GetComponent<Rigidbody2D>();
+        colliderRadius = GetComponent<CircleCollider2D>().radius;
     }
 
     void Start()
@@ -45,8 +48,10 @@ public class DefaultDiggingScript : MonoBehaviour , IDigScript {
             if (hit)
             {
                 Block hitBlock = hit.transform.gameObject.GetComponent<Block>();
-                if (hitBlock.isMinable())
+                if (hitBlock.isMinable() && Physics2D.CircleCast(this.transform.position, colliderRadius, direction, 0.75f, blocks) == hit)
                 {
+
+                    //do digging
                     if (digroutine != null)
                     {
                         StopCoroutine(digroutine); //halts cleanup of the visual/audio effects

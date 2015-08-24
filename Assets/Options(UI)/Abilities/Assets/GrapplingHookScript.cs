@@ -10,10 +10,14 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
     Transform player;
     Transform thisTransform;
     LineRenderer line;
+    bool collided;
 
     static LayerMask mask; //constant
     
     public float speed = 15f;
+
+    public GameObject hookCollisionEffectPrefab;
+    public GameObject hookDestructionEffectPrefab;
 
     [Tooltip("Material for the grappling line")]
     public Material mat;
@@ -28,9 +32,33 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
-        line.SetPosition(0, player.position);
-        line.SetPosition(1, thisTransform.position);
+	IEnumerator UpdateVisuals () {
+        collided = false;
+        while (!collided)
+        {
+            line.SetPosition(0, player.position);
+            line.SetPosition(1, thisTransform.position);
+            yield return new WaitForFixedUpdate();
+        }
+
+        //deactivate everything except audio
+        rigid.velocity = Vector2.zero;
+        line.enabled = false;
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.enabled = false;
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        renderer.enabled = false;
+
+        AudioSource audio = GetComponent<AudioSource>();
+        yield return new WaitForSeconds(audio.clip.length);
+
+        //re-enable stuff so this object can be reused
+
+        line.enabled = true;
+        collider.enabled = true;
+        renderer.enabled = true;
+
+        SimplePool.Despawn(this.gameObject);
 	}
 
     public void Instantiate(Vector3 target)
@@ -39,6 +67,8 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
         Vector2 dir = (target - thisTransform.position).normalized;
         thisTransform.rotation = dir.ToRotation();
         rigid.velocity = speed * dir;
+
+        StartCoroutine(UpdateVisuals());
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -51,8 +81,9 @@ public class GrapplingHookScript : MonoBehaviour, ILaunchable {
         GrappledBehaviour grapple = other.gameObject.AddComponent<GrappledBehaviour>();
         
         //raycast to find the precise collision point; tell that to the grappled block
-        grapple.Instantiate(Physics2D.Raycast(thisTransform.position, other.transform.position - thisTransform.position, 1, mask).point, mat);
+        grapple.Instantiate(Physics2D.Raycast(thisTransform.position, other.transform.position - thisTransform.position, 1, mask).point, mat, hookCollisionEffectPrefab, hookDestructionEffectPrefab);
 
-        SimplePool.Despawn(this.gameObject);
+        collided = true; //have our effects progress
     }
+
 }

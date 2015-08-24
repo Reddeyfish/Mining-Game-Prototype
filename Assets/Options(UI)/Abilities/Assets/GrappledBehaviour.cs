@@ -14,9 +14,15 @@ public class GrappledBehaviour : MonoBehaviour {
     SpringJoint2D spring;
     Transform thisTransform;
     Vector2 grappledPoint; //location of the grappling point in local space
+    Block block;
+
+    GameObject collisionEffectPrefab;
+    GameObject destructionEffectPrefab;
 
     const float lerpToPointerTime = 1f;
     static Color lineColor = new Color(100f / 255f, 100f / 255f, 100f / 255f); //constant
+
+    float remainingImpactTolerance;
 
 	// Use this for initialization
 	void Awake () {
@@ -36,9 +42,15 @@ public class GrappledBehaviour : MonoBehaviour {
         spring.dampingRatio = 0.5f;
 
         thisTransform = this.transform;
+
         StartCoroutine(DrawGrapplingLine());
 
-        GetComponent<Block>().UpdateMap(); //the block is going to be destroyed anyway, so might as well update it now.
+        GetComponent<BoxCollider2D>().size *= 9f/10f; //scale down the collider to help with movement
+
+        block = GetComponent<Block>();
+
+        block.UpdateMap(); //the block is going to be destroyed anyway, so might as well update it now.
+        remainingImpactTolerance = block.getImpactTolerance();
 	}
 
     IEnumerator DrawGrapplingLine()
@@ -74,14 +86,41 @@ public class GrappledBehaviour : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D other)
     {
         Debug.Log(other.relativeVelocity);
+        Block otherBlock = other.transform.GetComponent<Block>();
+        if (otherBlock != null)
+        {
+            Debug.Log("Block Collision");
+            float impactSpeed = other.relativeVelocity.magnitude;
+            if (impactSpeed > otherBlock.getImpactTolerance())
+            {
+                otherBlock.Obliterate();
+                remainingImpactTolerance -= impactSpeed;
+                SimplePool.Spawn(destructionEffectPrefab, other.contacts[0].point);
+                if (remainingImpactTolerance <= 0)
+                    block.Destroy();
+            }
+            else if(impactSpeed > remainingImpactTolerance)
+            {
+                SimplePool.Spawn(destructionEffectPrefab, thisTransform.position);
+                block.Destroy();
+            }
+            else{
+                SimplePool.Spawn(collisionEffectPrefab, other.contacts[0].point);
+            }
+        }
     }
 
-    public void Instantiate(Vector2 collisionPoint, Material spriteMat) //set the grappled point; collisionPoint is in world space
+    public void Instantiate(Vector2 collisionPoint, Material spriteMat, GameObject collisionPrefab, GameObject destructionPrefab) //set the grappled point; collisionPoint is in world space
     {
         //addComponent scripts can't have serialized references to assets, so as a workaround I'm passing in the material from the grappling object.
         line.material = spriteMat;
 
         spring.anchor = grappledPoint = thisTransform.InverseTransformPoint(collisionPoint);
+
+        SimplePool.Spawn(collisionPrefab, thisTransform.TransformPoint(grappledPoint));
+
+        this.collisionEffectPrefab = collisionPrefab;
+        this.destructionEffectPrefab = destructionPrefab;
     }
 
     void OnDisable()
@@ -89,6 +128,8 @@ public class GrappledBehaviour : MonoBehaviour {
         //when the object is disabled, it's despawned for pooling
 
         //reset the object to a normal block
+        GetComponent<BoxCollider2D>().size *= 10f / 9f;
+
         Destroy(this);
        
         Destroy(line);

@@ -12,6 +12,7 @@ public class CrystalLight : Block {
         Material mat = GetComponent<Renderer>().material;
         mat.color = HSVColor.HSVToRGB(colorValues.x, colorValues.y, colorValues.z, albedoAlpha);
         mat.SetColor("_EmissionColor", HSVColor.HSVToRGB(colorValues.x, 1, 1));
+        GetComponent<Light>().color = HSVColor.HSVToRGB(colorValues.x, 0.75f, 1);
     }
 
     public override bool isSolid()

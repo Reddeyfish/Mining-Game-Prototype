@@ -32,14 +32,14 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
         UpdateMap();
     }
 
-    public virtual void Obliterate()
+    public virtual void Obliterate() //called when hit by explosion
     {
         Despawn();
     }
 
-    public virtual void UpdateMap()
+    public virtual void UpdateMap() //when destroyed, update the map with whatever replaces this block
     {
-        WorldController.UpdateBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK);
+        WorldController.ModifyBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK, false);
     }
 
     public virtual bool isSolid() //counted as an air(false) or dirt(true) block
@@ -55,6 +55,11 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
     public virtual Color getColor()
     {
         return Color.clear;
+    }
+
+    public virtual float getImpactTolerance()
+    {
+        return 0;
     }
 
     //attributes
