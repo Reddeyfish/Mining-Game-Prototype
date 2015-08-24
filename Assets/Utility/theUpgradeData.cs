@@ -53,7 +53,7 @@ adjacent to you as if you had used your drill"),
             },
 @"When activated, instantly mines eight blocks in a
 straight line as if you had used your drill"),
-       new Upgrade("Grappling Drone", 2, 3, 
+       new Upgrade("Grappling Drone", 3, 2, 
             delegate(GameObject player, int ID) {
                 LaunchingAbility result = player.AddComponent<LaunchingAbility>();
                 result.ID = ID;
