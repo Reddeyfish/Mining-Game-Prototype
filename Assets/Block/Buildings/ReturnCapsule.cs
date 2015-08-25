@@ -6,7 +6,9 @@ public class ReturnCapsule : Block {
     CanvasGroup UI;
     IEnumerator inputCheck; //store the IEnumerator so we can stop it when it is no longer needed
     KeyCode code = KeyCode.Space;
+    LayerMask blocks;
 
+    public GameObject fireEffect;
     public float stopPercent = 0.1f; //the fraction of the original distance that the teleport will stop at
     public float speed = 20f;
     string capsuleTip = "This is a <color=cyan>Capsule</color>. When activated, it <color=yellow>transports</color> you back to base.";
@@ -14,6 +16,7 @@ public class ReturnCapsule : Block {
 	void Awake () {
         UI = transform.Find("UI").GetComponent<CanvasGroup>();
         tips = GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>();
+        blocks = LayerMask.GetMask(new string[] { Layers.blocks, Layers.transBlocks });
 	}
 	
 
@@ -68,13 +71,31 @@ public class ReturnCapsule : Block {
         CircleCollider2D playerCollider = player.GetComponent<CircleCollider2D>();
         playerCollider.enabled = false; //so the player can pass over blocks
         float stopDistance = stopPercent * player.position.magnitude;
-        while (player.position.magnitude > stopDistance || Physics2D.OverlapCircle(player.position, playerCollider.radius))
+
+        //effects
+        ParticleSystem[] systems = GameObject.FindGameObjectWithTag(Tags.playerVisuals).GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem system in systems)
+        {
+            system.gameObject.SetActive(false);
+            system.gameObject.SetActive(true); //clear the distance trackers
+            system.Play();
+        }
+
+        player.GetComponentInChildren<VisualsFaceVelocityScript>().setDirection(-player.position);
+        SimplePool.Spawn(fireEffect); //only audio, so no need to set location
+
+        while (player.position.magnitude > stopDistance || Physics2D.OverlapCircle(player.position, playerCollider.radius, blocks))
         {
             player.position -= speed * player.position.normalized * Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
 
         playerCollider.enabled = true;
+
+        //stop effects
+
+        foreach (ParticleSystem system in systems)
+            system.Stop();
     }
 
     public override blockDataType getBlockType()

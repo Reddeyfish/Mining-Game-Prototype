@@ -22,13 +22,28 @@ public class VisualsFaceVelocityScript : MonoBehaviour {
 	// Update is called once per frame
     public void FixedUpdate()
     {
-        var dir = rigid.velocity;
-        if (dir.sqrMagnitude == 0) //if there is no movement, we shouldn't be rotating
+        setDirectionTowards(rigid.velocity);
+        
+    }
+
+    public void setDirectionTowards(Vector2 direction)
+    {
+        if (direction.sqrMagnitude == 0) //if there is no movement, we shouldn't be rotating
         {
             return;
         }
-        float _angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float _angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         _targetRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
         thisTransform.rotation = Quaternion.RotateTowards(thisTransform.rotation, _targetRotation, rotateSpeed * Time.deltaTime);
+    }
+
+    public void setDirection(Vector2 direction)
+    {
+        if (direction.sqrMagnitude == 0) //if there is no movement, we shouldn't be rotating
+        {
+            return;
+        }
+        float _angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        thisTransform.rotation = Quaternion.AngleAxis(_angle, Vector3.forward);
     }
 }
