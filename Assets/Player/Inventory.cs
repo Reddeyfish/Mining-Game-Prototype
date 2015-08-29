@@ -16,17 +16,23 @@ public class Inventory : BaseInventory
 
     public override int Add(Resource resource)
     {
-        int count = spaceRemaining();
-        if (count > resource.count)
+        int space = spaceRemaining();
+        if (space <= 0) //inventory completely full
         {
-            count = resource.count;
+            SimplePool.Spawn(inventoryFullMessage, this.transform.position);
+            return 0;
         }
-        else
+        //else there is space, add to inventory
+
+        int count = resource.count;
+        if (count >= space)
         {
-            //inventory full
+            //inventory now full
             SimplePool.Spawn(inventoryFullMessage, this.transform.position);
         }
-        base.Add(resource.Resize(count));
+
+        base.Add(resource);
+
         return count; //calling script now does the UI stuff
     }
 

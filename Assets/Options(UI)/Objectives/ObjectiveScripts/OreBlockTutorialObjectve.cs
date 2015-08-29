@@ -11,7 +11,8 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
     protected IEnumerator reset;
 
 	// Use this for initialization
-	protected virtual void Awake () {
+	protected override void Awake () {
+        base.Awake();
         //tutorial tip
 
         setTip();
@@ -25,9 +26,8 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("This is a block of <color=yellow>ore</color>. Blocks of ore will <color=yellow>trigger</color> when nearby blocks are mined. <color=cyan>Mine the Ore Block</color>.");
     }
 
-    protected override void Start()
+    protected void Start()
     {
-       base.Start();
        SpawnObjects();
     }
 
@@ -82,7 +82,6 @@ public class OreBlockTutorialObjectve : ResettingObjective, IExplosionListener, 
         //reset things since it exploded
         if (reset == null) //else we're already resetting
         {
-            Debug.Log("reset");
             reset = Reset();
             StartCoroutine(reset);
         }

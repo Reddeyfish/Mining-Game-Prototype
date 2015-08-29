@@ -37,6 +37,11 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
         Despawn();
     }
 
+    public virtual void Grapple() //called when grappled
+    {
+        UpdateMap();
+    }
+
     public virtual void UpdateMap() //when destroyed, update the map with whatever replaces this block
     {
         WorldController.ModifyBlock(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), blockDataType.EMPTYBLOCK, false);
@@ -55,6 +60,23 @@ public class Block : MonoBehaviour, ISpawnable, IObliterable {
     public virtual Color getColor()
     {
         return Color.clear;
+    }
+
+    public colorType getColorType() //I don't expect that I'll need to use polymorphism on this
+    {
+        Color color = getColor();
+        colorType type = colorType.RED;
+        float max = color.r;
+        if (color.g > max)
+        {
+            max = color.g;
+            type = colorType.GREEN;
+        }
+        if (color.b > max)
+        {
+            type = colorType.BLUE;
+        }
+        return type;
     }
 
     public virtual float getImpactTolerance()

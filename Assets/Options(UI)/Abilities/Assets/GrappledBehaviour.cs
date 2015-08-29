@@ -49,7 +49,7 @@ public class GrappledBehaviour : MonoBehaviour {
 
         block = GetComponent<Block>();
 
-        block.UpdateMap(); //the block is going to be destroyed anyway, so might as well update it now.
+        block.Grapple(); 
         remainingImpactTolerance = block.getImpactTolerance();
 	}
 

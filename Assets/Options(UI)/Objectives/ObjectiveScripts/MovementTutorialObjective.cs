@@ -6,8 +6,9 @@ public class MovementTutorialObjective : ResettingObjective {
     Vector3 basePlayerPos;
 	// Use this for initialization
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         player = GameObject.FindGameObjectWithTag(Tags.player).transform;
         basePlayerPos = player.position;
 
@@ -17,10 +18,7 @@ public class MovementTutorialObjective : ResettingObjective {
         GameObject.FindGameObjectWithTag(Tags.canvas).transform.Find("InspectPanel/InventoryOutline/InventoryView/Content").GetComponent<BaseInventory>().Wipe();
     }
 
-	protected override void Start () {
-        base.Start();
-        
-        
+	protected void Start () {
         //tutorial tip
 
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Welcome to Chromatose! Use <color=yellow>WASD </color> or <color=yellow>the Arrow Keys</color> to move. Try moving to the <color=cyan>right</color>.");

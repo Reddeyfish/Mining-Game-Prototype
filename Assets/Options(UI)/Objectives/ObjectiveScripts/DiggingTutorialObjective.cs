@@ -7,8 +7,9 @@ public class DiggingTutorialObjective : ResettingObjective, IDigListener
     const int wallPos = -13;//the x-position of the wall
     DiggingListenerSystem listener;
 	// Use this for initialization
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         //spawn the wall
         for(int i = -3; i <= 3; i++)
             WorldController.ModifyBlock(wallPos, i, blockDataType.MAPBLOCK);

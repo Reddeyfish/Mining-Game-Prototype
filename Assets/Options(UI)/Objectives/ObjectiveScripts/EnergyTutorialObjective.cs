@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class EnergyTutorialObjective : ResettingObjective
 {
     EnergyBarLabel label;
+    Text homeBaseLabel;
+    string previousHomeBaseText;
 
     int returnValue = 0;
 	// Use this for initialization
-	protected override void Start () {
-        base.Start();
-        Debug.Log(".");
+	protected void Start () {
         EnergyMeter energyMeter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<EnergyMeter>();
         if (energyMeter != null)
         {
-            Debug.Log(",");
+
             //it's only not null in the main scene
             returnValue = 1;
 
@@ -34,12 +34,20 @@ public class EnergyTutorialObjective : ResettingObjective
         }
         else
         {
-            Debug.Log(",");
             //if it's null, we're still in the tutorial
             returnValue = 0;
         }
 
-        Callback.FireForFixedUpdate(() => ((TriggerObservable)(WorldController.getBlock(0, 0).AddComponent<TriggerObservable>())).Instantiate(this), this); //add observable; callback so that the map initialization finishes first
+        Callback.FireForFixedUpdate(() => 
+            {
+                GameObject homeBase = WorldController.getBlock(0, 0);
+                homeBase.transform.Find("UI").GetComponent<CanvasGroup>().alpha = 1;
+                homeBaseLabel = homeBase.transform.Find("UI/Label").GetComponent<Text>();
+                previousHomeBaseText = homeBaseLabel.text;
+                homeBaseLabel.text = "Home Base";
+                ((TriggerObservable)(homeBase.AddComponent<TriggerObservable>())).Instantiate(this);
+
+            }, this); //add observable; callback so that the map initialization finishes first
 
         GameObject.FindGameObjectWithTag(Tags.screenFlash).GetComponent<ScreenFlash>().Flash(3, 1); //fade from white, since we just changed scenes
 
@@ -55,6 +63,7 @@ public class EnergyTutorialObjective : ResettingObjective
 
     public void Notify(Collider2D other)
     {
+        homeBaseLabel.text = previousHomeBaseText;
         completeObjective(); //they've moved to base
     }
 

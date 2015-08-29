@@ -21,6 +21,7 @@ public class ObjectivesController : MonoBehaviour, ISaveListener {
     {
         if (PlayerPrefs.HasKey(PlayerPrefKeys.objectives))
         {
+            Debug.Log("Objective data found!");
             int[] data = PlayerPrefsX.GetIntArray(PlayerPrefKeys.objectives);
             if (data.Length % 2 != 0)
                 Debug.Log("Objective data formatted incorrectly");

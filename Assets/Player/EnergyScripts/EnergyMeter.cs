@@ -6,6 +6,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
     private Vector3 position;
     private Transform player;
     private ScreenFlash flash;
+    private bool draining = true;
     private float remainingDrainTime;
     private float _startDrainTime = 10.0f;
     private float explosionDamage = 10f;
@@ -34,7 +35,7 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
 
     void FixedUpdate()
     {
-        if (position != player.position) //only drain when moving
+        if (draining && position != player.position) //only drain when moving
         {
             updateMeter();
             remainingDrainTime -= Time.fixedDeltaTime;
@@ -64,6 +65,11 @@ public class EnergyMeter: MonoBehaviour, IObliterable {
         if (remainingDrainTime > _startDrainTime)
             remainingDrainTime = _startDrainTime;
         updateMeter();
+    }
+
+    public void SetDrain(bool draining)
+    {
+        this.draining = draining;
     }
 
     void CheckDeath()

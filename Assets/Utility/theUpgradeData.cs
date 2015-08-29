@@ -59,8 +59,10 @@ straight line as if you had used your drill"),
                 result.ID = ID;
                 return result; }, 
             new Cost[]{
+                new Cost(resourceType.PURECOLOR, 160, costType.GREEN), 
+                new Cost(resourceType.UNSTABLE, 80, costType.GREEN), 
             },
-@"Grappling Drone"),
+@"Grapples onto a block, allowing it to be moved and used as a wrecking ball."),
     };
 
     public static Sprite IDToSprite(int ID)

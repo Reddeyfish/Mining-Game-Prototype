@@ -139,6 +139,12 @@ public class ExplosiveBlock : Block, IDigListener {
         }
     }
 
+    public override void Grapple()
+    {
+        base.Grapple();
+        Obliterate();
+    }
+
     public override Color getColor()
     {
         return transform.Find("Visuals").GetComponent<Renderer>().material.color;

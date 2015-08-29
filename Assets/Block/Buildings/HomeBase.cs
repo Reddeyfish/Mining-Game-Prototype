@@ -35,6 +35,7 @@ public class HomeBase : Block {
             UI.alpha = 1;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max
+            meter.SetDrain(false);
             SimplePool.Spawn(energyRefilledPopup);
             if (keyShortcut == null)
             {
@@ -57,6 +58,7 @@ public class HomeBase : Block {
             UI.alpha = 0;
             EnergyMeter meter = player.GetComponent<EnergyMeter>();
             meter.Add(meter.StartDrainTime); //energy to max
+            meter.SetDrain(true);
             Destroy(keyShortcut);
             keyShortcut = null;
             UIMode.setStoreMode(false);

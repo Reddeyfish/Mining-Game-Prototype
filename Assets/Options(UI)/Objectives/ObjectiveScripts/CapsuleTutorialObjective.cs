@@ -7,9 +7,7 @@ public class CapsuleTutorialObjective : ResettingObjective
     static Vector2 capsulePos = new Vector2(32, 0); //constant
 
 	// Use this for initialization
-	protected override void Start () {
-        base.Start();
-
+	protected void Start () {
         //tutorial tip
         GameObject.FindGameObjectWithTag(Tags.tutorial).GetComponent<TutorialTip>().SetTip("Good. Up ahead is a <color=yellow>capsule</color>. Interacting with it will return you to <color=cyan>Home Base</color>.");
 

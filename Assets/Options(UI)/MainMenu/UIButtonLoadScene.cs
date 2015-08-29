@@ -30,6 +30,7 @@ public class UIButtonLoadScene : MonoBehaviour {
         }
         else
         {
+            wipeData();
             LoadScene(Scenes.tutorial);
         }
     }

@@ -359,12 +359,13 @@ public class BaseInventory : MonoBehaviour, IDisabledStart, ISaveListener
         resources = new List<Resource>();
     }
 }
-
+[System.Flags]
 public enum colorType
 {
-    RED = 0,
-    GREEN = 1,
-    BLUE = 2,
+    NONE = 0,
+    RED = 1,
+    GREEN = 2,
+    BLUE = 4,
 }
 
 public enum resourceType
