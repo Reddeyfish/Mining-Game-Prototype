@@ -32,7 +32,8 @@ public class theObjectiveData : MonoBehaviour {
     {
         Assert.IsTrue(ID > 0 && ID < IDToObjectiveData.Length); //assert that ID is in bounds; greater than zero because zero is the abstract objective
         Objective result = IDToObjectiveData[ID](target);
-        Assert.Equals(ID, result.getID()); //check that the IDs are set up correctly
+        Assert.AreEqual(ID, result.getID()); //check that the IDs are set up correctly
         return result;
     }
+
 }
